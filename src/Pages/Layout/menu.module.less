@@ -1,0 +1,18 @@
+.menu-box {
+  :global(.ant-menu-submenu-title) {
+    &:hover {
+      color: var(--white);
+    }
+  }
+
+  :global(.ant-menu-submenu-selected .ant-menu-submenu-title) {
+    color: var(--blue);
+  }
+  :global(.ant-menu-submenu-active.ant-menu-submenu-selected .ant-menu-submenu-title) {
+    color: var(--white);
+  }
+  :global(.ant-menu-submenu-open.ant-menu-submenu-active.ant-menu-submenu-selected .ant-menu-submenu-title) {
+    color: var(--white);
+    background-color: var(--blue);
+  }
+}
