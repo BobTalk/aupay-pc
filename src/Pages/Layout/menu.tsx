@@ -10,7 +10,7 @@ const LayoutMenu = () => {
       mode="vertical"
       className={mergeClassName(
         styleScope["menu-box"],
-        "pt-[.1rem] px-[.05rem]"
+        "pt-[.1rem] px-[.1rem]"
       )}
       defaultSelectedKeys={["1"]}
       items={[

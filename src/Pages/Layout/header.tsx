@@ -15,14 +15,14 @@ const LayoutHeader = ({ colorBgContainer }: any) => {
         <p className={styleScope["time"]}>
           {timeFormate(new Date(), "YYYY-MM-DD HH:mm")}
         </p>
-        <Badge count={0} showZero={false} className="mx-[.3rem]">
+        <Badge count={0} showZero={false} className="mx-[.24rem]">
           <Icon
             name="h-icon-xiaoxi"
             purity={false}
             style={{ fontSize: ".2rem" }}
           ></Icon>
         </Badge>
-        <Avatar size={32} className="mr-[.2rem]" icon={<UserOutlined />} />
+        <Avatar size={32} className="mr-[.14rem]" icon={<UserOutlined />} />
         <DropDownScope />
       </div>
     </Header>
