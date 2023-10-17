@@ -17,7 +17,7 @@ const LayoutMenu = () => {
         {
           key: "1",
           icon: (
-            <Icon name="h-icon-zichanguanli" className={styleScope["icon"]} />
+            <Icon name="h-icon-zichantongji" className={styleScope["icon"]} />
           ),
           label: "资产统计",
         },
@@ -56,7 +56,7 @@ const LayoutMenu = () => {
         },
         {
           key: "5",
-          icon: <Icon name="h-icon-Opera" className={styleScope["icon"]}/>,
+          icon: <Icon name="h-icon-Ozbet" className={styleScope["icon"]}/>,
           label: "Ozbet",
           children: [],
         },
