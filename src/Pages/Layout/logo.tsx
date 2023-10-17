@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "@/assets/images/logo.svg";
+import logo from "@/assets/images/logo_text.svg";
 import styleScope from "./logo.module.less";
 import { mergeClassName } from "@/utils/base";
 const LayoutLogo = ({ collapsed }:any) => {
@@ -7,13 +7,10 @@ const LayoutLogo = ({ collapsed }:any) => {
     <div
       className={mergeClassName(
         styleScope["logo-box"],
-        "flex items-end justify-center py-[.15rem]"
+        "grid place-content-center"
       )}
     >
-      <img src={logo} className="w-[.35rem] aspect-square" alt="logo" />
-      {!collapsed ? (
-        <p className={mergeClassName(styleScope["text"])}>auPay</p>
-      ) : null}
+      <img src={logo} className="aspect-square" alt="logo" />
     </div>
   );
 };

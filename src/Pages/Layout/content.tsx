@@ -1,9 +1,8 @@
 import Card from "@/Components/Card";
 import Message from "@/Components/Message";
-import { Button, theme, Layout } from "antd";
-import React from "react";
+import { Layout } from "antd";
 let { Content } = Layout;
-const LayoutContent = ({ colorBgContainer }) => {
+const LayoutContent = () => {
   return (
     <Content
       style={{
@@ -11,8 +10,10 @@ const LayoutContent = ({ colorBgContainer }) => {
         background: "var(--gray)",
       }}
     >
-      <Message message="test" className="bg-[red] text-[#fff]" icon={<>∆˙˚¬µ</>}/>
-      <Card/>
+      <Message message="test" className="text-[#333]" icon={<>∆˙˚¬µ</>} />
+      <Card>
+        <p>SDSDSDS</p>
+      </Card>
     </Content>
   );
 };
