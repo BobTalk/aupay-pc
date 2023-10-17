@@ -5,7 +5,8 @@ const AseKey = 'abcopekiYHJFMGTO';
 import { AES, enc, mode, pad, DES } from 'crypto-js'
 const SessionStorage = window.sessionStorage
 const mergeClassName = (...arg: string[]) => {
-  return arg.join(" ").trim()
+  let param = arg.filter(item => !['undefined', 'null'].includes(item)).filter(Boolean)
+  return param.join(" ").trim()
 }
 const dataType = (obj: any) => {
   return Object.prototype.toString.call(obj).slice(8, -1).toLocaleLowerCase()

@@ -44,7 +44,7 @@ const DropDownScope = () => {
   ];
   return (
     <Dropdown menu={{ items }}>
-      <a onClick={(e) => e.preventDefault()}>
+      <a onClick={(e) => e.preventDefault()} className="hover:text-[#333]">
         <span>amy gao</span>
         <CaretDownOutlined />
       </a>
