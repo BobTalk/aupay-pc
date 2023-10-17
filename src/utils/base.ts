@@ -79,7 +79,7 @@ function removeSession(name: string) {
  * 
  * @returns 移除全部session
  */
-function clearSession(){
+function clearSession() {
   return SessionStorage.clear()
 }
 
@@ -97,7 +97,7 @@ const thousands = (num: number): string => {
 }
 
 // 日期处理
-const timeFormate = (time: string, format: string = 'YYYY-MM-DD'): string => {
+const timeFormate = (time: string | Date, format: string = 'YYYY-MM-DD'): string => {
   return dayjs(time).format(format)
 }
 

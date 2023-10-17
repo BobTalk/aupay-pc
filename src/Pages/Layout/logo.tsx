@@ -2,7 +2,7 @@ import React from "react";
 import logo from "@/assets/images/logo.svg";
 import styleScope from "./logo.module.less";
 import { mergeClassName } from "@/utils/base";
-const LayoutLogo = () => {
+const LayoutLogo = ({ collapsed }:any) => {
   return (
     <div
       className={mergeClassName(
@@ -11,7 +11,9 @@ const LayoutLogo = () => {
       )}
     >
       <img src={logo} className="w-[.35rem] aspect-square" alt="logo" />
-      <p className={mergeClassName(styleScope["text"])}>auPay</p>
+      {!collapsed ? (
+        <p className={mergeClassName(styleScope["text"])}>auPay</p>
+      ) : null}
     </div>
   );
 };

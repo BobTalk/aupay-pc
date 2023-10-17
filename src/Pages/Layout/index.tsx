@@ -42,7 +42,7 @@ const LayoutPage: React.FC = () => {
           collapsible
           collapsed={collapsed}
         >
-          <LayoutLogo />
+          <LayoutLogo  collapsed={collapsed}/>
           <LayoutMenu />
         </Sider>
         <Layout>

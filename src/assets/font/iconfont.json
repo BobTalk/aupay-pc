@@ -1,0 +1,72 @@
+{
+  "id": "4029838",
+  "name": "uiComp-icon",
+  "font_family": "iconfont",
+  "css_prefix_text": "h-icon-",
+  "description": "ui组件库icon",
+  "glyphs": [
+    {
+      "icon_id": "37703339",
+      "name": "资产管理",
+      "font_class": "zichanguanli",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    },
+    {
+      "icon_id": "4562822",
+      "name": "铃铛",
+      "font_class": "lingdang",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "908553",
+      "name": "地址管理",
+      "font_class": "dizhiguanli",
+      "unicode": "e692",
+      "unicode_decimal": 59026
+    },
+    {
+      "icon_id": "1454750",
+      "name": "用户管理",
+      "font_class": "yonghuguanli",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "2314895",
+      "name": "Opera",
+      "font_class": "Opera",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
+      "icon_id": "7214192",
+      "name": "个人资料",
+      "font_class": "gerenziliao",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "15187540",
+      "name": "数据统计",
+      "font_class": "shujutongji",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "15633156",
+      "name": "公告列表",
+      "font_class": "gonggaoliebiao",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "19585505",
+      "name": "系统管理",
+      "font_class": "xitongguanli",
+      "unicode": "e99e",
+      "unicode_decimal": 59806
+    }
+  ]
+}
