@@ -9,12 +9,20 @@ import bgLogo from "@/assets/images/yellow_bg.svg";
 import totalAssets from "@/assets/images/total_assets.svg";
 import ozbetAssets from "@/assets/images/ozbet_assets.svg";
 import drawAssets from "@/assets/images/draw_addr.svg";
+import drawAddrIcon from "@/assets/images/draw_addr-icon.svg";
+import transferAddrIcon from "@/assets/images/transfer_addr-icon.svg";
+import transferAddrChart from "@/assets/images/transfer_addr-chart.svg";
+import reserveAssetsIcon from "@/assets/images/reserve_assets-icon.svg";
+import reserveAssetsChart from "@/assets/images/reserve_assets-chart.svg";
+import drawAddrChart from "@/assets/images/draw_addr-chart.svg";
 import styleScope from "./index.module.less";
 import Image from "@/Components/Image";
 import { mergeClassName } from "@/utils/base";
 const AssetsCount = () => {
   let imgList = [bgBlueLogo, bgPinkLogo, bgLogo];
   let iconList = [totalAssets, ozbetAssets, drawAssets];
+  let bIconList = [drawAddrIcon, transferAddrIcon, reserveAssetsIcon];
+  let bChartList = [drawAddrChart, transferAddrChart, reserveAssetsChart];
   let topModuleData = [
     {
       amount: "681,299.00",
@@ -68,6 +76,59 @@ const AssetsCount = () => {
       ],
     },
   ];
+  let bottomModuleData = [
+    {
+      amount: "109,230.00",
+      unit: "USDT",
+      title: "auPay提币地址",
+      detailData: [
+        {
+          title: "USDT-ERC20",
+          amount: "100,901.00",
+          unit: "USDT",
+        },
+        {
+          title: "USDT-ERC20",
+          amount: "91,793.00",
+          unit: "USDT",
+        },
+      ],
+    },
+    {
+      amount: "298,099.00",
+      unit: "USDT",
+      title: "auPay中转地址",
+      detailData: [
+        {
+          title: "USDT-ERC20",
+          amount: "131,793.00",
+          unit: "USDT",
+        },
+        {
+          title: "USDT-ERC20",
+          amount: "166,701.00",
+          unit: "USDT",
+        },
+      ],
+    },
+    {
+      amount: "71,393.00",
+      unit: "USDT",
+      title: "auPay储备资产",
+      detailData: [
+        {
+          title: "USDT-ERC20",
+          amount: "21,989.00",
+          unit: "USDT",
+        },
+        {
+          title: "USDT-ERC20",
+          amount: "30,902.00",
+          unit: "USDT",
+        },
+      ],
+    },
+  ];
   return (
     <>
       <Card
@@ -91,17 +152,59 @@ const AssetsCount = () => {
         </div>
       </Card>
 
-      
+      <div className="flex items-center gap-[.24rem] mt-[.24rem]">
+        {bottomModuleData.map((item, index) => (
+          <BottomCardList
+            key={item.title}
+            icon={bIconList[index]}
+            chart={bChartList[index]}
+            data={item}
+          />
+        ))}
+      </div>
     </>
+  );
+};
+const BottomCardList = (props) => {
+  let { icon, chart, data } = props;
+  return (
+    <div className="flex-1 p-[.34rem_.34rem_.22rem] bg-[var(--white)] rounded-[var(--border-radius)]">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center pb-[.21rem]">
+          <img className="w-[.48rem] h-[.45rem]" src={icon} alt="" />
+          <div className=" pl-[.13rem]">
+            <p className={styleScope["b-title"]}>{data.title}</p>
+            <p className={styleScope["b-amount"]}>
+              <span>{data.amount}</span>
+              <span>{data.unit}</span>
+            </p>
+          </div>
+        </div>
+        <img src={chart} alt="" />
+      </div>
+      <div className="border-t-[1px] border-dashed border-[var(--border-color)] pt-[.0873rem]">
+        {data?.detailData?.map((item) => (
+          <div key={data.title+"B"} className="flex items-center  justify-between mt-[.16rem]">
+            <span className={styleScope["b-title"]}>{item.title}</span>
+            <p className={styleScope["b-amount"]}>
+              <span>{item.amount}</span>
+              <span>{item.unit}</span>
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 const TopCardList = (props) => {
   let { imgUrl, iconUrl, data, index: parentIndex } = props;
-  console.log('parentIndex: ', parentIndex);
   return (
     <Card
       bgImg={imgUrl}
-      className={mergeClassName(styleScope[`shadow${parentIndex}`],"flex-1 bg-no-repeat h-full flex flex-col")}
+      className={mergeClassName(
+        styleScope[`shadow${parentIndex}`],
+        "flex-1 bg-no-repeat h-full flex flex-col"
+      )}
       style={{
         backgroundSize: "cover",
         minHeight: "2.25rem",
