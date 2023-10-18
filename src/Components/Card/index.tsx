@@ -8,8 +8,11 @@ interface CardType {
   bgImg?: string;
   children?: ReactNode;
   bgColor?: string;
+  opacity?:number;
 }
-const CardComp = styleComp.div`
+
+const Card = (props: CardType): ReactNode => {
+  const CardComp = styleComp.div`
   background-image:url(${(props: CardType) => props["bg-img"]});
   background-color: ${(props: CardType) => ColorFormat(props["bg-color"])};
 `;
@@ -17,9 +20,9 @@ function ColorFormat(color: string) {
   if (!color) return "";
   if (color.startsWith("rgba")) return color;
   if (color.startsWith("rgb")) {
-    return `rgba(${(color.slice(4, -1), 0.5)})`;
+    return `rgba(${(color.slice(4, -1), props.opacity)})`;
   }
-  return hexToRgba(color, 0.5);
+  return hexToRgba(color, props.opacity);
 }
 function hexToRgba(hex, opacity) {
   return (
@@ -34,7 +37,6 @@ function hexToRgba(hex, opacity) {
     ")"
   );
 }
-const Card = (props: CardType): ReactNode => {
   return (
     <CardComp
       bg-img={props.bgImg}
@@ -47,6 +49,7 @@ const Card = (props: CardType): ReactNode => {
   );
 };
 Card.defaultProps = {
+  opacity:1,
   className: "",
   style: {},
   bgImg: "",

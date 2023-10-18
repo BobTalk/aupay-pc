@@ -1,5 +1,101 @@
-const Login = ()=>{
-  return <>登陆</>
-}
+import Image from "@/Components/Image";
+import logo from "@/assets/images/logo_text.svg";
+import loginBg from "@/assets/images/login-bg.svg";
+import styleScope from "./index.module.less";
+import "@/assets/style/form.less";
+import Card from "@/Components/Card";
+import { Button, Form, Input } from "antd";
+import GetCodeBtn from "@/Components/GetCode";
+import { useState } from "react";
+const Login = () => {
+  return (
+    <Card bgImg={loginBg} bgColor="#f6f7f9" className="w-[100vw] h-[100vh]">
+      <div className="grid w-full h-full place-items-center">
+        <div className={styleScope["login-box_info"]}>
+          <Image src={logo} imgClassName="w-[1.8rem] m-[0_auto]">
+            <p className={styleScope["summary"]}>Web3.0支付 | 管理中心 V1.0</p>
+          </Image>
+          <FormComp />
+        </div>
+      </div>
+    </Card>
+  );
+};
 
-export default Login
+const FormComp = () => {
+  let [formInitVal, setFormInitVal] = useState({
+    username: "",
+    password: "",
+    emailCode: "",
+  });
+  const message = {
+    username: "请输入用户名",
+    password: "请输入密码",
+    emailCode: "请输入邮箱验证码",
+  };
+
+  function onFinish(obj) {
+    console.log('obj: ', obj);
+
+  }
+  return (
+    <Form
+    autoComplete="off"
+      initialValues={formInitVal}
+      layout="vertical"
+      onFinish={onFinish}
+      className="_reset-form mt-[.49rem]"
+    >
+      <Form.Item
+        className="hidden_start"
+        name="username"
+        label="用户名"
+        rules={[
+          {
+            required: true,
+            message: message["username"],
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        className="hidden_start"
+        name="password"
+        label="登录密码"
+        rules={[
+          {
+            required: true,
+            message: message["password"],
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        className="hidden_start"
+        name="emailCode"
+        label={
+          <div className="flex justify-between items-center flex-1">
+            <span>邮箱验证码</span>
+            <GetCodeBtn btnName="获取验证码" />
+          </div>
+        }
+        rules={[
+          {
+            required: true,
+            message: message["emailCode"],
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" block htmlType="submit">
+          登录
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+export default Login;

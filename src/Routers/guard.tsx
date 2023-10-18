@@ -11,6 +11,5 @@ export function Guard(element: any) {
       <Navigate replace to="login" state={{ from: location }} />
     );
   }
-  console.log('element: ', element);
   return element;
 }
