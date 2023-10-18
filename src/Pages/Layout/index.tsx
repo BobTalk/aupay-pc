@@ -51,7 +51,7 @@ const LayoutPage: React.FC = () => {
             collapsed={collapsed}
             setCollapsed={setCollapsed}
           />
-          <LayoutContent colorBgContainer={colorBgContainer} />
+          <LayoutContent />
         </Layout>
       </Layout>
     </ConfigProvider>

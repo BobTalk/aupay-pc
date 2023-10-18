@@ -11,7 +11,7 @@ const LayoutContent = () => {
         background: "var(--gray)",
       }}
     >
-      <Message message="test" className="text-[#333]" icon={<>∆˙˚¬µ</>} />
+      <Message message="test" className="text-[#333]" prvIcon={<>∆˙˚¬µ</>} />
       <Outlet/>
     </Content>
   );

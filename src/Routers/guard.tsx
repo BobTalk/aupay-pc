@@ -1,5 +1,4 @@
 import { getSession } from "@/utils/base";
-import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 export function Guard(element: any) {
   let { route } = element.props.match;
@@ -12,5 +11,6 @@ export function Guard(element: any) {
       <Navigate replace to="login" state={{ from: location }} />
     );
   }
+  console.log('element: ', element);
   return element;
 }
