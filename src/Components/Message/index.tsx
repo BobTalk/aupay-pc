@@ -2,13 +2,14 @@ import { Alert } from "antd";
 import { ReactNode, memo } from "react";
 import styleScope from "./index.module.less";
 import { mergeClassName } from "@/utils/base";
+import closeIcon from "@/assets/images/close.svg";
 type PropsType = {
   message: string;
   showIcon: true;
   type?: "success" | "info" | "warning" | "error";
   description?: string;
   onClose?: Function;
-  icon?: ReactNode;
+  prvIcon?: ReactNode;
   showCloseIcon?: boolean;
   action?: ReactNode;
   className?: string;
@@ -21,7 +22,7 @@ const Message = (props: PropsType) => {
       style={props.style}
       action={props.action}
       closable={props.showCloseIcon}
-      icon={props.icon}
+      icon={props.prvIcon}
       showIcon={props.showIcon}
       message={props.message}
       type={props.type}
@@ -37,8 +38,8 @@ Message.defaultProps = {
   type: "",
   description: "",
   onClose: (e: MouseEvent): void => {},
-  showCloseIcon: true,
-  icon: <></>,
+  showCloseIcon: false,
+  prvIcon: <></>,
   className: "",
   style: {},
 };
