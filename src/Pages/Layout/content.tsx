@@ -1,6 +1,7 @@
 import Card from "@/Components/Card";
 import Message from "@/Components/Message";
 import { Layout } from "antd";
+import { Outlet } from "react-router-dom";
 let { Content } = Layout;
 const LayoutContent = () => {
   return (
@@ -11,9 +12,7 @@ const LayoutContent = () => {
       }}
     >
       <Message message="test" className="text-[#333]" icon={<>∆˙˚¬µ</>} />
-      <Card>
-        <p>SDSDSDS</p>
-      </Card>
+      <Outlet/>
     </Content>
   );
 };
