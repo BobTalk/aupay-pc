@@ -2,6 +2,7 @@ import { lazy } from "react";
 const Login = lazy(() => import('@/Pages/Login'))
 const LayoutPage = lazy(() => import('@/Pages/Layout'))
 const Denied = lazy(() => import('@/Pages/Denied'))
+const AssetsCount = lazy(() => import('@/Pages/Assets'))
 const RouteList = [
   {
     path: '/',
@@ -12,9 +13,14 @@ const RouteList = [
     element: <Denied />
   },
   {
-    path: '/home',
+    path: '/aupay',
     element: <LayoutPage />,
-    children: []
+    children: [
+      {
+        path:'assets',
+        element: <AssetsCount/>
+      }
+    ]
   }
 ]
 export default RouteList

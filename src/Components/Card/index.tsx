@@ -8,35 +8,45 @@ interface CardType {
   bgImg?: string;
   children?: ReactNode;
   bgColor?: string;
-  opacity?:number;
+  opacity?: number;
 }
 
 const Card = (props: CardType): ReactNode => {
   const CardComp = styleComp.div`
-  background-image:url(${(props: CardType) => props["bg-img"]});
-  background-color: ${(props: CardType) => ColorFormat(props["bg-color"])};
+    ${(props: CardType) => formatImg(props["bg-img"])};
+    ${(props: CardType) => ColorFormat(props["bg-color"])};
 `;
-function ColorFormat(color: string) {
-  if (!color) return "";
-  if (color.startsWith("rgba")) return color;
-  if (color.startsWith("rgb")) {
-    return `rgba(${(color.slice(4, -1), props.opacity)})`;
+  function formatImg(imgUrl) {
+    if (imgUrl.startsWith("linear-gradient")) {
+      return `background-image:${imgUrl}`;
+    } else {
+      return `background-image:url('${imgUrl}')`;
+    }
   }
-  return hexToRgba(color, props.opacity);
-}
-function hexToRgba(hex, opacity) {
-  return (
-    "rgba(" +
-    parseInt("0x" + hex.slice(1, 3)) +
-    "," +
-    parseInt("0x" + hex.slice(3, 5)) +
-    "," +
-    parseInt("0x" + hex.slice(5, 7)) +
-    "," +
-    opacity +
-    ")"
-  );
-}
+  function ColorFormat(color: string) {
+    if (!color) return "";
+    if (color.startsWith("linear-gradient")) {
+      return formatImg(color);
+    }
+    if (color.startsWith("rgba")) return `background-color:${color}`;
+    if (color.startsWith("rgb")) {
+      return `background-color:rgba(${(color.slice(4, -1), props.opacity)})`;
+    }
+    return hexToRgba(color, props.opacity);
+  }
+  function hexToRgba(hex, opacity) {
+    return (
+      "background-color: rgba(" +
+      parseInt("0x" + hex.slice(1, 3)) +
+      "," +
+      parseInt("0x" + hex.slice(3, 5)) +
+      "," +
+      parseInt("0x" + hex.slice(5, 7)) +
+      "," +
+      opacity +
+      ")"
+    );
+  }
   return (
     <CardComp
       bg-img={props.bgImg}
@@ -49,7 +59,7 @@ function hexToRgba(hex, opacity) {
   );
 };
 Card.defaultProps = {
-  opacity:1,
+  opacity: 1,
   className: "",
   style: {},
   bgImg: "",

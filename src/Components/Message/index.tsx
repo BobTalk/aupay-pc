@@ -2,9 +2,8 @@ import { Alert } from "antd";
 import { ReactNode, memo } from "react";
 import styleScope from "./index.module.less";
 import { mergeClassName } from "@/utils/base";
-import closeIcon from "@/assets/images/close.svg";
 type PropsType = {
-  message: string;
+  message: ReactNode | string | null;
   showIcon: true;
   type?: "success" | "info" | "warning" | "error";
   description?: string;
@@ -18,7 +17,7 @@ type PropsType = {
 const Message = (props: PropsType) => {
   return (
     <Alert
-      className={mergeClassName(styleScope['_alert-box'], `${props.className}`)}
+      className={mergeClassName(styleScope["_alert-box"], `${props.className}`)}
       style={props.style}
       action={props.action}
       closable={props.showCloseIcon}

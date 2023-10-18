@@ -1,0 +1,59 @@
+@borderColorList: #65A7FF, #FF93FC, #FFCDAF;
+@linearGradientList: 0 .17rem .2rem #00A8FF, 0 .17rem .2rem #F07EEE, 0 .17rem .2rem #FFC354;
+
+.loop(@index, @len, @color-arr, @name) when(@index <=@len)and(@name='border') {
+  .detail@{index} {
+    border-top: 1px solid extract(@color-arr, @index+1);
+  }
+
+  .loop(@index + 1, @len, @color-arr, @name)
+}
+
+.loop(@index, @len, @color-arr, @name) when(@index <=@len)and(@name='shadow') {
+  .shadow@{index} {
+    box-shadow: extract(@color-arr, @index+1);
+  }
+
+  .loop(@index + 1, @len, @color-arr, @name)
+}
+
+.loop(0, 3, @borderColorList, 'border');
+.loop(0, 3, @linearGradientList, 'shadow');
+
+.amount {
+  font-size: .28rem;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.title {
+  &:extend(.amount);
+  font-size: .16rem !important;
+}
+
+.detail-info {
+  flex: 1;
+
+  >div {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-block: .167rem .13rem;
+    color: var(--white);
+
+    >p {
+      font-size: .14rem;
+
+      &:last-child {
+        font-size: .18rem;
+        margin-top: .08rem;
+      }
+    }
+
+    &:not(:last-child) {
+      border-right: 1px solid var(--border-color);
+    }
+  }
+}
