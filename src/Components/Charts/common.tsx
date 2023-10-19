@@ -28,7 +28,4 @@ const CommonChart = (props: BarPropsType, ref: any) => {
         onChartReady={onChartReadyCallback}
         option={option} />
 };
-CommonChart.defaultProps = {
-    option: {},
-};
 export default forwardRef(CommonChart);

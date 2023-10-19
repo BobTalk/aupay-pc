@@ -1,11 +1,12 @@
 import ReactECharts from 'echarts-for-react';
 import CommonChart from '../common';
+import { forwardRef } from 'react';
 type BarPropsType = {
   option: {};
   className?: "";
   style?: {};
 };
-const Bar = (props: BarPropsType) => {
+const Bar = (props: BarPropsType, ref: any) => {
   let { option, className, style } = props;
   function onChartReadyCallback(chart) {
     setTimeout(() => {
@@ -13,10 +14,8 @@ const Bar = (props: BarPropsType) => {
     }, 100)
   }
   return <div className={className} style={style}>
-    <CommonChart option={option} />
+    <CommonChart ref={ref} option={option} />
   </div>;
 };
-Bar.defaultProps = {
-  option: {},
-};
-export default Bar;
+
+export default forwardRef(Bar);
