@@ -20,6 +20,7 @@ const LayoutContent = () => {
   }
   return (
     <Content
+    className="overflow-y-auto"
       style={{
         padding: ".16rem .24rem",
         background: "var(--gray)",

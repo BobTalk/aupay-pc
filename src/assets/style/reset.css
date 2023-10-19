@@ -284,7 +284,7 @@
     display: none;
   }
 
-  .inlineSize {
-    container-type: "inline-size"
+  .inline-size {
+    container-type: inline-size;
   }
 }

@@ -4,11 +4,16 @@
   }
 
   :global(.ant-menu-submenu-title) {
+    height: .5rem !important;
+    line-height: .5rem !important;
+    margin-inline: 0;
+    margin-block: 0;
+    width: 100%;
+
     &:hover {
       color: var(--white);
     }
   }
-
   :global(.ant-menu-item) {
     display: flex;
     width: 100%;
@@ -26,6 +31,7 @@
 
   :global(.ant-menu-submenu-active.ant-menu-submenu-selected .ant-menu-submenu-title) {
     color: var(--white);
+
   }
 
   :global(.ant-menu-submenu-selected) {
@@ -42,4 +48,9 @@
     margin-inline-start: .16rem !important;
     font-size: .16rem;
   }
+}
+
+:global(.ant-menu-submenu-popup .ant-menu-vertical >.ant-menu-item) {
+  height: .5rem !important;
+  line-height: .5rem !important;
 }

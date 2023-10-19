@@ -1,6 +1,7 @@
 import { getSession } from "@/utils/base";
 import { Navigate, useLocation } from "react-router-dom";
 export function Guard(element: any) {
+  if (!element) return null;
   let { route } = element.props.match;
   let token = getSession("token");
   let location = useLocation();
