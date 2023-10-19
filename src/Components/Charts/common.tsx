@@ -18,10 +18,15 @@ const CommonChart = (props: BarPropsType, ref: any) => {
     function onChartLegendSelectChanged(obj) {
         console.log('obj2: ', obj);
     }
-    return <ReactECharts ref={ref} onEvents={{
-        click: onChartClick,
-        legendselectchanged: onChartLegendSelectChanged
-    }} opts={{ renderer: 'svg' }} onChartReady={onChartReadyCallback} option={option} onChartReady={onChartReadyCallback} />
+    return <ReactECharts
+        ref={ref}
+        onEvents={{
+            click: onChartClick,
+            legendselectchanged: onChartLegendSelectChanged
+        }}
+        opts={{ renderer: 'svg' }}
+        onChartReady={onChartReadyCallback}
+        option={option} />
 };
 CommonChart.defaultProps = {
     option: {},
