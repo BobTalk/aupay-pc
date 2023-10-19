@@ -48,18 +48,21 @@ export default {
   series: [
     {
       type: 'bar',
+      barWidth: 15,
       itemStyle: {
         barBorderRadius: [3, 3, 0, 0]
       }
     },
     {
       type: 'bar',
+      barWidth: 15,
       itemStyle: {
         barBorderRadius: [3, 3, 0, 0]
       }
     },
     {
       type: 'bar',
+      barWidth: 15,
       itemStyle: {
         barBorderRadius: [3, 3, 0, 0]
       }

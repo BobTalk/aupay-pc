@@ -3,11 +3,12 @@ import styleScope from "./index.module.less";
 import RangePicker from "@/Components/RangePicker";
 import { SearchOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import { BarChart } from "@/Components/Charts";
+import { BarChart, LineChart } from "@/Components/Charts";
 import BarOptions from "./mock.js";
+import BarOptions1 from "./mock2.js";
+import LineOptions from "./mock1.js";
 import { useEffect, useRef } from "react";
 const DataCount = () => {
-  let chartBoxRef = useRef<any>();
   let activationList = [
     {
       title: "总注册",
@@ -46,12 +47,6 @@ const DataCount = () => {
       num: 23809,
     },
   ];
-  useEffect(() => {
-    console.log(
-      "chartBoxRef.current.getBoundingRect(): ",
-      chartBoxRef.current.clientWidth
-    );
-  }, []);
   return (
     <>
       <div
@@ -106,22 +101,89 @@ const DataCount = () => {
               </Button>
             </div>
           </div>
-          <div ref={chartBoxRef} className="w-full" style={{height:"calc(100% - .32rem)"}}>
-          <BarChart
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-            option={BarOptions}
-          /> 
+          <div className="w-full" style={{ height: "calc(100% - .32rem)" }}>
+            <BarChart
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+              option={BarOptions}
+            />
           </div>
-          {/* <BarChart
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-[.24rem] mt-[.24rem] min-h-[4.74rem] inline-size">
+        <div className="bg-[var(--white)] p-[.24rem] rounded-[var(--border-radius)]">
+          <div className="flex items-center justify-between">
+            <p
+              className={mergeClassName(
+                styleScope["title"],
+                styleScope["blue-line"]
+              )}
+            >
+              支付Ozbet统计
+            </p>
+            <div>
+              <RangePicker />
+              <Button
+                type="primary"
+                className="ml-[.1rem]"
+                icon={<SearchOutlined />}
+              >
+                查询
+              </Button>
+            </div>
+          </div>
+          <div
             style={{
+              height: "calc(100% - .32rem)",
               width: "100%",
-              height: "100%",
             }}
-            option={BarOptions}
-          /> */}
+          >
+            <LineChart
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+              option={LineOptions}
+            />
+          </div>
+        </div>
+        <div className="bg-[var(--white)] p-[.24rem] rounded-[var(--border-radius)]">
+          <div className="flex items-center justify-between">
+            <p
+              className={mergeClassName(
+                styleScope["title"],
+                styleScope["blue-line"]
+              )}
+            >
+              auPay资产趋势
+            </p>
+            <div>
+              <RangePicker />
+              <Button
+                type="primary"
+                className="ml-[.1rem]"
+                icon={<SearchOutlined />}
+              >
+                查询
+              </Button>
+            </div>
+          </div>
+          <div
+            style={{
+              height: "calc(100% - .32rem)",
+              width: "calc(100% - .48rem)",
+            }}
+          >
+            <BarChart
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+              option={BarOptions1}
+            />
+          </div>
         </div>
       </div>
     </>
