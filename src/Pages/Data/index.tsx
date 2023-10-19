@@ -65,7 +65,7 @@ const DataCount = () => {
           >
             总注册-总活跃度
           </p>
-          <div className="grid grid-cols-3 grid-rows-3 gap-[.16rem] place-items-center">
+          <div className="grid grid-cols-3 grid-rows-3 gap-[.16rem] place-items-center]" style={{ height: 'calc(100% - .56rem)' }}>
             {activationList.map((item) => (
               <div
                 key={item.title + "_" + item.num}

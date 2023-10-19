@@ -1,22 +1,5 @@
-import { useEffect, useRef } from "react";
-import * as echarts from "echarts/core";
-import {
-  DatasetComponent,
-  TooltipComponent,
-  GridComponent,
-  LegendComponent,
-} from "echarts/components";
-import { BarChart } from "echarts/charts";
-import { CanvasRenderer } from "echarts/renderers";
-
-echarts.use([
-  DatasetComponent,
-  TooltipComponent,
-  GridComponent,
-  LegendComponent,
-  BarChart,
-  CanvasRenderer,
-]);
+import ReactECharts from 'echarts-for-react';
+import CommonChart from '../common';
 type BarPropsType = {
   option: {};
   className?: "";
@@ -24,23 +7,14 @@ type BarPropsType = {
 };
 const Bar = (props: BarPropsType) => {
   let { option, className, style } = props;
-  let echartViews = useRef();
-  function initChart() {
-    if (echartViews.current && option) {
-      let instance = echarts.init(echartViews.current);
-      instance.setOption(option);
-    }
+  function onChartReadyCallback(chart) {
+    setTimeout(() => {
+      chart.resize()
+    }, 100)
   }
-  function resize() {
-    echarts.init(echartViews.current).resize();
-  }
-  useEffect(() => {
-    echarts.init(echartViews.current).clear();
-    initChart();
-    window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
-  }, []);
-  return <div ref={echartViews} className={className} style={style}></div>;
+  return <div className={className} style={style}>
+    <CommonChart option={option} />
+  </div>;
 };
 Bar.defaultProps = {
   option: {},
