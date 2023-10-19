@@ -169,10 +169,10 @@ const BottomCardList = (props) => {
   let { icon, chart, data } = props;
   return (
     <div className="flex-1 p-[.34rem_.34rem_.22rem] bg-[var(--white)] rounded-[var(--border-radius)]">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center pb-[.21rem]">
+      <div className="flex items-center justify-between gap-[.1rem]  pb-[.21rem]">
+        <div className="flex flex-1 items-center">
           <img className="w-[.48rem] h-[.45rem]" src={icon} alt="" />
-          <div className=" pl-[.13rem]">
+          <div className="pl-[.13rem] inline-size flex-auto">
             <p className={styleScope["b-title"]}>{data.title}</p>
             <p className={styleScope["b-amount"]}>
               <span>{data.amount}</span>
@@ -180,11 +180,14 @@ const BottomCardList = (props) => {
             </p>
           </div>
         </div>
-        <img src={chart} alt="" />
+        <img src={chart} className="w-[36%]" alt="" />
       </div>
       <div className="border-t-[1px] border-dashed border-[var(--border-color)] pt-[.0873rem]">
-        {data?.detailData?.map((item) => (
-          <div key={data.title+"B"} className="flex items-center  justify-between mt-[.16rem]">
+        {data?.detailData?.map((item, index) => (
+          <div
+            key={data.title + "B" + index}
+            className="flex items-center  justify-between mt-[.16rem]"
+          >
             <span className={styleScope["b-title"]}>{item.title}</span>
             <p className={styleScope["b-amount"]}>
               <span>{item.amount}</span>
