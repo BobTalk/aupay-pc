@@ -112,7 +112,7 @@ const DataCount = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-[.24rem] mt-[.24rem] min-h-[4.74rem] inline-size">
+      <div className={mergeClassName(styleScope["bottom-box"], " gap-[.24rem] mt-[.24rem] min-h-[4.74rem] inline-size")} >
         <div className="bg-[var(--white)] p-[.24rem] rounded-[var(--border-radius)]">
           <div className="flex items-center justify-between">
             <p

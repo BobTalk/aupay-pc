@@ -9,8 +9,19 @@
 }
 
 .top-box {
-  // grid-template-columns: 34.74% 63.77%;
   grid-template-columns: 1.3fr 1.7fr;
+}
+
+.bottom-box {
+  display: inline-flex;
+  width: 100%;
+
+  >div {
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: calc(50% - .12rem);
+    width: calc(50% - .12rem);
+  }
 }
 
 .blue-line {

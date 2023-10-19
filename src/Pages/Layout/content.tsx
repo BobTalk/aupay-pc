@@ -20,7 +20,7 @@ const LayoutContent = () => {
   }
   return (
     <Content
-    className="overflow-y-auto"
+      className="overflow-y-auto"
       style={{
         padding: ".16rem .24rem",
         background: "var(--gray)",
@@ -33,7 +33,14 @@ const LayoutContent = () => {
           </p>
         }
         className={mergeClassName("text-[#333] mb-[.24rem]", `${showMessage}`)}
-        action={<img src={closeIcon} alt="" className="cursor-pointer" onClick={close} />}
+        action={
+          <img
+            src={closeIcon}
+            alt=""
+            className="cursor-pointer"
+            onClick={close}
+          />
+        }
         prvIcon={<img src={messageIcon} alt="" />}
       />
       <Outlet />

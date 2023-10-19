@@ -1,4 +1,6 @@
 import * as echarts from "echarts/core";
+// import { ScatterChart } from 'echarts/charts';
+// import ChartCore, { use } from 'react-echarts-core';
 import {
   TitleComponent,
   ToolboxComponent,
@@ -10,7 +12,7 @@ import { LineChart } from "echarts/charts";
 import { UniversalTransition } from "echarts/features";
 import { CanvasRenderer } from "echarts/renderers";
 import { useEffect, useRef } from "react";
-
+// use([ScatterChart]);
 echarts.use([
   TitleComponent,
   ToolboxComponent,
@@ -41,9 +43,9 @@ const Line = (props: LinePropsType) => {
   }
   useEffect(() => {
     echarts.init(echartViews.current).dispose();
-    echartViews.current.addEventListener("resize", resize);
+    window.addEventListener("resize", resize);
     initChart();
-    return () => echartViews.current.removeEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
   }, []);
   return <div ref={echartViews} className={className} style={style}></div>;
 };
