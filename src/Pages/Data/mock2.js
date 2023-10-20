@@ -1,5 +1,5 @@
 export default {
-  color: ["#1C63FF", '#FFC354', '#00A8FF'],
+  color: ["#1C63FF", '#00A8FF'],
   dataset: {
     dimentsions: ['date', "流入", "流出"],
     source: [
