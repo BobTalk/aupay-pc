@@ -4,8 +4,10 @@ import styleScope from "./index.module.less";
 import Table from "@/Components/Table";
 import { useState } from "react";
 import { data, columns, pagination } from "./table-mock.jsx";
+import { Outlet, useLocation } from "react-router-dom";
 const User = () => {
   let [state, setState] = useState(undefined);
+  let { pathname } = useLocation();
   let [name, setName] = useState(undefined);
   function tableChangeCb(
     pge,
@@ -15,7 +17,7 @@ const User = () => {
   ) {
     console.log("pagination: ", pge);
   }
-  return (
+  return pathname == "/aupay/user" ? (
     <>
       <div className={styleScope["filter-box"]}>
         <div className={styleScope["filter-user"]}>
@@ -58,6 +60,8 @@ const User = () => {
         rowClassName={styleScope["row"]}
       />
     </>
+  ) : (
+    <Outlet />
   );
 };
 export default User;

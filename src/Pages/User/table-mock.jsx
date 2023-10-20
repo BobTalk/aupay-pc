@@ -1,4 +1,5 @@
 import { EyeFilled } from '@ant-design/icons';
+import { NavLink } from 'react-router-dom';
 export const pagination = {
   current: 1,
   pageSize: 5,
@@ -199,7 +200,7 @@ export const columns = [
     responsive: ['xxl'],
     render: (_, record) => (<div className='text-[var(--blue)] cursor-pointer'>
       <EyeFilled />
-      <span className='ml-[.1rem]'>查看</span>
+      <NavLink className='ml-[.1rem] hover:text-[var(--blue)] text-[var(--blue)] ' to="/aupay/user/detail/user">查看</NavLink>
     </div>)
   },
 ]

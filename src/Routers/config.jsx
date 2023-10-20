@@ -5,6 +5,8 @@ const Denied = lazy(() => import("@/Pages/Denied"));
 const AssetsCount = lazy(() => import("@/Pages/Assets"));
 const DataCount = lazy(() => import("@/Pages/data"));
 const UserManage = lazy(() => import("@/Pages/User"));
+const UserDetail = lazy(() => import("@/Pages/User/detail"));
+const UserDetailInfo = lazy(() => import("@/Pages/User/detail/user"));
 const RouteList = [
   {
     path: "/",
@@ -29,7 +31,21 @@ const RouteList = [
       {
         path: "user",
         element: <UserManage />,
+        children: [
+          {
+            path: 'detail',
+            element: <UserDetail />,
+            children: [
+              {
+                path: 'user',
+                element: <UserDetailInfo />
+              }
+            ]
+          }
+        ]
+
       },
+
     ],
   },
 ];
