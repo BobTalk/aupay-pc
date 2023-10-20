@@ -53,7 +53,7 @@ export default {
       silent: true,
       barWidth: 24,
       itemStyle: {
-        barBorderRadius: 6
+        borderRadius: 6
       }
     },
     {
@@ -61,7 +61,7 @@ export default {
       type: 'bar',
       barWidth: 24,
       itemStyle: {
-        barBorderRadius: 6
+        borderRadius: 6
       }
     },
   ]

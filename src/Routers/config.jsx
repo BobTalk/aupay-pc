@@ -1,16 +1,15 @@
-import { lazy } from "react";
-const Login = lazy(() => import("@/Pages/Login"));
-const LayoutPage = lazy(() => import("@/Pages/Layout"));
-const Denied = lazy(() => import("@/Pages/Denied"));
-const AssetsCount = lazy(() => import("@/Pages/Assets"));
-const DataCount = lazy(() => import("@/Pages/data"));
-const UserManage = lazy(() => import("@/Pages/User"));
-const UserDetail = lazy(() => import("@/Pages/User/detail"));
-const UserDetailInfo = lazy(() => import("@/Pages/User/detail/user"));
-const TradeDetailInfo = lazy(() => import("@/Pages/User/detail/trade"));
-const DrawDetailInfo = lazy(() => import("@/Pages/User/detail/draw"));
-const AssetsChangesDetailInfo = lazy(() => import("@/Pages/User/detail/assetsChanges"));
-const RechargeDetailInfo = lazy(() => import("@/Pages/User/detail/recharge"));
+import Login from "@/Pages/Login";
+import LayoutPage from "@/Pages/Layout";
+import Denied from "@/Pages/Denied";
+import AssetsCount from "@/Pages/Assets";
+import DataCount from "@/Pages/data";
+import UserManage from "@/Pages/User";
+import UserDetail from "@/Pages/User/detail";
+import UserDetailInfo from "@/Pages/User/detail/user";
+import TradeDetailInfo from "@/Pages/User/detail/trade";
+import DrawDetailInfo from "@/Pages/User/detail/draw";
+import AssetsChangesDetailInfo from "@/Pages/User/detail/assetsChanges";
+import RechargeDetailInfo from "@/Pages/User/detail/recharge";
 const RouteList = [
   {
     path: "/",

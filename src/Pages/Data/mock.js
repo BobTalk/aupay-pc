@@ -50,21 +50,21 @@ export default {
       type: 'bar',
       barWidth: 15,
       itemStyle: {
-        barBorderRadius: [3, 3, 0, 0]
+        borderRadius: [3, 3, 0, 0]
       }
     },
     {
       type: 'bar',
       barWidth: 15,
       itemStyle: {
-        barBorderRadius: [3, 3, 0, 0]
+        borderRadius: [3, 3, 0, 0]
       }
     },
     {
       type: 'bar',
       barWidth: 15,
       itemStyle: {
-        barBorderRadius: [3, 3, 0, 0]
+        borderRadius: [3, 3, 0, 0]
       }
     }
   ]
