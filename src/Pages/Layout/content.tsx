@@ -14,7 +14,6 @@ const LayoutContent = () => {
   let [stop] = useStopPropagation();
   function close(e) {
     stop(e, () => {
-      console.log("close");
       setShowMessage("hidden");
     });
   }

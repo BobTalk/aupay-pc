@@ -4,6 +4,7 @@ const LayoutPage = lazy(() => import("@/Pages/Layout"));
 const Denied = lazy(() => import("@/Pages/Denied"));
 const AssetsCount = lazy(() => import("@/Pages/Assets"));
 const DataCount = lazy(() => import("@/Pages/data"));
+const UserManage = lazy(() => import("@/Pages/User"));
 const RouteList = [
   {
     path: "/",
@@ -24,6 +25,10 @@ const RouteList = [
       {
         path: "data",
         element: <DataCount />,
+      },
+      {
+        path: "user",
+        element: <UserManage />,
       },
     ],
   },

@@ -16,6 +16,19 @@ const LayoutPage: React.FC = () => {
     <ConfigProvider
       theme={{
         components: {
+          Pagination:{
+            colorText:"#666",
+            colorTextDisabled:'#B8BFCD',
+          },
+          Table: {
+            borderColor:"var(--border-color)",
+            colorText:"#333",
+            fontWeightStrong: 400,
+            headerColor: 'var(--menu-color)',
+            headerBg:"var(--table-head_gray)",
+            headerSplitColor:"transparent",
+            rowHoverBg: "var(--table-hover)",
+          },
           Button: {
             colorPrimary: "var(--blue)",
           },
@@ -23,10 +36,10 @@ const LayoutPage: React.FC = () => {
             itemHoverBg: "var(--blue)",
             itemHoverColor: "var(--white)",
             itemSelectedBg: "var(--blue)",
-            subMenuItemBg:"var(--blue)",
+            subMenuItemBg: "var(--blue)",
             itemSelectedColor: "var(--white)",
-            itemColor:'var(--menu-color)',
-            itemActiveBg:'var(--blue)'
+            itemColor: "var(--menu-color)",
+            itemActiveBg: "var(--blue)",
           },
         },
       }}
@@ -42,7 +55,7 @@ const LayoutPage: React.FC = () => {
           collapsible
           collapsed={collapsed}
         >
-          <LayoutLogo  collapsed={collapsed}/>
+          <LayoutLogo collapsed={collapsed} />
           <LayoutMenu />
         </Sider>
         <Layout>

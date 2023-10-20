@@ -3,11 +3,12 @@ import styleScope from "./menu.module.less";
 import { mergeClassName } from "@/utils/base";
 import Icon from "@/Components/Icon";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import urlMap from "./urlMapTitle";
 const LayoutMenu = () => {
   let [stop] = useStopPropagation();
   let navigate = useNavigate();
+  let { pathname } = useLocation();
   function menuSelectCb({ key, domEvent }) {
     stop(domEvent, () => {
       navigate(key, { state: { _title: urlMap[key] } });
@@ -22,7 +23,7 @@ const LayoutMenu = () => {
         styleScope["menu-box"],
         "pt-[.1rem] px-[.1rem]"
       )}
-      defaultSelectedKeys={["/aupay/assets"]}
+      defaultSelectedKeys={[pathname]}
       items={[
         {
           key: "/aupay/assets",
@@ -39,7 +40,7 @@ const LayoutMenu = () => {
           label: "数据统计",
         },
         {
-          key: "3",
+          key: "/aupay/user",
           icon: (
             <Icon name="h-icon-yonghuguanli" className={styleScope["icon"]} />
           ),
