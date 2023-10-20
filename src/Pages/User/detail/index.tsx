@@ -26,12 +26,16 @@ const UserDetail = () => {
     },
   ];
   function onChange(key: string) {
-    console.log("key: ", key);
     navigate(`/aupay/user/detail/${key}`);
   }
   return (
     <>
-      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+      <Tabs
+        className="bg-[var(--white)] px-[.24rem] rounded-[.08rem]"
+        defaultActiveKey="1"
+        items={items}
+        onChange={onChange}
+      />
       <Outlet />
     </>
   );

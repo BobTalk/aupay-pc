@@ -16,17 +16,30 @@ const LayoutPage: React.FC = () => {
     <ConfigProvider
       theme={{
         components: {
-          Pagination:{
-            colorText:"#666",
-            colorTextDisabled:'#B8BFCD',
+          Tabs: {
+            colorBorderSecondary: "transparent",
+            fontSize: 16,
+            itemColor: "#666",
+            cardBg: "var(--white)",
+            colorTextHeading: "#666",
+            colorText: "#666",
+            itemHoverColor: "var(--blue)",
+            colorFillAlter: "var(--white)",
+            cardHeight: 60,
+            margin: 0,
+            horizontalItemPadding:'17px 0'
+          },
+          Pagination: {
+            colorText: "#666",
+            colorTextDisabled: "#B8BFCD",
           },
           Table: {
-            borderColor:"var(--border-color)",
-            colorText:"#333",
+            borderColor: "var(--border-color)",
+            colorText: "#333",
             fontWeightStrong: 400,
-            headerColor: 'var(--menu-color)',
-            headerBg:"var(--table-head_gray)",
-            headerSplitColor:"transparent",
+            headerColor: "var(--menu-color)",
+            headerBg: "var(--table-head_gray)",
+            headerSplitColor: "transparent",
             rowHoverBg: "var(--table-hover)",
           },
           Button: {
