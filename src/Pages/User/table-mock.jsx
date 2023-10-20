@@ -1,13 +1,10 @@
 import { EyeFilled } from '@ant-design/icons';
 export const pagination = {
   current: 1,
-  pageSize: 10,
-  total: 100,
-location:'',
+  pageSize: 5,
+  total: 10,
   showTotal: function (total, range) {
-    console.log('range: ', range);
-    console.log('total: ', total);
-    return `${range.length > 1 ? range[0]+' - '+range[1] : range[0]} 页 共${total}条`
+    return `${Math.ceil(total / range[1]) > 1 ? 1 + ' - ' + Math.ceil(total / range[1]) : 1} 页 共${total}条`
   },
   showSizeChanger: false,
   showQuickJumper: true,
@@ -200,7 +197,7 @@ export const columns = [
     key: 'operation',
     dataIndex: 'operation',
     responsive: ['xxl'],
-    render: (_, record) => (<div className='text-[var(--blue)]'>
+    render: (_, record) => (<div className='text-[var(--blue)] cursor-pointer'>
       <EyeFilled />
       <span className='ml-[.1rem]'>查看</span>
     </div>)

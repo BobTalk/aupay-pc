@@ -3,10 +3,18 @@ import { SearchOutlined, CaretDownOutlined } from "@ant-design/icons";
 import styleScope from "./index.module.less";
 import Table from "@/Components/Table";
 import { useState } from "react";
-import { data, columns,pagination } from "./table-mock.jsx";
+import { data, columns, pagination } from "./table-mock.jsx";
 const User = () => {
   let [state, setState] = useState(undefined);
   let [name, setName] = useState(undefined);
+  function tableChangeCb(
+    pge,
+    filters,
+    sorter,
+    extra: { currentDataSource; action }
+  ) {
+    console.log("pagination: ", pge);
+  }
   return (
     <>
       <div className={styleScope["filter-box"]}>
@@ -42,7 +50,13 @@ const User = () => {
           </Button>
         </div>
       </div>
-      <Table dataSource={data} pagination={pagination} columns={columns} rowClassName={styleScope['row']}/>
+      <Table
+        onChange={tableChangeCb}
+        dataSource={data}
+        pagination={pagination}
+        columns={columns}
+        rowClassName={styleScope["row"]}
+      />
     </>
   );
 };
