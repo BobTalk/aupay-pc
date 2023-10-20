@@ -7,6 +7,10 @@ const DataCount = lazy(() => import("@/Pages/data"));
 const UserManage = lazy(() => import("@/Pages/User"));
 const UserDetail = lazy(() => import("@/Pages/User/detail"));
 const UserDetailInfo = lazy(() => import("@/Pages/User/detail/user"));
+const TradeDetailInfo = lazy(() => import("@/Pages/User/detail/trade"));
+const DrawDetailInfo = lazy(() => import("@/Pages/User/detail/draw"));
+const AssetsChangesDetailInfo = lazy(() => import("@/Pages/User/detail/assetsChanges"));
+const RechargeDetailInfo = lazy(() => import("@/Pages/User/detail/recharge"));
 const RouteList = [
   {
     path: "/",
@@ -39,6 +43,22 @@ const RouteList = [
               {
                 path: 'user',
                 element: <UserDetailInfo />
+              },
+              {
+                path: 'recharge',
+                element: <RechargeDetailInfo />
+              },
+              {
+                path: 'draw',
+                element: <DrawDetailInfo />
+              },
+              {
+                path: 'trade',
+                element: <TradeDetailInfo />
+              },
+              {
+                path: 'assetsChanges',
+                element: <AssetsChangesDetailInfo />
               }
             ]
           }
