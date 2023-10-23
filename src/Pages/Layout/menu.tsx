@@ -9,11 +9,17 @@ const LayoutMenu = () => {
   let [stop] = useStopPropagation();
   let navigate = useNavigate();
   let { pathname } = useLocation();
+  console.log("pathname: ", pathname);
   function menuSelectCb({ key, domEvent }) {
     stop(domEvent, () => {
       navigate(key, { state: { _title: urlMap[key] } });
     });
   }
+  const activePath = {
+    "/aupay/data": ["/aupay/data"],
+    "/aupay/assets": ["/aupay/assets"],
+    "/aupay/user/detail/user": ["/aupay/user"],
+  };
   return (
     <Menu
       theme="light"
@@ -23,7 +29,7 @@ const LayoutMenu = () => {
         styleScope["menu-box"],
         "pt-[.1rem] px-[.1rem]"
       )}
-      defaultSelectedKeys={[pathname]}
+      defaultSelectedKeys={activePath[pathname]}
       items={[
         {
           key: "/aupay/assets",

@@ -137,19 +137,22 @@ export const columns = [
     title: 'aupay用户名',
     key: 'aupayName',
     dataIndex: 'aupayName',
-    responsive: ['xxl']
+    responsive: ['xl'],
+    ellipsis:true
   },
   {
     title: '邮箱',
     key: 'email',
     dataIndex: 'email',
-    responsive: ['xxl']
+    responsive: ['xl'],
+    ellipsis:true
   },
   {
     title: '用户昵称',
     key: 'userName',
     dataIndex: 'userName',
-    responsive: ['xxl']
+    responsive: ['xl'],
+    ellipsis:true
   },
   {
     title: '账户状态',
@@ -161,43 +164,49 @@ export const columns = [
       }
       return <span className='text-[var(--pink)]'>已冻结</span>
     },
-    responsive: ['xxl']
+    responsive: ['xl'],
+    ellipsis:true
   },
   {
     title: '可用资产USDT',
     key: 'availableAssets',
     dataIndex: 'availableAssets',
-    responsive: ['xxl']
+    responsive: ['xl'],
+    ellipsis:true
   },
   {
     title: '开户时间',
     key: 'accountTime',
     dataIndex: 'accountTime',
-    responsive: ['xxl']
+    responsive: ['xl'],
+    ellipsis:true
   },
   {
     title: 'Ozbet用户名',
     key: 'OzbetUserName',
     dataIndex: 'OzbetUserName',
-    responsive: ['xxl']
+    responsive: ['xl'],
+    ellipsis:true
   },
   {
     title: '游戏资产OZC',
     key: 'gameAssets',
     dataIndex: 'gameAssets',
-    responsive: ['xxl']
+    responsive: ['xl'],
+    ellipsis:true
   },
   {
     title: '创建时间',
     key: 'createTime',
     dataIndex: 'createTime',
-    responsive: ['xxl']
+    responsive: ['xl'],
+    ellipsis:true
   },
   {
     title: '操作',
     key: 'operation',
     dataIndex: 'operation',
-    responsive: ['xxl'],
+    responsive: ['xl'],
     render: (_, record) => (<div className='text-[var(--blue)] cursor-pointer'>
       <EyeFilled />
       <NavLink className='ml-[.1rem] hover:text-[var(--blue)] text-[var(--blue)] ' to="/aupay/user/detail/user">查看</NavLink>
