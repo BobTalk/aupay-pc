@@ -3,12 +3,13 @@
  */
 import { mergeClassName } from "@/utils/base";
 import styleScope from "./index.module.less";
+import "@/assets/style/form.less";
 import TableComp from "@/Components/Table";
 import { dataSource, columns } from "./table-mock.jsx";
 import { DrawWhiteList, DetailAddr } from "./draw-white.jsx";
 import { EmpowerList } from "./empower-app.jsx";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
-import { Input, InputNumber, Modal } from "antd";
+import { Button, Form, Input, InputNumber, Modal } from "antd";
 import { memo, useRef, useState } from "react";
 import { createStyles, useTheme } from "antd-style";
 const useStyle = createStyles(({ token }) => ({
@@ -38,6 +39,7 @@ const useStyle = createStyles(({ token }) => ({
 const UserDetail = () => {
   let [stop] = useStopPropagation();
   let [pinValidate, setPinValidate] = useState(true);
+  let [googleCodeOpen, setGoogleCodeOpen] = useState(false);
   const { styles } = useStyle();
   const classNames = {
     body: styles["my-modal-body"],
@@ -46,7 +48,19 @@ const UserDetail = () => {
     footer: styles["my-modal-footer"],
     content: styles["my-modal-content"],
   };
+  const modalStyles = {
+    header: {
+      marginBottom: ".24rem",
+    },
+    body: {
+      gridTemplateColumns: "1fr",
+      padding: 0,
+    },
+  };
   let [modalOpen, setModalOpen] = useState<Boolean>(false);
+  let [formInitVal, setFormInitVal] = useState({
+    googleCode: "",
+  });
   function changeStatus() {
     setModalOpen(!modalOpen);
   }
@@ -65,7 +79,7 @@ const UserDetail = () => {
   function inputKeyUpCb(e, prvNode) {
     let keyCode = e.keyCode;
     if (prvNode && keyCode === 8) {
-      e.target.value=""
+      e.target.value = "";
       prvNode.current.focus();
     }
   }
@@ -190,8 +204,13 @@ const UserDetail = () => {
           ))}
         </div>
       </div>
+      {/* PIN */}
       <ModalScope
-        onOk={() => setPinValidate(!pinValidate)}
+        showFooter={true}
+        onOk={() => {
+          setModalOpen(!modalOpen);
+          setGoogleCodeOpen(!googleCodeOpen);
+        }}
         onCancel={() => setModalOpen(!modalOpen)}
         classNames={classNames}
         open={modalOpen}
@@ -201,42 +220,73 @@ const UserDetail = () => {
           </span>
         }
       >
-        {pinValidate ? (
-          <>
-            <Input
-              ref={inputRef1}
-              maxLength={1}
-              onKeyUp={(e) => inputKeyUpCb(e, undefined)}
-              onChange={(e) => inputChangeCb(e, inputRef2, undefined)}
-              className={styleScope["input-border"]}
-              bordered={false}
-            />
-            <Input
-              ref={inputRef2}
-              onKeyUp={(e) => inputKeyUpCb(e, inputRef1)}
-              onChange={(e) => inputChangeCb(e, inputRef3, inputRef1)}
-              maxLength={1}
-              className={styleScope["input-border"]}
-              bordered={false}
-            />
-            <Input
-            onKeyUp={(e) => inputKeyUpCb(e, inputRef2)}
-              onChange={(e) => inputChangeCb(e, inputRef4, inputRef2)}
-              ref={inputRef3}
-              maxLength={1}
-              className={styleScope["input-border"]}
-              bordered={false}
-            />
-            <Input
-              onKeyUp={(e) => inputKeyUpCb(e, inputRef3)}
-              onChange={(e) => inputChangeCb(e, undefined, inputRef3)}
-              ref={inputRef4}
-              maxLength={1}
-              className={styleScope["input-border"]}
-              bordered={false}
-            />
-          </>
-        ) : null}
+        <Input
+          ref={inputRef1}
+          maxLength={1}
+          onKeyUp={(e) => inputKeyUpCb(e, undefined)}
+          onChange={(e) => inputChangeCb(e, inputRef2, undefined)}
+          className={styleScope["input-border"]}
+          bordered={false}
+        />
+        <Input
+          ref={inputRef2}
+          onKeyUp={(e) => inputKeyUpCb(e, inputRef1)}
+          onChange={(e) => inputChangeCb(e, inputRef3, inputRef1)}
+          maxLength={1}
+          className={styleScope["input-border"]}
+          bordered={false}
+        />
+        <Input
+          onKeyUp={(e) => inputKeyUpCb(e, inputRef2)}
+          onChange={(e) => inputChangeCb(e, inputRef4, inputRef2)}
+          ref={inputRef3}
+          maxLength={1}
+          className={styleScope["input-border"]}
+          bordered={false}
+        />
+        <Input
+          onKeyUp={(e) => inputKeyUpCb(e, inputRef3)}
+          onChange={(e) => inputChangeCb(e, undefined, inputRef3)}
+          ref={inputRef4}
+          maxLength={1}
+          className={styleScope["input-border"]}
+          bordered={false}
+        />
+      </ModalScope>
+      <ModalScope
+        classNames={classNames}
+        showFooter={false}
+        style={modalStyles}
+        title={
+          <span className="flex items-center font-normal">
+            <i className={styleScope["icon"]}></i>验证Google
+          </span>
+        }
+        open={googleCodeOpen}
+      >
+        <Form
+          layout="vertical"
+          className="_reset-form w-full"
+          initialValues={formInitVal}
+        >
+          <Form.Item
+            className="hidden_start px-[.3rem]"
+            label={<span className="text-[#546078]">Google验证码</span>}
+            name="googleCode"
+            rules={[
+              {
+                required: true,
+                message: "请输入Google验证码",
+              },
+            ]}
+          >
+            <Input placeholder="请输入Google验证码" />
+          </Form.Item>
+          <Form.Item className={styleScope["btn-list"]}>
+            <Button>关闭</Button>
+            <Button type="primary">确定</Button>
+          </Form.Item>
+        </Form>
       </ModalScope>
     </>
   );
@@ -259,10 +309,12 @@ const ModalScope = memo(
         maskClosable={false}
         open={props.open}
         onOk={okCb}
+        footer={props.showFooter ? undefined : null}
         cancelText="关闭"
         onCancel={cancelCb}
         title={props.title}
         classNames={props.classNames}
+        styles={props.style}
       >
         {props.children}
       </Modal>

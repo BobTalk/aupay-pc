@@ -151,3 +151,21 @@
     &:extend(.b-b);
   }
 }
+
+.btn-list {
+  display: grid;
+  justify-items: end;
+  padding: .2rem .3rem .24rem;
+  border-top: 1px solid var(--border-color);
+
+  :global(.ant-form-item-control-input) {
+    height: .32rem !important;
+    line-height: .32rem !important;
+  }
+
+  button {
+    &:first-child {
+      margin-right: .16rem;
+    }
+  }
+}
