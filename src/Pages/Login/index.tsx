@@ -57,7 +57,7 @@ const FormComp = () => {
           },
         ]}
       >
-        <Input />
+        <Input placeholder={message["username"]} />
       </Form.Item>
       <Form.Item
         className="hidden_start"
@@ -70,7 +70,7 @@ const FormComp = () => {
           },
         ]}
       >
-        <Input />
+        <Input placeholder={message["password"]} />
       </Form.Item>
       <Form.Item
         className="hidden_start"
@@ -88,7 +88,7 @@ const FormComp = () => {
           },
         ]}
       >
-        <Input />
+        <Input placeholder={message["emailCode"]}/>
       </Form.Item>
       <Form.Item>
         <Button type="primary" block htmlType="submit">
