@@ -7,11 +7,77 @@ import TableComp from "@/Components/Table";
 import { dataSource, columns } from "./table-mock.jsx";
 import { DrawWhiteList, DetailAddr } from "./draw-white.jsx";
 import { EmpowerList } from "./empower-app.jsx";
+import { useStopPropagation } from "@/Hooks/StopPropagation";
+import { Input, InputNumber, Modal } from "antd";
+import { memo, useRef, useState } from "react";
+import { createStyles, useTheme } from "antd-style";
+const useStyle = createStyles(({ token }) => ({
+  "my-modal-body": {
+    display: "grid",
+    gridTemplateColumns: `repeat(4, 1fr)`,
+    gap: ".15rem",
+    paddingInline: ".5rem",
+    placeItems: "center",
+    minHeight: ".99rem",
+  },
+  "my-modal-mask": {
+    boxShadow: `inset 0 0 15px #fff`,
+  },
+  "my-modal-header": {
+    borderBottom: `1px solid var(--border-color)`,
+    padding: ".2rem 0.3rem",
+  },
+  "my-modal-footer": {
+    padding: ".2rem .3rem .24rem",
+    borderTop: `1px solid var(--border-color)`,
+  },
+  "my-modal-content": {
+    padding: `0 !important`,
+  },
+}));
 const UserDetail = () => {
+  let [stop] = useStopPropagation();
+  let [pinValidate, setPinValidate] = useState(true);
+  const { styles } = useStyle();
+  const classNames = {
+    body: styles["my-modal-body"],
+    mask: styles["my-modal-mask"],
+    header: styles["my-modal-header"],
+    footer: styles["my-modal-footer"],
+    content: styles["my-modal-content"],
+  };
+  let [modalOpen, setModalOpen] = useState<Boolean>(false);
+  function changeStatus() {
+    setModalOpen(!modalOpen);
+  }
+  const inputRef1 = useRef();
+  const inputRef2 = useRef();
+  const inputRef3 = useRef();
+  const inputRef4 = useRef();
+  function inputChangeCb(e, reactNode, deletePrvNode) {
+    stop(e, () => {
+      let val = e.target.value;
+      if (val && reactNode) {
+        reactNode.current.focus();
+      }
+    });
+  }
+  function inputKeyUpCb(e, prvNode) {
+    let keyCode = e.keyCode;
+    if (prvNode && keyCode === 8) {
+      e.target.value=""
+      prvNode.current.focus();
+    }
+  }
   return (
     <>
       <div className={mergeClassName(styleScope["card"])}>
-        <TitleInfo title="用户详情" status="已冻结" isShowStatus={true} />
+        <TitleInfo
+          title="用户详情"
+          status="已冻结"
+          onClick={changeStatus}
+          isShowStatus={true}
+        />
         <div className="flex items-start justify-between  gap-[.45rem]">
           <div className="flex-1">
             <SubTitle subTitle="基本资料" />
@@ -87,14 +153,17 @@ const UserDetail = () => {
         <TitleInfo title="提币白名单" isShowStatus={false} />
         {DrawWhiteList?.map((item, index) => (
           <>
-            <p key={item} className={styleScope["white-list--title"]}>
+            <p
+              key={item + "_" + index + "A"}
+              className={styleScope["white-list--title"]}
+            >
               {item}
             </p>
             {DetailAddr[item].map((it, idx) => (
               <>
                 <p
                   className={styleScope["white-list--addr"]}
-                  key={'white'+it.address + "-" + idx+'-'+index}
+                  key={"white" + it.address + "-" + idx + "-" + index}
                 >
                   <span>【{it.title}】</span>
                   <span>{it.address}</span>
@@ -107,10 +176,13 @@ const UserDetail = () => {
       <div className={mergeClassName(styleScope["card"])}>
         <TitleInfo title="快捷支付授权应用" isShowStatus={false} />
         <div className={styleScope["app-list"]}>
-          {EmpowerList.map((item) => (
-            <div key={'app'+item.id} className="flex items-center">
+          {EmpowerList.map((item, index) => (
+            <div
+              key={"app" + item.id + "-" + index}
+              className="flex items-center"
+            >
               <img src={item.icon} alt="" />
-              <div className={styleScope['info']} >
+              <div className={styleScope["info"]}>
                 <p>{item.name}</p>
                 <p>用户名：{item.username}</p>
               </div>
@@ -118,23 +190,110 @@ const UserDetail = () => {
           ))}
         </div>
       </div>
+      <ModalScope
+        onOk={() => setPinValidate(!pinValidate)}
+        onCancel={() => setModalOpen(!modalOpen)}
+        classNames={classNames}
+        open={modalOpen}
+        title={
+          <span className="flex items-center font-normal">
+            <i className={styleScope["icon"]}></i>验证PIN
+          </span>
+        }
+      >
+        {pinValidate ? (
+          <>
+            <Input
+              ref={inputRef1}
+              maxLength={1}
+              onKeyUp={(e) => inputKeyUpCb(e, undefined)}
+              onChange={(e) => inputChangeCb(e, inputRef2, undefined)}
+              className={styleScope["input-border"]}
+              bordered={false}
+            />
+            <Input
+              ref={inputRef2}
+              onKeyUp={(e) => inputKeyUpCb(e, inputRef1)}
+              onChange={(e) => inputChangeCb(e, inputRef3, inputRef1)}
+              maxLength={1}
+              className={styleScope["input-border"]}
+              bordered={false}
+            />
+            <Input
+            onKeyUp={(e) => inputKeyUpCb(e, inputRef2)}
+              onChange={(e) => inputChangeCb(e, inputRef4, inputRef2)}
+              ref={inputRef3}
+              maxLength={1}
+              className={styleScope["input-border"]}
+              bordered={false}
+            />
+            <Input
+              onKeyUp={(e) => inputKeyUpCb(e, inputRef3)}
+              onChange={(e) => inputChangeCb(e, undefined, inputRef3)}
+              ref={inputRef4}
+              maxLength={1}
+              className={styleScope["input-border"]}
+              bordered={false}
+            />
+          </>
+        ) : null}
+      </ModalScope>
     </>
   );
 };
+const ModalScope = memo(
+  (props: any) => {
+    let [stop] = useStopPropagation();
+    function okCb(e) {
+      stop(e, () => {
+        props?.onOk();
+      });
+    }
+    function cancelCb(e) {
+      stop(e, () => {
+        props?.onCancel();
+      });
+    }
+    return (
+      <Modal
+        maskClosable={false}
+        open={props.open}
+        onOk={okCb}
+        cancelText="关闭"
+        onCancel={cancelCb}
+        title={props.title}
+        classNames={props.classNames}
+      >
+        {props.children}
+      </Modal>
+    );
+  },
+  (prv, next) => prv.open === next.open
+);
 const SubTitle = (props) => (
   <p className={styleScope["base-info"]}>
     <span className={styleScope["info-title"]}>{props.subTitle}</span>
   </p>
 );
-const TitleInfo = (props) => (
-  <div className="inline-size h-[.22rem] flex items-center justify-between">
-    <p className={styleScope["title"]}>{props.title}</p>
-    {props.isShowStatus ? (
-      <p className={styleScope["state"]}>
-        <span>账户状态：</span>
-        <span>{props.status}</span>
-      </p>
-    ) : null}
-  </div>
-);
+const TitleInfo = (props) => {
+  let [stop] = useStopPropagation();
+  function changeStatus(e) {
+    stop(e, () => {
+      props?.onClick();
+    });
+  }
+  return (
+    <div className="inline-size h-[.22rem] flex items-center justify-between">
+      <p className={styleScope["title"]}>{props.title}</p>
+      {props.isShowStatus ? (
+        <p className={styleScope["state"]}>
+          <span>账户状态：</span>
+          <span className="cursor-pointer" onClick={changeStatus}>
+            {props.status}
+          </span>
+        </p>
+      ) : null}
+    </div>
+  );
+};
 export default UserDetail;

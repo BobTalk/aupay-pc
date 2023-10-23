@@ -1,7 +1,7 @@
 import { EditOutlined } from '@ant-design/icons';
 export const dataSource = [
   {
-    key:1,
+    key:"table1",
     aupayName: 'mini',
     walletProtocol: 'TRX',
     assetsType: "TRX",
@@ -12,7 +12,7 @@ export const dataSource = [
     walletCreateTime: '2023.7.20 11:10:09'
   },
   {
-    key:1,
+    key:"table2",
     aupayName: 'mini',
     walletProtocol: 'USDT-ERC20',
     assetsType: "USDT-ERC20",
@@ -23,7 +23,7 @@ export const dataSource = [
     walletCreateTime: '2023.7.20 11:10:09'
   },
   {
-    key:1,
+    key:"table3",
     aupayName: 'mini',
     walletProtocol: 'BTC',
     assetsType: "BTC",
@@ -34,7 +34,7 @@ export const dataSource = [
     walletCreateTime: '2023.7.20 11:10:09'
   },
   {
-    key:1,
+    key:"table4",
     aupayName: 'mini',
     walletProtocol: 'LTC',
     assetsType: "LTC",

@@ -123,3 +123,31 @@
     }
   }
 }
+
+.icon {
+  display: inline-flex;
+  width: .06rem;
+  height: .22rem;
+  background-color: var(--blue);
+  border-radius: var(--border-radius);
+  margin-right: .08rem;
+}
+
+.b-b {
+  border-bottom: 1px solid #C5CAD0;
+  text-align: center;
+  font-size: .3rem;
+}
+
+.input-border {
+  &:extend(.b-b);
+  border-radius: 0;
+
+  &:hover {
+    &:extend(.b-b);
+  }
+
+  &:focus {
+    &:extend(.b-b);
+  }
+}
