@@ -3,6 +3,10 @@
  */
 import { mergeClassName } from "@/utils/base";
 import styleScope from "./index.module.less";
+import TableComp from "@/Components/Table";
+import { dataSource, columns } from "./table-mock.jsx";
+import { DrawWhiteList, DetailAddr } from "./draw-white.jsx";
+import { EmpowerList } from "./empower-app.jsx";
 const UserDetail = () => {
   return (
     <>
@@ -66,6 +70,52 @@ const UserDetail = () => {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+      <div className={mergeClassName(styleScope["card"])}>
+        <TitleInfo title="资产详情" isShowStatus={false} />
+        <TableComp
+          className="mt-[.24rem]"
+          border
+          dataSource={dataSource}
+          columns={columns}
+        />
+      </div>
+      <div
+        className={mergeClassName(styleScope["card"], styleScope["white-list"])}
+      >
+        <TitleInfo title="提币白名单" isShowStatus={false} />
+        {DrawWhiteList?.map((item, index) => (
+          <>
+            <p key={item} className={styleScope["white-list--title"]}>
+              {item}
+            </p>
+            {DetailAddr[item].map((it, idx) => (
+              <>
+                <p
+                  className={styleScope["white-list--addr"]}
+                  key={'white'+it.address + "-" + idx+'-'+index}
+                >
+                  <span>【{it.title}】</span>
+                  <span>{it.address}</span>
+                </p>
+              </>
+            ))}
+          </>
+        ))}
+      </div>
+      <div className={mergeClassName(styleScope["card"])}>
+        <TitleInfo title="快捷支付授权应用" isShowStatus={false} />
+        <div className={styleScope["app-list"]}>
+          {EmpowerList.map((item) => (
+            <div key={'app'+item.id} className="flex items-center">
+              <img src={item.icon} alt="" />
+              <div className={styleScope['info']} >
+                <p>{item.name}</p>
+                <p>用户名：{item.username}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </>

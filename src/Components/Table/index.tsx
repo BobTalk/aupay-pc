@@ -6,14 +6,16 @@ type TableCompPropsType = {
   columns: Array<any>;
   pagination?: false | {};
   children?: ReactNode;
+  border?:boolean;
   [key: string]: any;
 };
 const TableComp = (props: TableCompPropsType) => {
-  let { dataSource, columns, pagination } = props;
+  let { dataSource, columns, pagination,border } = props;
   return (
     <ConfigProvider locale={zh_CN}>
       <Table
         virtual={true}
+        bordered={border}
         scroll={{ y: 0 }}
         pagination={pagination}
         dataSource={dataSource}
@@ -30,5 +32,6 @@ TableComp.defaultProps = {
   columns: [],
   sticky: true,
   pagination: false,
+  border:false
 };
 export default TableComp;

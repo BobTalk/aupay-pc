@@ -7,7 +7,7 @@
 
 .title {
   display: flex;
-  font-size: clamp(.14rem, 16cqw, .18rem);
+  font-size: .16rem;
   color: #333;
   white-space: nowrap;
   font-weight: 500;
@@ -25,7 +25,7 @@
 
 .state {
   color: var(--blue);
-  font-size: clamp(.12rem, 14cqw, .16rem);
+  font-size: .14rem;
 }
 
 .base-info {
@@ -36,7 +36,7 @@
     position: relative;
     display: inline-flex;
     flex-direction: column;
-    font-size: clamp(.12rem, 14cqw, .16rem);
+    font-size: .14rem;
     color: #333;
     padding-block: .24rem .06rem;
     font-weight: 500;
@@ -54,7 +54,7 @@
 
 .content {
   display: grid;
-  grid-template-columns: repeat(4, minmax(40px, max-content));
+  grid-template-columns: repeat(4, minmax(0, max-content));
   grid-auto-rows: auto;
   padding-right: .2rem;
   margin-top: .11rem;
@@ -63,7 +63,7 @@
     display: flex;
     flex-direction: column;
     margin-right: .24rem;
-    font-size: clamp(.12rem, 14cqw, .16rem);
+    font-size: clamp(.12rem, .14rem, .16rem);
 
     >span {
       margin-top: .16rem;
@@ -75,6 +75,51 @@
 
     &:nth-child(evnt) {
       color: #333;
+    }
+  }
+}
+
+.white-list {
+  .white-list--title {
+    font-size: .14rem;
+    color: #333;
+    padding-block: .24rem .04rem;
+  }
+
+  .white-list--addr {
+    font-size: .14rem;
+    color: var(--menu-color);
+    padding-block: .2rem;
+    border-bottom: 1px dashed var(--border-color);
+    text-indent: 2em;
+  }
+}
+
+.app-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin-top: .24rem;
+
+  img {
+    width: .55rem;
+    height: .55rem;
+  }
+
+  .info {
+    margin-left: .16rem;
+
+    p {
+      &:first-child {
+        font-size: .16rem;
+        color: #333;
+        font-weight: 500;
+      }
+
+      &:last-child {
+        font-size: .14rem;
+        color: #666;
+        margin-top: .1rem;
+      }
     }
   }
 }
