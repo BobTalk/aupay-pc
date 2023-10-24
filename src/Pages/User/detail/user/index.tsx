@@ -58,6 +58,7 @@ const UserDetail = () => {
     },
   };
   let [modalOpen, setModalOpen] = useState<Boolean>(false);
+  let [messageTip, setMessageTip] = useState<Boolean>(false);
   let [formInitVal, setFormInitVal] = useState({
     googleCode: "",
   });
@@ -253,9 +254,12 @@ const UserDetail = () => {
           bordered={false}
         />
       </ModalScope>
+      {/* google验证 */}
       <ModalScope
         classNames={classNames}
         showFooter={false}
+        onOk={() => setGoogleCodeOpen(!googleCodeOpen)}
+        onCancel={() => setGoogleCodeOpen(!googleCodeOpen)}
         style={modalStyles}
         title={
           <span className="flex items-center font-normal">
@@ -283,10 +287,38 @@ const UserDetail = () => {
             <Input placeholder="请输入Google验证码" />
           </Form.Item>
           <Form.Item className={styleScope["btn-list"]}>
-            <Button>关闭</Button>
+            <Button>
+              <span className="text-[#999]">关闭</span>
+            </Button>
             <Button type="primary">确定</Button>
           </Form.Item>
         </Form>
+      </ModalScope>
+      <ModalScope
+        style={modalStyles}
+        showFooter={true}
+        cancelText="取消"
+        okText="确定"
+        onOk={() => {
+          setMessageTip(!messageTip);
+        }}
+        onCancel={() => {
+          setMessageTip(!messageTip);
+        }}
+        classNames={classNames}
+        open={messageTip}
+        title={
+          <span className="flex items-center font-normal">
+            <i className={styleScope["icon"]}></i>提示信息
+          </span>
+        }
+      >
+        <div className={styleScope['tip-box']}>
+          {/* 恢复账号使用状态 */}
+          {/* 解冻后恢复登陆 */}
+          <p className="text-center">冻结账号：海棠多度</p>
+          <p className="mt-[.15rem] text-center">冻结后将无法登陆</p>
+        </div>
       </ModalScope>
     </>
   );
@@ -310,7 +342,8 @@ const ModalScope = memo(
         open={props.open}
         onOk={okCb}
         footer={props.showFooter ? undefined : null}
-        cancelText="关闭"
+        cancelText={props.cancelText}
+        okText='确定'
         onCancel={cancelCb}
         title={props.title}
         classNames={props.classNames}
