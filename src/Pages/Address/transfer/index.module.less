@@ -1,0 +1,48 @@
+.filter-box {
+  display: flex;
+  align-items: center;
+  margin-top: .16rem;
+  padding: .24rem;
+  border-radius: .06rem .06rem 0 0;
+  background-color: var(--white);
+  gap: .1rem;
+}
+
+.table-box {
+  border-radius: 0 0 .06rem .06rem;
+  overflow: hidden;
+}
+
+.total-info {
+  display: flex;
+  gap: .24rem;
+  > div{
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    flex:1;
+    align-items: center;
+  }
+  > img{
+    aspect-ratio: auto 1 / 1;
+  }
+  .type{
+    font-size: .2rem;
+    color: #333;
+    line-height: 1.25;
+  }
+  .addr{
+    font-size: .14rem;
+    color: #666;
+    line-height: 1.25;
+  }
+  .aseets-name{
+    font-size: .14rem;
+    color: #666;
+    line-height: 1.25;
+  }
+  .aseets-num{
+    font-size: .18rem;
+    color: #333;
+    line-height: 1.25;
+  }
+}
