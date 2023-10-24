@@ -19,13 +19,17 @@ const LayoutMenu = () => {
     "/aupay/data": ["/aupay/data"],
     "/aupay/assets": ["/aupay/assets"],
     "/aupay/user/detail/user": ["/aupay/user"],
+    "/aupay/user/detail/assetsChanges": ["/aupay/user"],
+    "/aupay/user/detail/trade": ["/aupay/user"],
+    "/aupay/user/detail/draw": ["/aupay/user"],
+    "/aupay/user/detail/recharge": ["/aupay/user"],
     "/aupay/user": ["/aupay/user"],
   };
   return (
     <Menu
       theme="light"
       onSelect={menuSelectCb}
-      mode="vertical"
+      mode="inline"
       className={mergeClassName(
         styleScope["menu-box"],
         "pt-[.1rem] px-[.1rem]"
@@ -54,21 +58,36 @@ const LayoutMenu = () => {
           label: "用户管理",
         },
         {
-          key: "4",
+          key: "/aupay/address",
           icon: (
             <Icon name="h-icon-dizhiguanli" className={styleScope["icon"]} />
           ),
           label: "地址管理",
           children: [
             {
-              key: "4-1",
-              icon: (
-                <Icon
-                  name="h-icon-dizhiguanli"
-                  className={styleScope["icon"]}
-                />
-              ),
-              label: "地址管理21",
+              key: "/aupay/address/user",
+              icon: <></>,
+              label: "用户地址",
+            },
+            {
+              key: "/aupay/address/transfer",
+              icon: <></>,
+              label: "中转地址",
+            },
+            {
+              key: "/aupay/address/reserve",
+              icon: <></>,
+              label: "储备资产",
+            },
+            {
+              key: "/aupay/address/draw",
+              icon: <></>,
+              label: "提币地址",
+            },
+            {
+              key: "/aupay/address/minerFees",
+              icon: <></>,
+              label: "矿工费地址",
             },
           ],
         },

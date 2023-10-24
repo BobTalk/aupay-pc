@@ -10,6 +10,12 @@ import TradeDetailInfo from "@/Pages/User/detail/trade";
 import DrawDetailInfo from "@/Pages/User/detail/draw";
 import AssetsChangesDetailInfo from "@/Pages/User/detail/assetsChanges";
 import RechargeDetailInfo from "@/Pages/User/detail/recharge";
+import AddressManage from "@/Pages/Address";
+import UserAddress from "@/Pages/Address/user";
+import MinerFeesAddress from "@/Pages/Address/minerFees";
+import DrawAddress from "@/Pages/Address/draw";
+import ReserveAddress from "@/Pages/Address/reserve";
+import TransferAddress from "@/Pages/Address/transfer";
 const RouteList = [
   {
     path: "/",
@@ -64,7 +70,32 @@ const RouteList = [
         ]
 
       },
-
+      {
+        path: 'address',
+        element: <AddressManage />,
+        children: [
+          {
+            path: 'user',
+            element: <UserAddress />
+          },
+          {
+            path: 'transfer',
+            element: <TransferAddress/>
+          },
+          {
+            path: 'reserve',
+            element: <ReserveAddress/>
+          },
+          {
+            path: 'draw',
+            element: <DrawAddress/>
+          },
+          {
+            path: 'minerFees',
+            element: <MinerFeesAddress/>
+          },
+        ]
+      }
     ],
   },
 ];
