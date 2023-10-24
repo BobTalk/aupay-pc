@@ -6,22 +6,29 @@ type TableCompPropsType = {
   columns: Array<any>;
   pagination?: false | {};
   children?: ReactNode;
-  border?:boolean;
-  themeObj?:Object;
-  paginationThemeObj?:Object
+  border?: boolean;
+  themeObj?: Object;
+  paginationThemeObj?: Object;
+  components?:Object,
+  virtual?:boolean,
   [key: string]: any;
 };
 const TableComp = (props: TableCompPropsType) => {
-  let { dataSource, columns, pagination,border } = props;
+  console.log('props: ', props);
+  let { dataSource, columns, pagination, border,components,virtual } = props;
   return (
-    <ConfigProvider theme={{
-      components:{
-        Table: props?.themeObj??{},
-        Pagination: props?.paginationThemeObj??{}
-      }
-    }} locale={zh_CN}>
+    <ConfigProvider
+      theme={{
+        components: {
+          Table: props?.themeObj ?? {},
+          Pagination: props?.paginationThemeObj ?? {},
+        },
+      }}
+      locale={zh_CN}
+    >
       <Table
-        virtual={true}
+        components={components}
+        virtual={virtual}
         bordered={border}
         scroll={{ y: 0 }}
         pagination={pagination}
@@ -39,8 +46,10 @@ TableComp.defaultProps = {
   columns: [],
   sticky: true,
   pagination: false,
-  border:false,
-  themeObj:{},
-  paginationThemeObj:{}
+  border: false,
+  themeObj: {},
+  paginationThemeObj: {},
+  components:{},
+  virtual:true
 };
 export default TableComp;
