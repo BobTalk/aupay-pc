@@ -23,7 +23,12 @@ const LayoutMenu = () => {
     "/aupay/user/detail/trade": ["/aupay/user"],
     "/aupay/user/detail/draw": ["/aupay/user"],
     "/aupay/user/detail/recharge": ["/aupay/user"],
-    "/aupay/user": ["/aupay/user"],
+    "/aupay/address/user": ["/aupay/address",'/aupay/address/user'],
+    "/aupay/address/transfer": ["/aupay/address",'/aupay/address/transfer'],
+    "/aupay/address/reserve": ["/aupay/address",'/aupay/address/reserve'],
+    "/aupay/address/draw": ["/aupay/address",'/aupay/address/draw'],
+    "/aupay/address/minerFees": ["/aupay/address",'/aupay/address/minerFees'],
+    
   };
   return (
     <Menu
