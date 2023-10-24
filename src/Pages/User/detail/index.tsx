@@ -1,38 +1,40 @@
 import { Tabs } from "antd";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const UserDetail = () => {
   let navigate = useNavigate();
+  let { pathname } = useLocation();
+  const publicUrl = "/aupay/user/detail/";
   const items = [
     {
-      key: "user",
+      key: `${publicUrl}user`,
       label: "用户详情",
     },
     {
-      key: "recharge",
+      key: `${publicUrl}recharge`,
       label: "充币记录",
     },
     {
-      key: "draw",
+      key: `${publicUrl}draw`,
       label: "提币记录",
     },
     {
-      key: "trade",
+      key: `${publicUrl}trade`,
       label: "交易记录",
     },
     {
-      key: "assetsChanges",
+      key: `${publicUrl}assetsChanges`,
       label: "资产变动记录",
     },
   ];
   function onChange(key: string) {
-    navigate(`/aupay/user/detail/${key}`);
+    navigate(key);
   }
   return (
     <>
       <Tabs
         className="bg-[var(--white)] px-[.24rem] rounded-[.08rem]"
-        defaultActiveKey="1"
+        defaultActiveKey={pathname}
         items={items}
         onChange={onChange}
       />

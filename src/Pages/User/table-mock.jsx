@@ -2,7 +2,7 @@ import { EyeFilled } from '@ant-design/icons';
 import { NavLink } from 'react-router-dom';
 export const pagination = {
   current: 1,
-  pageSize: 5,
+  pageSize: 10,
   total: 10,
   showTotal: function (total, range) {
     return `${Math.ceil(total / range[1]) > 1 ? 1 + ' - ' + Math.ceil(total / range[1]) : 1} 页 共${total}条`

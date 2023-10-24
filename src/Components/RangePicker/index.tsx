@@ -20,7 +20,7 @@ const RangePicker = (props, ref) => {
     [time]
   );
   return (
-    <Picker ref={ref} value={time} onChange={timeChangeCb} locale={locale} />
+    <Picker ref={ref} size={props.size} value={time} onChange={timeChangeCb} locale={locale} />
   );
 };
 

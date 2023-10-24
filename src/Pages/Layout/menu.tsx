@@ -19,6 +19,7 @@ const LayoutMenu = () => {
     "/aupay/data": ["/aupay/data"],
     "/aupay/assets": ["/aupay/assets"],
     "/aupay/user/detail/user": ["/aupay/user"],
+    "/aupay/user": ["/aupay/user"],
   };
   return (
     <Menu
