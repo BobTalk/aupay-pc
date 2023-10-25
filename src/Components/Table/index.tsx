@@ -15,7 +15,7 @@ type TableCompPropsType = {
 };
 const TableComp = (props: TableCompPropsType) => {
   console.log('props: ', props);
-  let { dataSource, columns, pagination, border,components,virtual } = props;
+  let { dataSource, columns, pagination, border,components: comp,virtual } = props;
   return (
     <ConfigProvider
       theme={{
@@ -27,7 +27,7 @@ const TableComp = (props: TableCompPropsType) => {
       locale={zh_CN}
     >
       <Table
-        components={components}
+        components={comp}
         virtual={virtual}
         bordered={border}
         scroll={{ y: 0 }}
