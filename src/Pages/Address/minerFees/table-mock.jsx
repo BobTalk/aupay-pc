@@ -154,7 +154,7 @@ const TableConfig = () => {
       {key == 'triggerQuantity' ?
         <Icon name='h-icon-xiaoyudengyu' /> : null
       }
-      <InputNumber defaultValue={_} />
+      <InputNumber size="small" defaultValue={_} />
       <span>LTC</span>
     </>
   }
