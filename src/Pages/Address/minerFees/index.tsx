@@ -5,11 +5,12 @@ import { SwapOutlined } from "@ant-design/icons";
 import { Button, Modal, QRCode } from "antd";
 import styleScope from "./index.module.less";
 
-import TableConfig from "./table-mock.jsx";
+import TableConfig from "./table.jsx";
 import { mergeClassName } from "@/utils/base";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { memo, useState } from "react";
 import { createStyles } from "antd-style";
+import TransferRecord from "../transferRecords";
 const useStyle = createStyles(({ token }) => ({
   "my-modal-body": {
     display: "grid",
@@ -34,7 +35,7 @@ const useStyle = createStyles(({ token }) => ({
     padding: `0 !important`,
   },
 }));
-const MinerFeesAddress = () => {
+const MinerFeesAddress = (props) => {
   const { styles } = useStyle();
   const classNames = {
     body: styles["my-modal-body"],
@@ -59,10 +60,15 @@ const MinerFeesAddress = () => {
       setQrCode(!qrCode);
     });
   }
+  function recordCb(e){
+    stop(e, () => {
+      props?.recordCb?.()
+    });
+  }
   return (
     <>
       <div className={styleScope["filter-box"]}>
-        <Button type="primary" size="large" icon={<SwapOutlined />}>
+        <Button type="primary" onClick={recordCb} size="large" icon={<SwapOutlined />}>
           转账记录
         </Button>
       </div>
@@ -97,6 +103,16 @@ const MinerFeesAddress = () => {
     </>
   );
 };
+const RecordList = () => {
+  return <TransferRecord/>;
+};
+const ChangeComp = () => {
+  let [isRecord, setIsRecord] = useState(false);
+  function recordCb(){
+    setIsRecord(true)
+  }
+  return isRecord ? <RecordList /> : <MinerFeesAddress recordCb={recordCb}/>;
+};
 const ModalScope = memo(
   (props: any) => {
     let [stop] = useStopPropagation();
@@ -129,4 +145,4 @@ const ModalScope = memo(
   },
   (prv, next) => prv.open === next.open
 );
-export default MinerFeesAddress;
+export default ChangeComp;
