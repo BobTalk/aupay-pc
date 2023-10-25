@@ -150,26 +150,29 @@ const TableConfig = () => {
   };
   let editorEl = (_, record, key) => {
     console.log('record: ', record);
-    return <>
+    return <div className="flex items-center">
       {key == 'triggerQuantity' ?
         <Icon name='h-icon-xiaoyudengyu' /> : null
       }
-      <InputNumber size="small" defaultValue={_} />
+      <InputNumber size="small" className="mx-[.1rem]" defaultValue={_} />
       <span>LTC</span>
-    </>
+    </div>
   }
   let defaultEl = (_, record, key) => {
-    return <>
+    return <div className="flex items-center">
       {key == 'triggerQuantity' ?
         <Icon name='h-icon-xiaoyudengyu' /> : null
       }
       {_}
       <span>LTC</span>
-    </>
+    </div>
   }
 
   return (
     <TableComp
+      themeObj={{
+        headerBorderRadius: 0,
+      }}
       bordered={false}
       dataSource={data}
       columns={columns}
