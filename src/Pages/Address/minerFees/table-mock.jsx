@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import TableComp from '@/Components/Table'
-import { EditOutlined } from '@ant-design/icons'
-import { InputNumber, Typography } from "antd";
+import { InputNumber, Typography, Form, ConfigProvider } from "antd";
 import Icon from '@/Components/Icon';
-const TableConfig = () => {
+const TableConfig = (props) => {
+  const [form] = Form.useForm();
+  function into(e, crt) {
+    props.into?.(e, crt)
+  }
+
+
+
   let [data, setData] = useState([
     {
       key: "table1",
@@ -32,7 +38,17 @@ const TableConfig = () => {
       supplementaryMinerFees: 89,
     },
   ]);
-
+  // 保存编辑信息
+  async function submitCb(e, crt, index) {
+    const row = await form.validateFields()
+    let newData = data.toSpliced(index, 1, {
+      ...crt,
+      supplementaryMinerFees: row.supplementaryMinerFees ?? crt.supplementaryMinerFees,
+      triggerQuantity: row.triggerQuantity ?? crt.triggerQuantity
+    })
+    setData(newData)
+    setEditingKey("");
+  }
   let columns = [
     {
       title: "钱包协议",
@@ -100,18 +116,18 @@ const TableConfig = () => {
       responsive: ["xl"],
       ellipsis: true,
       align: "left",
-      render: (_, record) => {
+      render: (_, record, index) => {
         const editable = isEditing(record);
         return editable ? (
           <>
             <Typography.Link
               className="mr-[.2rem]"
-              onClick={cancel}
+              onClick={(e) => submitCb(e, record, index)}
             >
               <Icon className="text-[var(--green)] mr-[.1rem]" name="h-icon-dingdan" />
               <span className="text-[var(--green)]">确定</span>
             </Typography.Link>
-            <Typography.Link>
+            <Typography.Link onClick={(e) => into(e, record)}>
               <Icon className='text-[var(--blue)] mr-[.1rem]' name="h-icon-zhuanru" />
               <span className='text-[var(--blue)]'>转入</span>
             </Typography.Link>
@@ -128,8 +144,7 @@ const TableConfig = () => {
 
             </Typography.Link>
             <Typography.Link
-              disabled={editingKey !== ""}
-              onClick={() => edit(record)}
+              onClick={(e) => into(e, record)}
             >
               <Icon className='text-[var(--blue)] mr-[.1rem]' name="h-icon-zhuanru" />
               <span className='text-[var(--blue)]'>转入</span>
@@ -142,21 +157,20 @@ const TableConfig = () => {
   ];
   let [editingKey, setEditingKey] = useState("");
   let isEditing = (record) => record.key === editingKey;
+  // 编辑
   let edit = (record) => {
     setEditingKey(record.key);
   };
-  let cancel = () => {
-    setEditingKey("");
-  };
+
   let editorEl = (_, record, key) => {
-    console.log('record: ', record);
-    return <div className="flex items-center">
-      {key == 'triggerQuantity' ?
-        <Icon name='h-icon-xiaoyudengyu' /> : null
-      }
-      <InputNumber size="small" className="mx-[.1rem]" defaultValue={_} />
-      <span>LTC</span>
-    </div>
+    return <Form.Item name={key} className="flex items-center mb-0">
+      <div>
+        {key == 'triggerQuantity' ?
+          <Icon name='h-icon-xiaoyudengyu' /> : null
+        }
+        <InputNumber size="small" className="mx-[.1rem]" defaultValue={_} />
+        <span>LTC</span></div>
+    </Form.Item>
   }
   let defaultEl = (_, record, key) => {
     return <div className="flex items-center">
@@ -169,15 +183,27 @@ const TableConfig = () => {
   }
 
   return (
-    <TableComp
-      themeObj={{
-        headerBorderRadius: 0,
-      }}
-      bordered={false}
-      dataSource={data}
-      columns={columns}
-      pagination={true}
-    />
+    <ConfigProvider
+      theme={{
+        components: {
+          Form: {
+            labelHeight: 25,
+            controlHeight: 25
+          }
+        }
+      }} >
+      <Form form={form} component={false}>
+        <TableComp
+          themeObj={{
+            headerBorderRadius: 0,
+          }}
+          bordered={false}
+          dataSource={data}
+          columns={columns}
+          pagination={true}
+        />
+      </Form>
+    </ConfigProvider >
   );
 };
 
