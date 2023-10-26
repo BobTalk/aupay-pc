@@ -19,6 +19,7 @@ import TransferAddress from "@/Pages/Address/transfer";
 import Ozbet from "@/Pages/Ozbet";
 import AssetsAddr from "@/Pages/Ozbet/assetsAddress";
 import DrawAddr from "@/Pages/Ozbet/drawAddress";
+import OzbetTransferRecords from "@/Pages/Ozbet/transferRecords";
 import System from "@/Pages/System";
 import IPManage from "@/Pages/System/IPManage";
 import IPRecord from "@/Pages/System/IPRecord";
@@ -115,12 +116,19 @@ const RouteList = [
         children: [
           {
             path: 'assets',
-            element: <AssetsAddr />
+            element: <AssetsAddr />,
+            children: [
+              {
+                path: 'transfer-records',
+                element: <OzbetTransferRecords />
+              }
+            ]
           },
           {
             path: 'draw',
             element: <DrawAddr />
-          }
+          },
+
         ]
       },
       {
@@ -164,7 +172,8 @@ const RouteList = [
       {
         path: 'personal',
         element: <PersonalInfo />
-      }
+      },
+
     ],
   },
 ];

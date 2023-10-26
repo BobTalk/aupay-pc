@@ -215,7 +215,7 @@ const TopCardList = (props) => {
     >
       <Image
         src={iconUrl}
-        className="p-[.345rem] place-content-start grid-cols-[auto_1fr] gap-x-[.245rem] items-center"
+        className="grid place-content-center p-[.345rem] place-content-start grid-cols-[auto_1fr] gap-x-[.245rem] items-center"
       >
         <div className="text-[var(--white)]">
           <p className={styleScope["amount"]}>

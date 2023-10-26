@@ -1,4 +1,4 @@
-import { Alert } from "antd";
+import { Alert as AlertComp } from "antd";
 import { ReactNode, forwardRef, memo } from "react";
 import styleScope from "./index.module.less";
 import { mergeClassName } from "@/utils/base";
@@ -17,7 +17,7 @@ type PropsType = {
 const Message = forwardRef((props: PropsType, ref: any) => {
   return (
     <div ref={ref}>
-      <Alert
+      <AlertComp
         className={mergeClassName(
           styleScope["_alert-box"],
           `${props.className}`

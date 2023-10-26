@@ -1,0 +1,32 @@
+.info {
+  display: grid;
+  grid-template-columns: max-content minmax(50px, 1fr);
+  border-top: 1px solid var(--border-color);
+  padding-block: 0.16rem 0;
+
+  >p {
+    &:nth-child(n+3) {
+      margin-top: .16rem;
+    }
+
+    &:nth-child(odd) {
+      font-size: .14rem;
+      color: var(--menu-color);
+    }
+
+    &:nth-child(2n) {
+      font-size: .18rem;
+      color: #333;
+      margin-left: .24rem;
+    }
+
+    &:last-child {
+      font-size: .14rem;
+    }
+  }
+}
+
+.type-money {
+  font-size: .14rem;
+  color: #333;
+}
