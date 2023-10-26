@@ -28,6 +28,7 @@ const LayoutMenu = () => {
     "/aupay/address/reserve": ["/aupay/address",'/aupay/address/reserve'],
     "/aupay/address/draw": ["/aupay/address",'/aupay/address/draw'],
     "/aupay/address/minerFees": ["/aupay/address",'/aupay/address/minerFees'],
+    "/aupay/ozbet":["/aupay/ozbet"]
     
   };
   return (
@@ -97,10 +98,21 @@ const LayoutMenu = () => {
           ],
         },
         {
-          key: "5",
+          key: "/aupay/ozbet",
           icon: <Icon name="h-icon-Ozbet" className={styleScope["icon"]} />,
           label: "Ozbet",
-          children: [],
+          children: [
+            {
+              key:'/aupay/ozbet/assets',
+              icon:<></>,
+              label:'Ozbet资产地址'
+            },
+            {
+              key:'/aupay/ozbet/draw',
+              icon:<></>,
+              label:'Ozbet提款地址'
+            }
+          ],
         },
         {
           key: "6",

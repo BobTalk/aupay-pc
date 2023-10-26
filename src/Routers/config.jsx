@@ -16,6 +16,9 @@ import MinerFeesAddress from "@/Pages/Address/minerFees";
 import DrawAddress from "@/Pages/Address/draw";
 import ReserveAddress from "@/Pages/Address/reserve";
 import TransferAddress from "@/Pages/Address/transfer";
+import Ozbet from "@/Pages/Ozbet";
+import AssetsAddr from "@/Pages/Ozbet/assetsAddress";
+import DrawAddr from "@/Pages/Ozbet/drawAddress";
 const RouteList = [
   {
     path: "/",
@@ -80,20 +83,34 @@ const RouteList = [
           },
           {
             path: 'transfer',
-            element: <TransferAddress/>
+            element: <TransferAddress />
           },
           {
             path: 'reserve',
-            element: <ReserveAddress/>
+            element: <ReserveAddress />
           },
           {
             path: 'draw',
-            element: <DrawAddress/>
+            element: <DrawAddress />
           },
           {
             path: 'minerFees',
-            element: <MinerFeesAddress/>
+            element: <MinerFeesAddress />
           },
+        ]
+      },
+      {
+        path: 'ozbet',
+        element: <Ozbet />,
+        children: [
+          {
+            path: 'assets',
+            element: <AssetsAddr />
+          },
+          {
+            path: 'draw',
+            element: <DrawAddr />
+          }
         ]
       }
     ],
