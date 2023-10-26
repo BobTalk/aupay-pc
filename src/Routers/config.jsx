@@ -126,7 +126,13 @@ const RouteList = [
           },
           {
             path: 'draw',
-            element: <DrawAddr />
+            element: <DrawAddr />,
+            children: [
+              {
+                path: 'transfer-records',
+                element: <OzbetTransferRecords />
+              }
+            ]
           },
 
         ]

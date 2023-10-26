@@ -23,22 +23,30 @@ const LayoutMenu = () => {
     "/aupay/user/detail/trade": ["/aupay/user"],
     "/aupay/user/detail/draw": ["/aupay/user"],
     "/aupay/user/detail/recharge": ["/aupay/user"],
-    "/aupay/address/user": ["/aupay/address",'/aupay/address/user'],
-    "/aupay/address/transfer": ["/aupay/address",'/aupay/address/transfer'],
-    "/aupay/address/reserve": ["/aupay/address",'/aupay/address/reserve'],
-    "/aupay/address/draw": ["/aupay/address",'/aupay/address/draw'],
-    "/aupay/address/minerFees": ["/aupay/address",'/aupay/address/minerFees'],
-    "/aupay/ozbet":["/aupay/ozbet"],
-    "/aupay/personal":["/aupay/personal"],
-    "/aupay/system/staff-manage":['/aupay/system',"/aupay/system/staff-manage"],
-    "/aupay/system/logs-manage":['/aupay/system',"/aupay/system/logs-manage"],
-    "/aupay/system/rate-manage":['/aupay/system',"/aupay/system/rate-manage"],
-    "/aupay/system/draw":['/aupay/system',"/aupay/system/draw"],
-    "/aupay/system/automated":['/aupay/system',"/aupay/system/automated"],
-    "/aupay/system/ip-record":['/aupay/system',"/aupay/system/ip-record"],
-    "/aupay/system/ip-manage":['/aupay/system',"/aupay/system/ip-manage"],
-    "/aupay/notice":['/aupay/notice'],
-    
+    "/aupay/address/user": ["/aupay/address", "/aupay/address/user"],
+    "/aupay/address/transfer": ["/aupay/address", "/aupay/address/transfer"],
+    "/aupay/address/reserve": ["/aupay/address", "/aupay/address/reserve"],
+    "/aupay/address/draw": ["/aupay/address", "/aupay/address/draw"],
+    "/aupay/address/minerFees": ["/aupay/address", "/aupay/address/minerFees"],
+    "/aupay/ozbet": ["/aupay/ozbet"],
+    "/aupay/ozbet/assets": ["/aupay/ozbet", "/aupay/ozbet/assets"],
+    "/aupay/ozbet/draw": ["/aupay/ozbet", "/aupay/ozbet/draw"],
+    "/aupay/ozbet/assets/transfer-records": [
+      "/aupay/ozbet",
+      "/aupay/ozbet/assets",
+    ],
+    "/aupay/personal": ["/aupay/personal"],
+    "/aupay/system/staff-manage": [
+      "/aupay/system",
+      "/aupay/system/staff-manage",
+    ],
+    "/aupay/system/logs-manage": ["/aupay/system", "/aupay/system/logs-manage"],
+    "/aupay/system/rate-manage": ["/aupay/system", "/aupay/system/rate-manage"],
+    "/aupay/system/draw": ["/aupay/system", "/aupay/system/draw"],
+    "/aupay/system/automated": ["/aupay/system", "/aupay/system/automated"],
+    "/aupay/system/ip-record": ["/aupay/system", "/aupay/system/ip-record"],
+    "/aupay/system/ip-manage": ["/aupay/system", "/aupay/system/ip-manage"],
+    "/aupay/notice": ["/aupay/notice"],
   };
   return (
     <Menu
@@ -112,15 +120,15 @@ const LayoutMenu = () => {
           label: "Ozbet",
           children: [
             {
-              key:'/aupay/ozbet/assets',
-              icon:<></>,
-              label:'Ozbet资产地址'
+              key: "/aupay/ozbet/assets",
+              icon: <></>,
+              label: "Ozbet资产地址",
             },
             {
-              key:'/aupay/ozbet/draw',
-              icon:<></>,
-              label:'Ozbet提款地址'
-            }
+              key: "/aupay/ozbet/draw",
+              icon: <></>,
+              label: "Ozbet提款地址",
+            },
           ],
         },
         {
@@ -138,32 +146,32 @@ const LayoutMenu = () => {
           label: "系统管理",
           children: [
             {
-              key:'/aupay/system/ip-manage',
-              label:'IP管理'
+              key: "/aupay/system/ip-manage",
+              label: "IP管理",
             },
             {
-              key:'/aupay/system/ip-record',
-              label:'IP记录'
+              key: "/aupay/system/ip-record",
+              label: "IP记录",
             },
             {
-              key:'/aupay/system/automated',
-              label:'自动化配置'
+              key: "/aupay/system/automated",
+              label: "自动化配置",
             },
             {
-              key:'/aupay/system/draw',
-              label:'提币设置'
+              key: "/aupay/system/draw",
+              label: "提币设置",
             },
             {
-              key:'/aupay/system/rate-manage',
-              label:'汇率管理'
+              key: "/aupay/system/rate-manage",
+              label: "汇率管理",
             },
             {
-              key:'/aupay/system/logs-manage',
-              label:'日志记录'
+              key: "/aupay/system/logs-manage",
+              label: "日志记录",
             },
             {
-              key:'/aupay/system/staff-manage',
-              label:'员工管理'
+              key: "/aupay/system/staff-manage",
+              label: "员工管理",
             },
           ],
         },

@@ -1,8 +1,9 @@
 .info {
   display: grid;
-  grid-template-columns: max-content minmax(50px, 1fr);
+  grid-template-columns: 1.25rem minmax(50px, 1fr);
   border-top: 1px solid var(--border-color);
-  padding-block: 0.16rem 0;
+  padding-block: 0.16rem;
+  align-items: center;
   column-gap: .24rem;
   row-gap: .16rem;
 
@@ -27,4 +28,8 @@
 .type-money {
   font-size: .14rem;
   color: #333;
+}
+.config{
+  &:extend(.info);
+  padding-block: 0.16rem 0;
 }
