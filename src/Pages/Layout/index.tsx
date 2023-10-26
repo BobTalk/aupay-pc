@@ -16,6 +16,9 @@ const LayoutPage: React.FC = () => {
     <ConfigProvider
       theme={{
         components: {
+          Alert:{
+            colorInfoBorder:"transparent"
+          },
           Tabs: {
             colorBorderSecondary: "transparent",
             fontSize: 16,

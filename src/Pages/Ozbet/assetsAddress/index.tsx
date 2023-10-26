@@ -1,4 +1,6 @@
 const AssetsAddressOzbet = () => {
-  return <>资产地址</>;
+  return <div className="h-full bg-[var(--white)]">
+    <p>dfdf</p>
+  </div>;
 };
 export default AssetsAddressOzbet;

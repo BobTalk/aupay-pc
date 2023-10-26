@@ -1,5 +1,5 @@
 import { Alert } from "antd";
-import { ReactNode, memo } from "react";
+import { ReactNode, forwardRef, memo } from "react";
 import styleScope from "./index.module.less";
 import { mergeClassName } from "@/utils/base";
 type PropsType = {
@@ -14,27 +14,32 @@ type PropsType = {
   className?: string;
   style?: Object;
 };
-const Message = (props: PropsType) => {
+const Message = forwardRef((props: PropsType, ref: any) => {
   return (
-    <Alert
-      className={mergeClassName(styleScope["_alert-box"], `${props.className}`)}
-      style={props.style}
-      action={props.action}
-      closable={props.showCloseIcon}
-      icon={props.prvIcon}
-      showIcon={props.showIcon}
-      message={props.message}
-      type={props.type}
-      onClose={(e) => props?.onClose(e)}
-      description={props.description}
-    />
+    <div ref={ref}>
+      <Alert
+        className={mergeClassName(
+          styleScope["_alert-box"],
+          `${props.className}`
+        )}
+        style={props.style}
+        action={props.action}
+        closable={props.showCloseIcon}
+        icon={props.prvIcon}
+        showIcon={props.showIcon}
+        message={props.message}
+        type={props.type}
+        onClose={(e) => props?.onClose(e)}
+        description={props.description}
+      />
+    </div>
   );
-};
+});
 Message.defaultProps = {
   message: "",
   action: <></>,
   showIcon: true,
-  type: "",
+  type: "info",
   description: "",
   onClose: (e: MouseEvent): void => {},
   showCloseIcon: false,

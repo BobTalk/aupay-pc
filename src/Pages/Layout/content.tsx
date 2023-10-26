@@ -4,11 +4,13 @@ import { Outlet } from "react-router-dom";
 import messageIcon from "@/assets/images/message.svg";
 import styleScope from "./content.module.less";
 import closeIcon from "@/assets/images/close.svg";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { mergeClassName } from "@/utils/base";
 let { Content } = Layout;
 const LayoutContent = () => {
+  let messageRefs = useRef<any>({});
+  let [contentH, setContentH] = useState(0);
   let [usename] = useState("Bob");
   let [showMessage, setShowMessage] = useState("");
   let [stop] = useStopPropagation();
@@ -17,6 +19,11 @@ const LayoutContent = () => {
       setShowMessage("hidden");
     });
   }
+  useEffect(() => {
+    let { height } = messageRefs.current.getBoundingClientRect();
+    console.log("height: ", height);
+    setContentH(height);
+  }, []);
   return (
     <Content
       className="overflow-y-auto"
@@ -26,6 +33,7 @@ const LayoutContent = () => {
       }}
     >
       <Message
+        ref={messageRefs}
         message={
           <p className={styleScope["message"]}>
             您好！欢迎您登录<span>aupay</span>后台管理：{usename}~
@@ -41,8 +49,15 @@ const LayoutContent = () => {
           />
         }
         prvIcon={<img src={messageIcon} alt="" />}
+        showIcon={true}
       />
-      <Outlet />
+      <div
+        style={{
+          height: `calc(100% - ${contentH}px - 0.32rem)`,
+        }}
+      >
+        <Outlet />
+      </div>
     </Content>
   );
 };
