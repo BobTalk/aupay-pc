@@ -1,15 +1,16 @@
 import { Button, DatePicker, Form, Input } from "antd";
 import locale from "antd/es/date-picker/locale/zh_CN";
 import { useState } from "react";
+import EditorPanel from "./tinymce";
 const EditorNotice = () => {
-  let [formInitalVal, setFormInitalVal]= useState({
-    employeeId:'',
-    title:'',
-    publishTime:[],
-    content:''
-  })
+  let [formInitalVal, setFormInitalVal] = useState({
+    employeeId: "",
+    title: "",
+    publishTime: [],
+    content: "",
+  });
   return (
-    <div className="bg-[var(--white)] h-full px-[.5rem] py-[.4rem] rounded-[.06rem]">
+    <div className="bg-[var(--white)] h-full px-[.5rem] py-[.4rem] rounded-[.06rem] overflow-auto">
       <Form
         autoComplete="off"
         colon={false}
@@ -41,7 +42,9 @@ const EditorNotice = () => {
             <DatePicker className="flex-1" size="large" locale={locale} />
           </div>
         </Form.Item>
-        <Form.Item label="内容详情"></Form.Item>
+        <Form.Item label="内容详情">
+          <EditorPanel />
+        </Form.Item>
         <Form.Item className="flex justify-end">
           <Button
             size="large"
