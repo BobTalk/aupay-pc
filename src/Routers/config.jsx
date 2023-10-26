@@ -29,6 +29,7 @@ import RateManage from "@/Pages/System/rateManage";
 import LogsManage from "@/Pages/System/logs";
 import StaffManage from "@/Pages/System/staffManage";
 import NoticeList from "@/Pages/Notice";
+import NoticeEditor from "@/Pages/Notice/editor";
 import PersonalInfo from "@/Pages/Personal";
 const RouteList = [
   {
@@ -173,7 +174,17 @@ const RouteList = [
       },
       {
         path: 'notice',
-        element: <NoticeList />
+        element: <NoticeList />,
+        children: [
+          {
+            path: 'add',
+            element: <NoticeEditor />
+          },
+          {
+            path: 'editor',
+            element: <NoticeEditor />
+          }
+        ]
       },
       {
         path: 'personal',

@@ -7,9 +7,6 @@ const TableConfig = (props) => {
   function into(e, crt) {
     props.into?.(e, crt)
   }
-
-
-
   let [data, setData] = useState([
     {
       key: "table1",

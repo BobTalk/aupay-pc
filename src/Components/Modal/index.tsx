@@ -63,11 +63,11 @@ const ModalScope = memo(
         onOk={okCb}
         footer={props.showFooter ? undefined : null}
         cancelText={props.cancelText}
-        okText="确定"
+        okText={props.okText ?? "确定"}
         onCancel={cancelCb}
         title={props.title}
         classNames={props.classNames ?? classNames}
-        styles={props.style ?? styles}
+        styles={props.style ?? modalStyles}
       >
         {props.children}
       </Modal>
