@@ -19,6 +19,16 @@ import TransferAddress from "@/Pages/Address/transfer";
 import Ozbet from "@/Pages/Ozbet";
 import AssetsAddr from "@/Pages/Ozbet/assetsAddress";
 import DrawAddr from "@/Pages/Ozbet/drawAddress";
+import System from "@/Pages/System";
+import IPManage from "@/Pages/System/IPManage";
+import IPRecord from "@/Pages/System/IPRecord";
+import AutomatedConfig from "@/Pages/System/automatedConfig";
+import DrawConfig from "@/Pages/System/drawConfig";
+import RateManage from "@/Pages/System/rateManage";
+import LogsManage from "@/Pages/System/logs";
+import StaffManage from "@/Pages/System/staffManage";
+import NoticeList from "@/Pages/Notice";
+import PersonalInfo from "@/Pages/Personal";
 const RouteList = [
   {
     path: "/",
@@ -112,6 +122,48 @@ const RouteList = [
             element: <DrawAddr />
           }
         ]
+      },
+      {
+        path: 'system',
+        element: <System />,
+        children: [
+          {
+            path: 'ip-manage',
+            element: <IPManage />
+          },
+          {
+            path: 'ip-record',
+            element: <IPRecord />
+          },
+          {
+            path: 'automated',
+            element: <AutomatedConfig />
+          },
+          {
+            path: 'draw',
+            element: <DrawConfig />
+          },
+          {
+            path: 'rate-manage',
+            element: <RateManage />
+          },
+          {
+            path: 'logs-manage',
+            element: <LogsManage />
+          },
+          {
+            path: 'staff-manage',
+            element: <StaffManage />
+          },
+        ]
+      },
+      {
+        path: 'notice',
+        element: <NoticeList />
+      },
+      {
+        path: 'personal',
+        element: <PersonalInfo />
       }
     ],
   },
