@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "37883711",
+      "name": "错误",
+      "font_class": "cuowu",
+      "unicode": "e692",
+      "unicode_decimal": 59026
+    },
+    {
+      "icon_id": "37883788",
+      "name": "对勾小",
+      "font_class": "duigouxiao",
+      "unicode": "e693",
+      "unicode_decimal": 59027
+    },
+    {
       "icon_id": "1375",
       "name": "订单",
       "font_class": "dingdan",

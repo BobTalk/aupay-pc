@@ -69,7 +69,7 @@ const UserDetail = () => {
   const inputRef2 = useRef();
   const inputRef3 = useRef();
   const inputRef4 = useRef();
-  function inputChangeCb(e, reactNode, deletePrvNode) {
+  function inputChangeCb(e, reactNode) {
     stop(e, () => {
       let val = e.target.value;
       if (val && reactNode) {
@@ -225,21 +225,21 @@ const UserDetail = () => {
           ref={inputRef1}
           maxLength={1}
           onKeyUp={(e) => inputKeyUpCb(e, undefined)}
-          onChange={(e) => inputChangeCb(e, inputRef2, undefined)}
+          onChange={(e) => inputChangeCb(e, inputRef2)}
           className={styleScope["input-border"]}
           bordered={false}
         />
         <Input
           ref={inputRef2}
           onKeyUp={(e) => inputKeyUpCb(e, inputRef1)}
-          onChange={(e) => inputChangeCb(e, inputRef3, inputRef1)}
+          onChange={(e) => inputChangeCb(e, inputRef3)}
           maxLength={1}
           className={styleScope["input-border"]}
           bordered={false}
         />
         <Input
           onKeyUp={(e) => inputKeyUpCb(e, inputRef2)}
-          onChange={(e) => inputChangeCb(e, inputRef4, inputRef2)}
+          onChange={(e) => inputChangeCb(e, inputRef4)}
           ref={inputRef3}
           maxLength={1}
           className={styleScope["input-border"]}
@@ -247,7 +247,7 @@ const UserDetail = () => {
         />
         <Input
           onKeyUp={(e) => inputKeyUpCb(e, inputRef3)}
-          onChange={(e) => inputChangeCb(e, undefined, inputRef3)}
+          onChange={(e) => inputChangeCb(e, undefined)}
           ref={inputRef4}
           maxLength={1}
           className={styleScope["input-border"]}
@@ -294,6 +294,7 @@ const UserDetail = () => {
           </Form.Item>
         </Form>
       </ModalScope>
+      {/* 提示信息 */}
       <ModalScope
         style={modalStyles}
         showFooter={true}

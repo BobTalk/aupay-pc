@@ -26,7 +26,12 @@ const NoticeList = () => {
       navigate("/aupay/notice/add");
     });
   }
-  return pathname == "/aupay/notice/add" ? (
+  function editorCb(e) {
+    stop(e, () => {
+      navigate("/aupay/notice/editor");
+    });
+  }
+  return ["/aupay/notice/add", "/aupay/notice/editor"].includes(pathname) ? (
     <Outlet />
   ) : (
     <>
@@ -43,7 +48,7 @@ const NoticeList = () => {
       <div
         className={mergeClassName("bg-[var(--white)]", styleScope["table-box"])}
       >
-        <TableScope onShowOrHidden={toggleVisiable} />
+        <TableScope onEditor={editorCb} onShowOrHidden={toggleVisiable} />
       </div>
       <ModalScope
         showFooter={true}

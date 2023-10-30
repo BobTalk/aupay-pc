@@ -1,36 +1,68 @@
+import React, { useState } from "react";
+import ReactQuill, { Quill } from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import quillEmoji from "quill-emoji";
+import "quill-emoji/dist/quill-emoji.css";
+import { ImageDrop } from "quill-image-drop-module";
+const { EmojiBlot, ShortNameEmoji, ToolbarEmoji, TextAreaEmoji } = quillEmoji;
+Quill.register(
+  {
+    "formats/emoji": EmojiBlot,
+    // "formats/video": VideoBlot,
+    "modules/emoji-shortname": ShortNameEmoji,
+    "modules/emoji-toolbar": ToolbarEmoji,
+    "modules/emoji-textarea": TextAreaEmoji,
+    // 'modules/ImageExtend': ImageExtend, //拖拽图片扩展组件
+    "modules/ImageDrop": ImageDrop, //复制粘贴组件
+  },
+  true
+);
+function EditorPanel() {
+  const modules = {
+    history:{
+      delay: 2000,
+      maxStack: 500,
+      userOnly: true
+    },
+    clipboard: {
+      matchVisual: false,
+    },
 
-import { Editor } from '@tinymce/tinymce-react';
-import { useRef } from 'react';
-
- 
-const handleEditorChange = (content: any, editor: any) => {
-  console.log('Content was updated:', content);
-}
- 
-const EditorPanel =()=> {
-  const editorRef: any = useRef(null);
-   return (
-     <>
-       <Editor
-         onInit={(evt, editor) => editorRef.current = editor}
-         init={{
-           height: '100%',
-           menubar: false,
-           language: 'zh_CN',
-           plugins: [
-             'advlist autolink lists link image charmap print preview anchor',
-             'searchreplace visualblocks code fullscreen',
-             'insertdatetime media table paste code help wordcount'
-           ],
-           toolbar: 'undo redo | formatselect | ' +
-           'bold italic backcolor | alignleft aligncenter ' +
-           'alignright alignjustify | bullist numlist outdent indent | ' +
-           'removeformat | help',
-           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-         }}
-        onEditorChange={handleEditorChange}
-       />
-     </>
-   );     
+    toolbar: [
+      ["bold", "italic", "underline", "strike"], // toggled buttons
+      ["link",  "blockquote", "code-block"],
+      // [{ header: 1 }, { header: 2 }], // custom button values
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ script: "sub" }, { script: "super" }], // superscript/subscript
+      [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+      [{ direction: "rtl" }], // text direction
+      // [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ font: [] }],
+      [{ align: [] }],
+      ["emoji"],
+      ["video","image",],
+      ["clean"],
+    ],
+    ImageDrop: true,
+    "emoji-toolbar": true, //是否展示出来
+    "emoji-textarea": false, //我不需要emoji展示在文本框所以设置为false
+    "emoji-shortname": true,
+  };
+  let [text, setText] = useState();
+  function handleChange(val) {
+    console.log("val: ", val);
+    setText(val);
   }
-export default EditorPanel
+  return (
+    <ReactQuill
+      modules={modules}
+      placeholder="请输入内容"
+      value={text}
+      onChange={handleChange}
+    />
+  );
+}
+
+export default EditorPanel;
