@@ -127,9 +127,9 @@ const TableConfig = (props) => {
   let editorEl = (_, record, key, site) => {
     return <Form.Item name={key} className={mergeClassName("flex items-center mb-0", styleScope[site])} >
       <div className="w-full">
-        <span>≤</span>
+        <span className="text-[14px] text-[#333]">≤</span>
         <InputNumber size="small" className="mx-[.1rem]" defaultValue={_} />
-        <span>则补充</span>
+        <span className="text-[14px] text-[#333]">则补充</span>
         <InputNumber size="small" className="mx-[.1rem]" defaultValue={_} />
       </div>
     </Form.Item>
@@ -137,9 +137,9 @@ const TableConfig = (props) => {
   let defaultEl = (_, record, key) => {
     return <div className="flex items-center">
       <div className="w-full">
-        <span>≤</span>
+        <span className="text-[14px] text-[#333]">≤</span>
         <InputNumber disabled size="small" className="mx-[.1rem]" defaultValue={_} />
-        <span>则补充</span>
+        <span className="text-[14px] text-[#333]">则补充</span>
         <InputNumber disabled size="small" className="mx-[.1rem]" defaultValue={_} />
       </div>
     </div>
