@@ -1,15 +1,7 @@
 import { LockOutlined, UnlockOutlined, DeleteOutlined } from '@ant-design/icons';
 import TableComp from "@/Components/Table";
 const TableScope = (props) => {
-  function deleteCb(e, crt) {
-    props?.onDelete(e, crt, '删除IP地址')
-  }
-  function disableCb(e, crt) {
-    props?.onDisableCb(e, crt, '禁用IP地址')
-  }
-  function enableCb(e, crt) {
-    props?.onEnableCb(e, crt, '启用IP地址')
-  }
+  
   const pagination = {
     current: 1,
     pageSize: 10,
@@ -36,14 +28,6 @@ const TableScope = (props) => {
   ]
   const columns = [
     {
-      title: '编号',
-      key: 'assetsType',
-      dataIndex: 'assetsType',
-      responsive: ['xl'],
-      ellipsis: false,
-      align: 'left'
-    },
-    {
       title: 'IP地址',
       key: 'walletProtocol',
       dataIndex: 'walletProtocol',
@@ -68,36 +52,20 @@ const TableScope = (props) => {
       align: 'left'
     },
     {
+      title: '动作',
+      key: 'tradeType',
+      dataIndex: 'tradeType',
+      responsive: ['xl'],
+      ellipsis: true,
+      align: 'left'
+    },
+    {
       title: '员工ID',
       key: 'num',
       dataIndex: 'num',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
-    },
-
-    {
-      title: '操作',
-      key: 'tradeConfirmNum',
-      dataIndex: 'tradeConfirmNum',
-      responsive: ['xl'],
-      ellipsis: true,
-      align: 'left',
-      render: (_, record) => {
-        return <div className='flex items-center gap-[.2rem]'>
-          {true ?
-            <div className='text-[var(--pink)] cursor-pointer' onClick={(e) => { disableCb(e, record) }}>
-              <LockOutlined className='mr-[.1rem]' />已禁用
-            </div>
-            : <div className='text-[var(--green)] cursor-pointer' onClick={(e) => { enableCb(e, record) }}>
-              <UnlockOutlined className='mr-[.1rem]' /> 已开启
-            </div>
-          }
-          <div className='text-[var(--menu-color)] cursor-pointer' onClick={(e) => { deleteCb(e, record) }}>
-            <DeleteOutlined className='mr-[.1rem]' />删除
-          </div>
-        </div>
-      }
     },
   ]
   return <TableComp
