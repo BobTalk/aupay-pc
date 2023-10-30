@@ -2,6 +2,8 @@ import { Input, Select } from "antd";
 import styleScope from "./index.module.less";
 import greenIcon from "./images/green-icon.svg";
 import blueIcon from "./images/blue-icon.svg";
+import TableScope from './table.jsx'
+
 const AutomatedSystemConfig = () => {
   function timeList() {
     let timeList = [];
@@ -86,7 +88,7 @@ const AutomatedSystemConfig = () => {
         </div>
       </CommonBox>
       <CommonBox title="提币地址">
-        <p>提币地址</p>
+        <TableScope/>
       </CommonBox>
     </>
   );
