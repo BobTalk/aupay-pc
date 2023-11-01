@@ -28,6 +28,7 @@ import DrawConfig from "@/Pages/System/drawConfig";
 import RateManage from "@/Pages/System/rateManage";
 import LogsManage from "@/Pages/System/logs";
 import StaffManage from "@/Pages/System/staffManage";
+import StaffDetail from "@/Pages/System/staffManage/detail";
 import NoticeList from "@/Pages/Notice";
 import NoticeEditor from "@/Pages/Notice/editor";
 import PersonalInfo from "@/Pages/Personal";
@@ -168,7 +169,11 @@ const RouteList = [
           },
           {
             path: 'staff-manage',
-            element: <StaffManage />
+            element: <StaffManage />,
+            children:[
+             { path:'detail',
+              element: <StaffDetail/>}
+            ]
           },
         ]
       },
