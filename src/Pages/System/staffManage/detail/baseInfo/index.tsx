@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 const BaseInfo = () => {
   return (
     <>
-      <CommonModule  title="员工信息" className="mt-[.16rem]">
+      <CommonModule  title="员工信息" className="mt-[.16rem] h-[1.56rem]">
         <div className={styleScope["staff-info"]}>
           <p>
             <span>员工ID：</span>
@@ -44,7 +44,9 @@ const BaseInfo = () => {
           </p>
         </div>
       </CommonModule>
-      <CommonModule title="账户管理" className="mt-[.16rem]">
+      <CommonModule title="账户管理" className="mt-[.16rem]" style={{
+        height: `calc(100% - 1.72rem)`
+      }}>
         <div className="flex items-start not-first:mt-[.25rem]">
           <Icon
             name="h-icon-status"
