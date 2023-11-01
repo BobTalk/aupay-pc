@@ -2,10 +2,11 @@ import { mergeClassName } from "@/utils/base";
 import styleScope from "./index.module.less";
 import { EditOutlined, RightOutlined } from "@ant-design/icons";
 import Icon from "@/Components/Icon";
+import { useEffect, useRef } from "react";
 const BaseInfo = () => {
   return (
     <>
-      <CommonModule title="员工信息" className="mt-[.16rem]">
+      <CommonModule  title="员工信息" className="mt-[.16rem]">
         <div className={styleScope["staff-info"]}>
           <p>
             <span>员工ID：</span>
