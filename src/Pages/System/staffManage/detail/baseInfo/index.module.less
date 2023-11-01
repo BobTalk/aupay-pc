@@ -1,0 +1,38 @@
+.title {
+  display: flex;
+  font-size: .16rem;
+  color: #333;
+  margin-bottom: .3rem;
+
+  &::before {
+    display: inline-block;
+    content: '';
+    width: .06rem;
+    height: inherit;
+    background-color: var(--blue);
+    border-radius: .03rem;
+    margin-right: .1rem;
+  }
+}
+
+.staff-info {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  gap: .16rem;
+
+  >p {
+    display: flex;
+    align-items: center;
+    gap: .24rem;
+    >span {
+      font-size: .14rem;
+      color: #333;
+
+      &:first-child {
+        color: var(--menu-color);
+        width: .7rem;
+      }
+    }
+  }
+}

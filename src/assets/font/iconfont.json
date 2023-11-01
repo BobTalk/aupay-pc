@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "37922896",
+      "name": "close",
+      "font_class": "close",
+      "unicode": "e698",
+      "unicode_decimal": 59032
+    },
+    {
+      "icon_id": "37922894",
+      "name": "pin",
+      "font_class": "pin",
+      "unicode": "e699",
+      "unicode_decimal": 59033
+    },
+    {
+      "icon_id": "37922893",
+      "name": "status",
+      "font_class": "status",
+      "unicode": "e69a",
+      "unicode_decimal": 59034
+    },
+    {
+      "icon_id": "37922895",
+      "name": "sign",
+      "font_class": "sign",
+      "unicode": "e696",
+      "unicode_decimal": 59030
+    },
+    {
+      "icon_id": "37922897",
+      "name": "google",
+      "font_class": "google",
+      "unicode": "e697",
+      "unicode_decimal": 59031
+    },
+    {
       "icon_id": "37883711",
       "name": "错误",
       "font_class": "cuowu",
