@@ -1,9 +1,11 @@
 import { Tabs } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const StaffDetail = () => {
+  const tabsRef = useRef<any>();
   let [defaultActiveKey, setDefaultActiveKey] = useState("baseInfo");
   let [currentModule, setCurrentModule] = useState();
+  let [tabsHeight, setTabsHeight] = useState();
   const items = [
     {
       key: `baseInfo`,
@@ -26,15 +28,27 @@ const StaffDetail = () => {
       setCurrentModule(res.default);
     });
   }, [defaultActiveKey]);
+  useEffect(() => {
+    let { height } = tabsRef.current.getBoundingClientRect();
+    setTabsHeight(height);
+  }, []);
   return (
     <>
-      <Tabs
-        className="bg-[var(--white)] px-[.24rem] rounded-[.08rem]"
-        defaultActiveKey={defaultActiveKey}
-        items={items}
-        onChange={onChange}
-      />
-      {currentModule}
+      <div ref={tabsRef}>
+        <Tabs
+          className="bg-[var(--white)] px-[.24rem] rounded-[.08rem]"
+          defaultActiveKey={defaultActiveKey}
+          items={items}
+          onChange={onChange}
+        />
+      </div>
+      <div
+        style={{
+          height: `calc(100% - ${tabsHeight}px - .24rem)`,
+        }}
+      >
+        {currentModule}
+      </div>
     </>
   );
 };
