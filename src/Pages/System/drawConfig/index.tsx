@@ -1,4 +1,6 @@
-const DrawSystemConfig=()=>{
-  return <>提币设置</>
-}
-export default DrawSystemConfig
+import TableScope from "./table.jsx";
+
+const DrawSystemConfig = () => {
+  return <TableScope />;
+};
+export default DrawSystemConfig;
