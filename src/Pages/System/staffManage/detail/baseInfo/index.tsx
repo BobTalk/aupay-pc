@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 const BaseInfo = () => {
   return (
     <>
-      <CommonModule  title="员工信息" className="mt-[.16rem] h-[1.56rem]">
+      <CommonModule title="员工信息" className="mt-[.16rem] h-[1.56rem]">
         <div className={styleScope["staff-info"]}>
           <p>
             <span>员工ID：</span>
@@ -44,9 +44,13 @@ const BaseInfo = () => {
           </p>
         </div>
       </CommonModule>
-      <CommonModule title="账户管理" className="mt-[.16rem]" style={{
-        height: `calc(100% - 1.72rem)`
-      }}>
+      <CommonModule
+        title="账户管理"
+        className="mt-[.16rem]"
+        style={{
+          height: `calc(100% - 1.72rem)`,
+        }}
+      >
         <div className="flex items-start not-first:mt-[.25rem]">
           <Icon
             name="h-icon-status"
@@ -73,8 +77,8 @@ const BaseInfo = () => {
               marginRight: ".1rem",
             }}
           />
-          <p className="flex justify-between items-center flex-1 leading-[.3rem] pb-[.2rem] border-b border-[#C5CAD0] border-dashed">
-            <span className="text-[14px] text-[#666]">登录密码</span>
+          <p className="flex justify-between items-center text-[14px] flex-1 leading-[.3rem] pb-[.2rem] border-b border-[#C5CAD0] border-dashed">
+            <span className="text-[#666]">登录密码</span>
             <span className="text-[#0385F2] cursor-pointer">重置</span>
           </p>
         </div>
@@ -87,8 +91,8 @@ const BaseInfo = () => {
               marginRight: ".1rem",
             }}
           />
-          <p className="flex justify-between items-center flex-1 leading-[.3rem] pb-[.2rem] border-b border-[#C5CAD0] border-dashed">
-            <span className="text-[14px] text-[#666]">PIN码</span>
+          <p className="flex justify-between items-center text-[14px] flex-1 leading-[.3rem] pb-[.2rem] border-b border-[#C5CAD0] border-dashed">
+            <span className="text-[#666]">PIN码</span>
             <span className="text-[#0385F2] cursor-pointer">重置</span>
           </p>
         </div>
@@ -101,8 +105,8 @@ const BaseInfo = () => {
               marginRight: ".1rem",
             }}
           />
-          <p className="flex justify-between items-center flex-1 leading-[.3rem] pb-[.2rem] border-b border-[#C5CAD0] border-dashed">
-            <span className="text-[14px] text-[#666]">Google验证器</span>
+          <p className="flex justify-between items-center text-[14px] flex-1 leading-[.3rem] pb-[.2rem] border-b border-[#C5CAD0] border-dashed">
+            <span className="text-[#666]">Google验证器</span>
             <span className="text-[#0385F2] cursor-pointer">未绑定</span>
           </p>
         </div>
@@ -115,9 +119,9 @@ const BaseInfo = () => {
               marginRight: ".1rem",
             }}
           />
-          <p className="flex justify-between items-center flex-1 leading-[.3rem] pb-[.2rem]">
+          <p className="flex justify-between items-center text-[14px] flex-1 leading-[.3rem] pb-[.2rem]">
             <span>
-              <span className="text-[14px] text-[#666]">关闭账户</span>
+              <span className="text-[#666]">关闭账户</span>
               <span className="text-[var(--pink)] ml-[.16rem]">
                 账户关闭后将彻底无法使用
               </span>

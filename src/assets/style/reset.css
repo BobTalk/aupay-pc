@@ -288,3 +288,18 @@
     container-type: inline-size;
   }
 }
+.text-\[14px\]{
+  font-size: .14rem !important;
+}
+.text-\[12px\]{
+  font-size: .12rem !important;
+}
+.text-\[16px\]{
+  font-size: .16rem !important;
+}
+.text-\[18px\]{
+  font-size: .18rem !important;
+}
+.text-\[22px\]{
+  font-size: .22rem !important;
+}

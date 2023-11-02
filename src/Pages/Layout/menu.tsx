@@ -47,7 +47,8 @@ const LayoutMenu = () => {
     "/aupay/system/ip-record": ["/aupay/system", "/aupay/system/ip-record"],
     "/aupay/system/ip-manage": ["/aupay/system", "/aupay/system/ip-manage"],
     "/aupay/notice": ["/aupay/notice"],
-    "/aupay/notice/add": ["/aupay/notice"]
+    "/aupay/notice/add": ["/aupay/notice"],
+    "/aupay/system/staff-manage/detail": ["/aupay/system/staff-manage"],
   };
   return (
     <Menu
