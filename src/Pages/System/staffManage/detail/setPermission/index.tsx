@@ -1,4 +1,4 @@
-import { KeyOutlined } from "@ant-design/icons";
+import { KeyOutlined, SaveOutlined } from "@ant-design/icons";
 import styleScope from "./index.module.less";
 import { Button, ConfigProvider, Tree,theme } from "antd";
 import { mergeClassName } from "@/utils/base";
@@ -33,6 +33,9 @@ const SetPermission = () => {
         <Button size="large" type="primary" icon={<KeyOutlined />}>
           权限调整
         </Button>
+        {/* <Button size="large" className="bg-[var(--green)]" type="primary" icon={<SaveOutlined />}>
+          保存
+        </Button> */}
       </div>
       <ConfigProvider
         theme={{
