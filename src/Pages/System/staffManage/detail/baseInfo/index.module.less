@@ -36,3 +36,47 @@
     }
   }
 }
+.icon {
+  display: inline-flex;
+  width: .06rem;
+  height: .22rem;
+  background-color: var(--blue);
+  border-radius: var(--border-radius);
+  margin-right: .08rem;
+}
+.b-b {
+  border-bottom: 1px solid #C5CAD0;
+  text-align: center;
+  font-size: .3rem;
+}
+
+.input-border {
+  &:extend(.b-b);
+  border-radius: 0;
+
+  &:hover {
+    &:extend(.b-b);
+  }
+
+  &:focus {
+    &:extend(.b-b);
+  }
+}
+
+.btn-list {
+  display: grid;
+  justify-items: end;
+  padding: .2rem .3rem .24rem;
+  border-top: 1px solid var(--border-color);
+
+  :global(.ant-form-item-control-input) {
+    height: .32rem !important;
+    line-height: .32rem !important;
+  }
+
+  button {
+    &:first-child {
+      margin-right: .16rem;
+    }
+  }
+}

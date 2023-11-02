@@ -1,10 +1,11 @@
 import { Tabs } from "antd";
 import { useEffect, useRef, useState } from "react";
-
+import BaseInfo from "./baseInfo";
+import SetPermission from "./setPermission";
+import OperationRecords from "./operationRecords";
 const StaffDetail = () => {
   const tabsRef = useRef<any>();
   let [defaultActiveKey, setDefaultActiveKey] = useState("baseInfo");
-  let [currentModule, setCurrentModule] = useState();
   let [tabsHeight, setTabsHeight] = useState();
   const items = [
     {
@@ -24,11 +25,6 @@ const StaffDetail = () => {
     setDefaultActiveKey(key);
   }
   useEffect(() => {
-    import(`./${defaultActiveKey}`).then((res) => {
-      setCurrentModule(res.default);
-    });
-  }, [defaultActiveKey]);
-  useEffect(() => {
     let { height } = tabsRef.current.getBoundingClientRect();
     setTabsHeight(height);
   }, []);
@@ -47,7 +43,13 @@ const StaffDetail = () => {
           height: `calc(100% - ${tabsHeight}px - .24rem)`,
         }}
       >
-        {currentModule}
+        {defaultActiveKey == "baseInfo" ? (
+          <BaseInfo />
+        ) : defaultActiveKey == "setPermission" ? (
+          <SetPermission />
+        ) : (
+          <OperationRecords />
+        )}
       </div>
     </>
   );

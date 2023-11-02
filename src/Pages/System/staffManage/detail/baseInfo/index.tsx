@@ -1,11 +1,74 @@
-import { mergeClassName } from "@/utils/base";
 import styleScope from "./index.module.less";
 import { EditOutlined, RightOutlined } from "@ant-design/icons";
 import Icon from "@/Components/Icon";
-import { useEffect, useRef } from "react";
+import { useStopPropagation } from "@/Hooks/StopPropagation";
+import ValidatorComp from "./validator";
+import Context from "./Context.jsx";
+import CommonModule from "./common";
+import { createContext, useContext, useState } from "react";
+
 const BaseInfo = () => {
+  // 提示信息
+  const tipMessage = {
+    pwd:"确认要重置登录密码，密码将重置为123456，请及时修改密码",
+    freeze:"确认冻结员工：Bob，冻结后将无法登录",
+    enable:'确认启用员工：Bob，解冻后将恢复使用',
+    PIN:'确认重置PIN码，重置为0000',
+    google:'确认重置Google验证器，重置后可重新',
+    closeAccount:'确认要关闭此员工账户，停用后将无法恢复'
+  }
+  let [PIN, setPIN] = useState(false);
+  let [googleCodeOpen, setGoogleCodeOpen] = useState(false);
+  let [summary, setSummary] = useState("");
+  let [tipOpen, setTipOpen] = useState(false);
+  let [stop] = useStopPropagation();
+  function isFreeze(e) {
+    stop(e, () => {
+      setPIN(!PIN);
+    });
+  }
+  // PIN取消
+  function onPINCancel() {
+    setPIN(!PIN);
+  }
+  // PIN确定
+  function onPINOk() {
+    setPIN(!PIN);
+    setGoogleCodeOpen(!googleCodeOpen);
+  }
+  // Google取消
+  function onGoogleCancel() {
+    setGoogleCodeOpen(!googleCodeOpen);
+  }
+  // Google确定
+  function onGoogleOk() {
+    console.log("00000");
+    setGoogleCodeOpen(!googleCodeOpen);
+    setTipOpen(!tipOpen);
+  }
+  // 提示信息取消
+  function onTipCancel() {
+    setTipOpen(!tipOpen);
+  }
+  // 提示信息确定
+  function onTipOk() {
+    setTipOpen(!tipOpen);
+  }
   return (
-    <>
+    <Context.Provider
+      value={{
+        onPINOk,
+        onPINCancel,
+        PINOpen: PIN,
+        onGoogleOk,
+        onGoogleCancel,
+        googleCodeOpen,
+        onTipOk,
+        onTipCancel,
+        tipOpen,
+        summary,
+      }}
+    >
       <CommonModule title="员工信息" className="mt-[.16rem] h-[1.56rem]">
         <div className={styleScope["staff-info"]}>
           <p>
@@ -64,7 +127,12 @@ const BaseInfo = () => {
             <span className="text-[14px] text-[#666]">账户状态</span>
             <p className="text-[14px]">
               <span className="text-[#333] mr-[.2rem]">已冻结</span>
-              <span className="text-[var(--green)] cursor-pointer">启用</span>
+              <span
+                className="text-[var(--green)] cursor-pointer"
+                onClick={isFreeze}
+              >
+                启用
+              </span>
             </p>
           </div>
         </div>
@@ -130,21 +198,9 @@ const BaseInfo = () => {
           </p>
         </div>
       </CommonModule>
-    </>
+      <ValidatorComp />
+    </Context.Provider>
   );
 };
-const CommonModule = (props) => {
-  return (
-    <div
-      className={mergeClassName(
-        "p-[.24rem] bg-[var(--white)] rounded-[.06rem]",
-        `${props.className}`
-      )}
-      style={props.style}
-    >
-      <p className={styleScope["title"]}>{props.title}</p>
-      {props.children}
-    </div>
-  );
-};
+
 export default BaseInfo;
