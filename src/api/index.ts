@@ -48,6 +48,12 @@ export const UpdateBaseInfoInterFace = (data) => {
     data
   })
 }
+// 获取个人信息
+export const GetUserInfo = () => {
+  return _http.getReq({
+    url: `${staffPrefix}/getAdminInfo`
+  })
+}
 // 8.通用验证PIN码 GET admin/verifyPin?pin=PIN&operationId=OPERATION_ID
 export const VerifyPinInterFace = (obj: { pin: '', operationId: '' }) => {
   return _http.getReq({
@@ -138,7 +144,7 @@ export const SwitchFreezeAdminInterFace = (id) => {
   })
 }
 // 22.设置员工部门 PUT admin/setAdminDepartment?adminId=ADMINID&department=DEPARTMENT
-export const SetAdminDepartmentInterFace = (obj:{id:'',department:""}) => {
+export const SetAdminDepartmentInterFace = (obj: { id: '', department: "" }) => {
   return _http.putReq({
     url: `${staffPrefix}/setAdminDepartment?adminId=${obj.id}&department=${obj.department}`,
   })

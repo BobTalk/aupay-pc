@@ -8,7 +8,7 @@ import { Button, Form, Input, message } from "antd";
 // import GetCodeBtn from "@/Components/GetCode";
 import { useState } from "react";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import { GetAccessKeyInterface, LoginInterFace } from "@/api";
+import { GetAccessKeyInterface, GetUserInfo, LoginInterFace } from "@/api";
 import { encrypt, encryptByDES, setSession } from "@/utils/base";
 import { useNavigate } from "react-router-dom";
 const Login = () => {
@@ -49,8 +49,12 @@ const FormComp = () => {
           message.error(res.message ?? "信息错误");
         } else {
           // 存放token
-          setSession('token', encrypt(res.data))
-          navigate("/aupay/assets");
+          setSession("token", res.data);
+          GetUserInfo().then((res) => {
+            if (!res.status) return;
+            setSession("userInfo", res.data);
+            navigate("/aupay/assets");
+          });
         }
       });
     });

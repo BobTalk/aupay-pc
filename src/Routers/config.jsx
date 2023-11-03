@@ -38,48 +38,62 @@ const RouteList = [
     element: <Login />,
   },
   {
+    path: "/login",
+    element: <Login />,
+  },
+  {
     path: "/denied",
     element: <Denied />,
   },
   {
     path: "/aupay",
     element: <LayoutPage />,
+    isAuth: true,
     children: [
       {
         path: "assets",
         element: <AssetsCount />,
+        isAuth: true,
       },
       {
         path: "data",
         element: <DataCount />,
+        isAuth: true,
       },
       {
         path: "user",
         element: <UserManage />,
+        isAuth: true,
         children: [
           {
             path: 'detail',
             element: <UserDetail />,
+            isAuth: true,
             children: [
               {
                 path: 'user',
-                element: <UserDetailInfo />
+                element: <UserDetailInfo />,
+                isAuth: true,
               },
               {
                 path: 'recharge',
-                element: <RechargeDetailInfo />
+                element: <RechargeDetailInfo />,
+                isAuth: true,
               },
               {
                 path: 'draw',
-                element: <DrawDetailInfo />
+                element: <DrawDetailInfo />,
+                isAuth: true,
               },
               {
                 path: 'trade',
-                element: <TradeDetailInfo />
+                element: <TradeDetailInfo />,
+                isAuth: true,
               },
               {
                 path: 'assetsChanges',
-                element: <AssetsChangesDetailInfo />
+                element: <AssetsChangesDetailInfo />,
+                isAuth: true,
               }
             ]
           }
@@ -89,50 +103,61 @@ const RouteList = [
       {
         path: 'address',
         element: <AddressManage />,
+        isAuth: true,
         children: [
           {
             path: 'user',
-            element: <UserAddress />
+            element: <UserAddress />,
+            isAuth: true,
           },
           {
             path: 'transfer',
-            element: <TransferAddress />
+            element: <TransferAddress />,
+            isAuth: true,
           },
           {
             path: 'reserve',
-            element: <ReserveAddress />
+            element: <ReserveAddress />,
+            isAuth: true,
           },
           {
             path: 'draw',
-            element: <DrawAddress />
+            element: <DrawAddress />,
+            isAuth: true,
           },
           {
             path: 'minerFees',
-            element: <MinerFeesAddress />
+            element: <MinerFeesAddress />,
+            isAuth: true,
           },
         ]
       },
       {
         path: 'ozbet',
         element: <Ozbet />,
+        isAuth: true,
         children: [
           {
             path: 'assets',
             element: <AssetsAddr />,
+            isAuth: true,
             children: [
               {
                 path: 'transfer-records',
-                element: <OzbetTransferRecords />
+                element: <OzbetTransferRecords />,
+                isAuth: true,
               }
             ]
           },
           {
             path: 'draw',
             element: <DrawAddr />,
+            isAuth: true,
             children: [
               {
                 path: 'transfer-records',
-                element: <OzbetTransferRecords />
+                element: <OzbetTransferRecords />,
+                isAuth: true,
               }
             ]
           },
@@ -142,37 +167,48 @@ const RouteList = [
       {
         path: 'system',
         element: <System />,
+        isAuth: true,
         children: [
           {
             path: 'ip-manage',
-            element: <IPManage />
+            element: <IPManage />,
+            isAuth: true,
           },
           {
             path: 'ip-record',
-            element: <IPRecord />
+            element: <IPRecord />,
+            isAuth: true,
           },
           {
             path: 'automated',
-            element: <AutomatedConfig />
+            element: <AutomatedConfig />,
+            isAuth: true,
           },
           {
             path: 'draw',
-            element: <DrawConfig />
+            element: <DrawConfig />,
+            isAuth: true,
           },
           {
             path: 'rate-manage',
-            element: <RateManage />
+            element: <RateManage />,
+            isAuth: true,
           },
           {
             path: 'logs-manage',
-            element: <LogsManage />
+            element: <LogsManage />,
+            isAuth: true,
           },
           {
             path: 'staff-manage',
             element: <StaffManage />,
-            children:[
-             { path:'detail',
-              element: <StaffDetail/>}
+            isAuth: true,
+            children: [
+              {
+                path: 'detail',
+                element: <StaffDetail />,
+                isAuth: true,
+              }
             ]
           },
         ]
@@ -180,20 +216,24 @@ const RouteList = [
       {
         path: 'notice',
         element: <NoticeList />,
+        isAuth: true,
         children: [
           {
             path: 'add',
-            element: <NoticeEditor />
+            element: <NoticeEditor />,
+            isAuth: true,
           },
           {
             path: 'editor',
-            element: <NoticeEditor />
+            element: <NoticeEditor />,
+            isAuth: true,
           }
         ]
       },
       {
         path: 'personal',
-        element: <PersonalInfo />
+        element: <PersonalInfo />,
+        isAuth: true,
       },
 
     ],
