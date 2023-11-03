@@ -4,8 +4,13 @@ import { useState } from "react";
 
 const GetCodeBtn = (props: any) => {
   let { operationId, btnName, module, email, username, onClick } = props;
+  function loginCode(){
+    console.log("登陆即可调用");
+  }
   // 模块映射
-  let moduleMap: any = new Map([]);
+  let moduleMap: any = new Map([
+   [ 'login', loginCode]
+  ]);
   let [stop] = useStopPropagation();
   let [codeMessage, setCodeMessage] = useState(btnName);
   let { start, count: timeDown } = useCountDown(

@@ -4,9 +4,13 @@ import loginBg from "@/assets/images/login-bg.svg";
 import styleScope from "./index.module.less";
 import "@/assets/style/form.less";
 import Card from "@/Components/Card";
-import { Button, Form, Input } from "antd";
-import GetCodeBtn from "@/Components/GetCode";
+import { Button, Form, Input, message } from "antd";
+// import GetCodeBtn from "@/Components/GetCode";
 import { useState } from "react";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import { GetAccessKeyInterface, LoginInterFace } from "@/api";
+import { encrypt, encryptByDES, setSession } from "@/utils/base";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   return (
     <Card bgImg={loginBg} bgColor="#f6f7f9" className="w-[100vw] h-[100vh]">
@@ -23,24 +27,37 @@ const Login = () => {
 };
 
 const FormComp = () => {
+  let navigate = useNavigate();
   let [formInitVal, setFormInitVal] = useState({
     username: "",
     password: "",
     emailCode: "",
   });
-  const message = {
+  const messageScope = {
     username: "请输入用户名",
     password: "请输入密码",
     emailCode: "请输入邮箱验证码",
   };
 
   function onFinish(obj) {
-    console.log('obj: ', obj);
-
+    GetAccessKeyInterface().then(({ data }) => {
+      LoginInterFace({
+        adminId: obj.username,
+        password: encryptByDES(obj.password, data),
+      }).then((res) => {
+        if (!res.status) {
+          message.error(res.message ?? "信息错误");
+        } else {
+          // 存放token
+          setSession('token', encrypt(res.data))
+          navigate("/aupay/assets");
+        }
+      });
+    });
   }
   return (
     <Form
-    autoComplete="off"
+      autoComplete="off"
       initialValues={formInitVal}
       layout="vertical"
       onFinish={onFinish}
@@ -53,11 +70,11 @@ const FormComp = () => {
         rules={[
           {
             required: true,
-            message: message["username"],
+            message: messageScope["username"],
           },
         ]}
       >
-        <Input placeholder={message["username"]} />
+        <Input placeholder={messageScope["username"]} />
       </Form.Item>
       <Form.Item
         className="hidden_start"
@@ -66,19 +83,24 @@ const FormComp = () => {
         rules={[
           {
             required: true,
-            message: message["password"],
+            message: messageScope["password"],
           },
         ]}
       >
-        <Input placeholder={message["password"]} />
+        <Input.Password
+          iconRender={(visible) =>
+            visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+          }
+          placeholder={messageScope["password"]}
+        />
       </Form.Item>
-      <Form.Item
+      {/* <Form.Item
         className="hidden_start"
         name="emailCode"
         label={
           <div className="flex justify-between items-center flex-1">
             <span>邮箱验证码</span>
-            <GetCodeBtn btnName="获取验证码" />
+            <GetCodeBtn module="login" btnName="获取验证码"/>
           </div>
         }
         rules={[
@@ -89,9 +111,9 @@ const FormComp = () => {
         ]}
       >
         <Input placeholder={message["emailCode"]}/>
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item>
-        <Button type="primary" block htmlType="submit">
+        <Button className="mt-[.24rem]" type="primary" block htmlType="submit">
           登录
         </Button>
       </Form.Item>

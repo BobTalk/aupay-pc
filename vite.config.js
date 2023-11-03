@@ -25,12 +25,19 @@ export default defineConfig({
     ]
   },
   server: {
-    hmr: {
-      overlay: false
-    },
     port: 8080,
     host: true,
     https: false,
-    open: true
+    open: true,
+    proxy: {
+      "/admin": {
+        target: "http://192.168.50.162:9000",
+        changeOrigin: true,
+      },
+      "/operate": {
+        target: "http://192.168.50.162:9000",
+        changeOrigin: true,
+      }
+    }
   }
 })

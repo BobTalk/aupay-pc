@@ -33,10 +33,10 @@ class BaseHttp {
         // 200:服务端业务处理正常结束
         if (res.status === 200) {
           resolve({
-            ...(dataType(res?.data?.data) === 'object' ? res?.data?.data : { value: res?.data?.data }),
-            status: true,
+            ...(dataType(res?.data?.data) === 'object' ? res?.data?.data : { data: res?.data?.data }),
+            status: [200].includes(res?.data.code) ? true : false,
             message: res?.data?.message ?? "成功",
-            code: 200,
+            code: res?.data.code ?? 200,
           });
         } else {
           resolve({

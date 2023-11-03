@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { PendingType } from './type';
 import { getSession, removeSession } from '@/utils/base';
-import { Toast } from 'antd-mobile';
 // 取消重复请求
 const pending: Array<PendingType> = [];
 const CancelToken = axios.CancelToken;
@@ -45,48 +44,10 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response: any) => {
     // removePending(response.config);
-    const errorCode = response?.data?.code;
-    if (errorCode === 401) {
-      Toast.show({
-        content: '登陆信息已过期,请重新登陆'
-      })
-      removeSession('token')
-      window.history.forward()
-      return {
-        status: false,
-        data: {message: response.data.message},
-        code:errorCode
-      }
-    }
-    if ([1001, 1013, 1017,1007].includes(errorCode)) {
-      return {
-        status: errorCode,
-        data: { message: response.data.message }
-      }
-    }
-    return response;
+    return response
   },
   (error: any) => {
     const response = error.response;
-
-    // 根据返回的http状态码做不同的处理
-    switch (response?.status) {
-      case 401:
-        // token失效
-        break;
-      case 403:
-        // 没有权限
-        break;
-      case 500:
-        // 服务端错误
-        break;
-      case 503:
-        // 服务端错误
-        break;
-      default:
-        break;
-    }
-
     return Promise.reject(response || { message: error.message });
   }
 );
