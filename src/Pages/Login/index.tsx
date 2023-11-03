@@ -51,8 +51,9 @@ const FormComp = () => {
           // 存放token
           setSession("token", res.data);
           GetUserInfo().then((res) => {
+            console.log('res: ', res);
             if (!res.status) return;
-            setSession("userInfo", res.data);
+            setSession("userInfo", res);
             navigate("/aupay/assets");
           });
         }

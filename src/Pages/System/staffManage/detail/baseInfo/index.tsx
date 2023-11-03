@@ -5,9 +5,12 @@ import { useStopPropagation } from "@/Hooks/StopPropagation";
 import ValidatorComp from "./validator";
 import Context from "./Context.jsx";
 import CommonModule from "./common";
-import { createContext, useContext, useState } from "react";
+import { useState } from "react";
+import { getSession } from "@/utils/base";
 
 const BaseInfo = () => {
+  let userInfo = getSession('userInfo')
+  console.log('userInfo: ', userInfo);
   // 提示信息
   const tipMessage = {
     pwd:"确认要重置登录密码，密码将重置为123456，请及时修改密码",
