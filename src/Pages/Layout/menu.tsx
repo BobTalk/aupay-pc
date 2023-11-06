@@ -6,33 +6,41 @@ import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import store from "@/store";
 import { activePath, activePathToName } from "./activeRouterConfig";
+import { useEffect, useLayoutEffect } from "react";
 const LayoutMenu = () => {
   let [stop] = useStopPropagation();
   let navigate = useNavigate();
   let { pathname } = useLocation();
   function menuSelectCb({ key, domEvent }) {
     stop(domEvent, () => {
-      let activeKey = activePathToName[key];
-      console.log('activeKey: ', activeKey);
-      let activeP = activePath[key];
-      navigate(key, { state: { _title: activeKey } });
-      if (activeKey.length > 1) {
-        let res = activeKey.map((item, idx, arr) => {
-          return idx === arr.length - 1
-            ? { title: item }
-            : { title: item, href: activeP[idx] };
-        });
-        store.dispatch({ type: "ADD_BREADCRUMB", data: res });
-      } else {
-        store.dispatch({
-          type: "ADD_BREADCRUMB",
-          data: [{ title: activePathToName[key] }],
-        });
-      }
-      // store.store.dispatch({ type: "ADD_BREADCRUMB", data: [{ title:  }] });
+      navigate(key, { state: { _title: activePathToName[key] } });
+      breadSite(key);
     });
   }
-
+  function breadSite(key) {
+    let activeKey = activePathToName[key];
+    console.log('activeKey: ', activeKey);
+    let activeP = activePath[key];
+    if (activeKey.length > 1) {
+      let res = activeKey.map((item, idx, arr) => {
+        return idx === arr.length - 1
+          ? { title: item }
+          : { title: item, href: activeP[idx] };
+      });
+      console.log('res: ', res);
+      store.dispatch({ type: "ADD_BREADCRUMB", data: res });
+    } else {
+      console.log(activePathToName[key][0]);
+      store.dispatch({
+        type: "ADD_BREADCRUMB",
+        data: [{ title: activePathToName[key][0] }],
+      });
+    }
+   
+  }
+  useLayoutEffect(() => {
+    breadSite(pathname);
+  }, []);
   return (
     <Menu
       theme="light"

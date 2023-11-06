@@ -7,7 +7,7 @@ import styleScope from "./content.module.less";
 import closeIcon from "@/assets/images/close.svg";
 import { useEffect, useRef, useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
-import { getSession, mergeClassName } from "@/utils/base";
+import { getSession, mergeClassName, setSession } from "@/utils/base";
 import store from "@/store";
 let { Content } = Layout;
 const LayoutContent = () => {
@@ -17,7 +17,7 @@ const LayoutContent = () => {
   let userInfo = getSession("userInfo");
   let [usename] = useState(() => userInfo["adminId"]);
   let [showMessage, setShowMessage] = useState("");
-  let [isShowLoginTip, setIsShowLoginTip] = useState<Boolean>(false);
+  let [isShowLoginTip, setIsShowLoginTip] = useState<Boolean>(getSession('loginTip'));
   let [breadcrumb, setBreadcrumb] = useState(
     store.getState().breadcrumbReducer
   );
@@ -25,20 +25,15 @@ const LayoutContent = () => {
   function close(e) {
     stop(e, () => {
       setShowMessage("hidden");
+      setIsShowLoginTip(true)
+      setSession('loginTip', true)
     });
   }
+  useEffect(()=>{
+    setBreadcrumb(store.getState().breadcrumbReducer);
+  },[store.getState().breadcrumbReducer])
   useEffect(() => {
     let { height } = messageRefs.current.getBoundingClientRect();
-    // 监听store数据变化
-    store.subscribe(() => {
-      setBreadcrumb(store.getState().breadcrumbReducer);
-    });
-    if (pathname == "/aupay/assets") {
-      setIsShowLoginTip(true);
-    }
-    setTimeout(() => {
-      setIsShowLoginTip(false);
-    }, 3000);
     setContentH(height);
   }, []);
   return (
@@ -49,7 +44,7 @@ const LayoutContent = () => {
         background: "var(--gray)",
       }}
     >
-      {isShowLoginTip ? (
+      {!isShowLoginTip ? (
         <Message
           ref={messageRefs}
           message={

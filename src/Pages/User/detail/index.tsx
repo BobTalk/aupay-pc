@@ -45,7 +45,7 @@ const UserDetail = () => {
     } else {
       store.dispatch({
         type: "ADD_BREADCRUMB",
-        data: [{ title: activePathToName[key] }],
+        data: [{ title: activePathToName[key][0] }],
       });
     }
   }
