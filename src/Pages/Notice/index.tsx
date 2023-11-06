@@ -10,7 +10,10 @@ import { useStopPropagation } from "@/Hooks/StopPropagation";
 import ModalScope from "@/Components/Modal";
 import { useRef, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { DeleteAnnouncementInterFace, UpdateAnnouncementInterFace } from "@/api";
+import {
+  DeleteAnnouncementInterFace,
+  UpdateAnnouncementInterFace,
+} from "@/api";
 const NoticeList = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const tableRefEl = useRef<any>({ current: undefined });
@@ -59,18 +62,31 @@ const NoticeList = () => {
       });
     });
   }
-  function deleteCb(e, crt){
+  function deleteCb(e, crt) {
     stop(e, () => {
-      DeleteAnnouncementInterFace(crt.id).then(res => {
-        console.log('res: ', res);
-        if(res.status){
-          message.success(res.message)
-          tableRefEl.current.getTableInfo()
-        }else{
-          message.error(res.message)
+      DeleteAnnouncementInterFace(crt.id).then((res) => {
+        if (res.status) {
+          message.success(res.message);
+          tableRefEl.current.getTableInfo();
+        } else {
+          message.error(res.message);
         }
-      })
-    })
+      });
+    });
+  }
+  function CheckboxCb(e, crt) {
+    stop(e, () => {
+      UpdateAnnouncementInterFace({
+        isRoll: !crt.isRoll,
+      }).then((res) => {
+        if (res.status) {
+          message.success(res.message);
+          tableRefEl.current.getTableInfo();
+        } else {
+          message.error(res.message);
+        }
+      });
+    });
   }
   return ["/aupay/notice/add", "/aupay/notice/editor"].includes(pathname) ? (
     <Outlet />
@@ -93,6 +109,7 @@ const NoticeList = () => {
           ref={tableRefEl}
           onEditor={editorCb}
           onDelete={deleteCb}
+          onCheckbox={CheckboxCb}
           onShowOrHidden={toggleVisiable}
         />
       </div>

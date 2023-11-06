@@ -26,7 +26,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render: (_, record) => (<Checkbox checked={_} />)
+      render: (_, record) => (<Checkbox onChange={(e) => checkboxCb(e, record)} checked={_} />)
     },
     {
       title: '公告标题',
@@ -104,6 +104,9 @@ const TableScope = (props, ref) => {
         </Typography.Link></>
     },
   ]
+  function checkboxCb(e, crt) {
+    props?.onCheckbox(e, crt)
+  }
   function edit(e, crt) {
     props?.onEditor?.(e, crt)
   }
