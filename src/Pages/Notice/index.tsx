@@ -10,7 +10,7 @@ import { useStopPropagation } from "@/Hooks/StopPropagation";
 import ModalScope from "@/Components/Modal";
 import { useRef, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { UpdateAnnouncementInterFace } from "@/api";
+import { DeleteAnnouncementInterFace, UpdateAnnouncementInterFace } from "@/api";
 const NoticeList = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const tableRefEl = useRef<any>({ current: undefined });
@@ -43,13 +43,34 @@ const NoticeList = () => {
   }
   function addNotice(e) {
     stop(e, () => {
-      navigate("/aupay/notice/add", { state: { module: "add", id:getSession('userInfo').adminId} });
+      navigate("/aupay/notice/add", {
+        state: { module: "add", id: getSession("userInfo").adminId },
+      });
     });
   }
-  function editorCb(e) {
+  function editorCb(e, crt) {
     stop(e, () => {
-      navigate("/aupay/notice/editor");
+      navigate("/aupay/notice/editor", {
+        state: {
+          module: "editor",
+          id: getSession("userInfo").adminId,
+          crt,
+        },
+      });
     });
+  }
+  function deleteCb(e, crt){
+    stop(e, () => {
+      DeleteAnnouncementInterFace(crt.id).then(res => {
+        console.log('res: ', res);
+        if(res.status){
+          message.success(res.message)
+          tableRefEl.current.getTableInfo()
+        }else{
+          message.error(res.message)
+        }
+      })
+    })
   }
   return ["/aupay/notice/add", "/aupay/notice/editor"].includes(pathname) ? (
     <Outlet />
@@ -71,6 +92,7 @@ const NoticeList = () => {
         <TableScope
           ref={tableRefEl}
           onEditor={editorCb}
+          onDelete={deleteCb}
           onShowOrHidden={toggleVisiable}
         />
       </div>

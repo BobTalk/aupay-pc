@@ -52,7 +52,6 @@ function EditorPanel(props) {
   };
   // let [text, setText] = useState();
   function handleChange(val) {
-    console.log("val: ", val);
     // setText(val);
     props?.onChange(val)
   }

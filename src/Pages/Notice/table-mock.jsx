@@ -1,6 +1,6 @@
 import { EyeOutlined, EyeInvisibleOutlined, DeleteOutlined } from '@ant-design/icons';
 import Icon from '@/Components/Icon';
-import { Checkbox, Typography } from 'antd'
+import { Checkbox, Popconfirm, Typography } from 'antd'
 import TableComp from "@/Components/Table";
 import { FindAnnouncementListInterFace } from "@/api";
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
@@ -95,10 +95,12 @@ const TableScope = (props, ref) => {
 
       </Typography.Link>
         <Typography.Link
-          onClick={(e) => deleteCb(e, record)}
+
         >
-          <DeleteOutlined className='text-[var(--menu-color)] mr-[.1rem]' />
-          <span className='text-[var(--menu-color)]'>删除</span>
+          <Popconfirm title="确认删除此公告?" onConfirm={(e) => deleteCb(e, record)}>
+            <DeleteOutlined className='text-[var(--menu-color)] mr-[.1rem]' />
+            <span className='text-[var(--menu-color)]'>删除</span>
+          </Popconfirm>
         </Typography.Link></>
     },
   ]
@@ -121,7 +123,11 @@ const TableScope = (props, ref) => {
       pageSize: pagination.pageSize,
       conditions: null
     }).then(res => {
-      setDataSource(res.data)
+      let formatData = res.data.map(item => (
+        item.key = item.id,
+        item
+      ))
+      setDataSource(formatData)
       setPagination({
         current: res.pageNo,
         pageSize: res.pageSize,
@@ -134,7 +140,7 @@ const TableScope = (props, ref) => {
       })
     })
   }
-  useImperativeHandle(ref, ()=>({
+  useImperativeHandle(ref, () => ({
     getTableInfo
   }), [])
   useEffect(() => {

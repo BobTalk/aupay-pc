@@ -3,37 +3,52 @@ import locale from "antd/es/date-picker/locale/zh_CN";
 import { useState } from "react";
 import EditorPanel from "./tinymce";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AddAnnouncementInterFace } from "@/api";
+import { AddAnnouncementInterFace, UpdateAnnouncementInterFace } from "@/api";
 const EditorNotice = () => {
   let { state: urlParams } = useLocation();
+  console.log("urlParams: ", urlParams);
   let navigate = useNavigate();
   let [formInitalVal, setFormInitalVal] = useState({
     employeeId: urlParams.id,
-    title: "",
+    title: urlParams?.crt?.title,
     publishTime: [],
-    content: "",
+    content: urlParams?.crt?.content,
   });
   function cancleCb() {
     navigate("/aupay/notice", { replace: true });
   }
   function publishAndAddNoticeCb(values) {
-    console.log("values: ", values);
     let { title, content } = values;
-    AddAnnouncementInterFace({
-      title,
-      content,
-      isShow: false,
-      isRoll: false,
-    }).then((res) => {
-      if (res.status) {
-        message.success(res.message);
-        cancleCb();
-      } else {
-        message.error(res.message);
-      }
-    });
+    if (urlParams.module === "add") {
+      AddAnnouncementInterFace({
+        title,
+        content,
+        isShow: false,
+        isRoll: false,
+      }).then((res) => {
+        if (res.status) {
+          message.success(res.message);
+          cancleCb();
+        } else {
+          message.error(res.message);
+        }
+      });
+    } else {
+      UpdateAnnouncementInterFace({
+        title,
+        content,
+        isShow: urlParams.crt.isShow,
+        isRoll: urlParams.crt.isRoll,
+      }).then((res) => {
+        if (res.status) {
+          message.success(res.message);
+          cancleCb();
+        } else {
+          message.error(res.message);
+        }
+      });
+    }
   }
-
   return (
     <div className="bg-[var(--white)] h-full px-[.5rem] py-[.4rem] rounded-[.06rem] overflow-auto">
       <Form
@@ -42,7 +57,6 @@ const EditorNotice = () => {
         labelAlign="left"
         onFinish={publishAndAddNoticeCb}
         labelCol={{ span: 3 }}
-        // wrapperCol={{ span: 10 }}
         style={{ maxWidth: 910 }}
         initialValues={formInitalVal}
       >
@@ -63,7 +77,11 @@ const EditorNotice = () => {
             },
           ]}
         >
-          <Input size="large" placeholder="请输入公告标题" />
+          <Input
+            size="large"
+            defaultValue={formInitalVal.title}
+            placeholder="请输入公告标题"
+          />
         </Form.Item>
         {urlParams.module !== "add" ? null : (
           <Form.Item label="发布时间" name="publishTime">
@@ -121,7 +139,7 @@ const EditorNotice = () => {
             type="primary"
             htmlType="submit"
           >
-            新增并发布
+            {urlParams.module == "add" ? "新增并发布" : "确定更新"}
           </Button>
         </Form.Item>
       </Form>
