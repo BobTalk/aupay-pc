@@ -23,7 +23,7 @@ const LayoutMenu = () => {
     let activeP = activePath[key];
     if (activeKey.length > 1) {
       let res = activeKey.map((item, idx, arr) => {
-        return idx === arr.length - 1
+        return (idx === arr.length - 1 || !idx)
           ? { title: item }
           : { title: item, href: activeP[idx] };
       });
