@@ -13,12 +13,13 @@ const LayoutMenu = () => {
   function menuSelectCb({ key, domEvent }) {
     stop(domEvent, () => {
       let activeKey = activePathToName[key];
+      console.log('activeKey: ', activeKey);
       let activeP = activePath[key];
       navigate(key, { state: { _title: activeKey } });
       if (activeKey.length > 1) {
         let res = activeKey.map((item, idx, arr) => {
           return idx === arr.length - 1
-            ? { title: activeKey }
+            ? { title: item }
             : { title: item, href: activeP[idx] };
         });
         store.dispatch({ type: "ADD_BREADCRUMB", data: res });

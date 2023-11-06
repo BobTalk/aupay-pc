@@ -1,11 +1,19 @@
 import { EyeFilled } from '@ant-design/icons';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import TableComp from "@/Components/Table";
+import { message } from 'antd';
+import { useEffect, useState } from 'react';
+import { FindAdminListInterFace } from "@/api";
+import { useStopPropagation } from "@/Hooks/StopPropagation";
+import store from '@/store'
+import dayjs from 'dayjs';
 const TableScope = (props) => {
-  function isEffectiveCb(e,crt){
+  let navigate = useNavigate()
+  let [stop] = useStopPropagation();
+  function isEffectiveCb(e, crt) {
     props?.onState(e, crt)
   }
-  const pagination = {
+  let [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
     total: 10,
@@ -14,85 +22,77 @@ const TableScope = (props) => {
     },
     showSizeChanger: false,
     showQuickJumper: true,
-  }
-  const dataSource = [
-    {
-      key: "table1",
-      assetsType: 'USDT',
-      walletProtocol: 'USDT-ERC20',
-      createTime: "2023.7.17 15:22:20",
-      tradeType: '充币',
-      num: 189,
-      payAddr: '0x32983464f44',
-      tradeId: '0x32983464f440x32983464f44',
-      tradeConfirmNum: 87,
-    },
-
-  ]
+  })
+  let [dataSource, setDataSource] = useState([])
   const columns = [
     {
       title: '员工ID',
-      key: 'walletProtocol',
-      dataIndex: 'walletProtocol',
+      key: 'adminId',
+      dataIndex: 'adminId',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '备注',
-      key: 'createTime',
-      dataIndex: 'createTime',
+      key: 'notes',
+      dataIndex: 'notes',
       responsive: ['xl'],
       ellipsis: true,
-      align: 'left'
+      align: 'left',
+      render: (_, record) => <>{_ ?? "--"}</>
     },
     {
       title: '邮箱',
-      key: 'tradeType',
-      dataIndex: 'tradeType',
+      key: 'email',
+      dataIndex: 'email',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '联系方式',
-      key: 'tradeType',
-      dataIndex: 'tradeType',
+      key: 'mobile',
+      dataIndex: 'mobile',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '部门',
-      key: 'tradeType',
-      dataIndex: 'tradeType',
-      responsive: ['xl'],
-      ellipsis: true,
-      align: 'left'
-    },
-    {
-      title: '创建时间',
-      key: 'tradeType',
-      dataIndex: 'tradeType',
-      responsive: ['xl'],
-      ellipsis: true,
-      align: 'left'
-    },
-    {
-      title: '账户状态',
-      key: 'tradeType',
-      dataIndex: 'tradeType',
+      key: 'department',
+      dataIndex: 'department',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render:(_,record)=>{
-        return <span onClick={(e)=>isEffectiveCb(e, record)}>{_}</span>
+      render: (_, record) => <>{_ ?? "--"}</>
+    },
+    {
+      title: '创建时间',
+      key: 'createTime',
+      dataIndex: 'createTime',
+      responsive: ['xl'],
+      ellipsis: true,
+      align: 'left',
+      render: (_, record) => dayjs(_).format("YYYY.MM.DD")
+    },
+    {
+      title: '账户状态',
+      key: 'state',
+      dataIndex: 'state',
+      responsive: ['xl'],
+      ellipsis: true,
+      align: 'left',
+      render: (_, record) => {
+        return <span className={_ == 1 ? "" : "text-[var(--pink)]"} onClick={(e) => isEffectiveCb(e, record)}>
+          {_ == 1 ? "有效" : "无效"}
+        </span>
       }
     },
     {
       title: '创建人',
-      key: 'tradeType',
-      dataIndex: 'tradeType',
+      key: 'creator',
+      dataIndex: 'creator',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
@@ -104,10 +104,47 @@ const TableScope = (props) => {
       responsive: ['xl'],
       render: (_, record) => (<div className='text-[var(--blue)] cursor-pointer'>
         <EyeFilled />
-        <NavLink className='ml-[.1rem] hover:text-[var(--blue)] text-[var(--blue)] ' to="/aupay/system/staff-manage/detail">查看</NavLink>
+        <span onClick={(e) => jumpDetail(e, record)} className='ml-[.1rem] hover:text-[var(--blue)] text-[var(--blue)]'>查看</span>
       </div>)
     },
   ]
+  function jumpDetail(e, crt) {
+    stop(e, () => {
+      navigate('/aupay/system/staff-manage/detail', { state: {} })
+      store.dispatch({
+        type: "ADD_BREADCRUMB",
+        data: [
+          {
+            title: '系统管理',
+            href: "/aupay/system"
+          },
+          {
+            title: '员工管理',
+            href: "/aupay/system/staff-manage"
+          },
+          { title: "详情" }
+        ]
+      })
+    })
+  }
+  function getTableList() {
+    FindAdminListInterFace({
+      pageNo: pagination.current,
+      pageSize: pagination.pageSize,
+      conditions: {}
+    }).then(res => {
+      if (res.status) {
+        message.success(res.message)
+        let r = res.data?.map((item, idx) => (item.key = idx, item))
+        setDataSource(r)
+      } else {
+        message.error(res.message)
+      }
+    })
+  }
+  useEffect(() => {
+    getTableList()
+  }, [])
   return <TableComp
     themeObj={{
       headerBorderRadius: 0,

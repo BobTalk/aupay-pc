@@ -1,5 +1,7 @@
 import { LockOutlined, UnlockOutlined, DeleteOutlined } from '@ant-design/icons';
 import TableComp from "@/Components/Table";
+import { useEffect, useState } from 'react';
+import { FindAdminIpInterFace } from "@/api";
 const TableScope = (props) => {
   function deleteCb(e, crt) {
     props?.onDelete(e, crt, '删除IP地址')
@@ -10,7 +12,7 @@ const TableScope = (props) => {
   function enableCb(e, crt) {
     props?.onEnableCb(e, crt, '启用IP地址')
   }
-  const pagination = {
+  let [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
     total: 10,
@@ -19,7 +21,7 @@ const TableScope = (props) => {
     },
     showSizeChanger: false,
     showQuickJumper: true,
-  }
+  })
   const dataSource = [
     {
       key: "table1",
@@ -100,6 +102,18 @@ const TableScope = (props) => {
       }
     },
   ]
+  function getTableList() {
+    FindAdminIpInterFace({
+      pageNo: pagination.current,
+      pageSize: pagination.pageSize,
+      conditions: {}
+    }).then(res => {
+      console.log('res: ', res);
+    })
+  }
+  useEffect(() => {
+    getTableList()
+   }, [])
   return <TableComp
     themeObj={{
       headerBorderRadius: 0,

@@ -18,6 +18,8 @@ import drawAddrChart from "@/assets/images/draw_addr-chart.svg";
 import styleScope from "./index.module.less";
 import Image from "@/Components/Image";
 import { mergeClassName } from "@/utils/base";
+import { FindUserAssetsCollectionConfigInterFace } from "@/api";
+import { useEffect } from "react";
 const AssetsCount = () => {
   let imgList = [bgBlueLogo, bgPinkLogo, bgLogo];
   let iconList = [totalAssets, ozbetAssets, drawAssets];
@@ -129,6 +131,14 @@ const AssetsCount = () => {
       ],
     },
   ];
+  function getPageList() {
+    FindUserAssetsCollectionConfigInterFace().then((res) => {
+      console.log("res: ", res);
+    });
+  }
+  useEffect(() => {
+    getPageList();
+  }, []);
   return (
     <>
       <Card
