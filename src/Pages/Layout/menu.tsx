@@ -19,7 +19,6 @@ const LayoutMenu = () => {
   }
   function breadSite(key) {
     let activeKey = activePathToName[key];
-    console.log('activeKey: ', activeKey);
     let activeP = activePath[key];
     if (activeKey.length > 1) {
       let res = activeKey.map((item, idx, arr) => {
@@ -27,7 +26,6 @@ const LayoutMenu = () => {
           ? { title: item }
           : { title: item, href: activeP[idx] };
       });
-      console.log('res: ', res);
       store.dispatch({ type: "ADD_BREADCRUMB", data: res });
     } else {
       console.log(activePathToName[key][0]);

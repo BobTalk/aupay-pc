@@ -1,13 +1,17 @@
-import { Avatar, Badge, Dropdown, Layout, Space } from "antd";
+import { Avatar, Badge, Dropdown, Layout, Space, message } from "antd";
 import type { MenuProps } from "antd";
 import styleScope from "./header.module.less";
 const { Header } = Layout;
 import { UserOutlined, CaretDownOutlined } from "@ant-design/icons";
-import { getSession, timeFormate } from "@/utils/base";
+import { clearSession, getSession, timeFormate } from "@/utils/base";
 import Icon from "@/Components/Icon";
 import { useState } from "react";
+import { CustomChart } from "echarts/charts";
+import { LogoutInterFace } from "@/api";
+import { useNavigate } from "react-router-dom";
 const LayoutHeader = ({ colorBgContainer }: any) => {
- let [userInfo] =  useState(getSession('userInfo'))
+  let [userInfo] = useState(getSession("userInfo"));
+
   return (
     <Header
       style={{ padding: 0, background: colorBgContainer }}
@@ -24,24 +28,48 @@ const LayoutHeader = ({ colorBgContainer }: any) => {
             style={{ fontSize: ".2rem" }}
           ></Icon>
         </Badge>
-        <Avatar size={32} className="mr-[.14rem]" icon={<UserOutlined />} />
-        <DropDownScope userInfo={userInfo}/>
+
+        <DropDownScope userInfo={userInfo} />
       </div>
     </Header>
   );
 };
 const DropDownScope = (props) => {
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: <span>个人中心</span>,
-    },
-  ];
+  console.log("props: ", props);
+  let navigate = useNavigate();
+  function logout() {
+    LogoutInterFace().then((res) => {
+      if (res.status) {
+        navigate("/", { replace: true });
+        clearSession();
+      } else {
+        message.error(res.message);
+      }
+    });
+  }
+  function customDropdown(menu) {
+    return (
+      <div className="bg-[var(--white)] p-[.1rem]">
+        <p className="hover:bg-[var(--gray)] rounded-[.06rem] cursor-pointer leading-[.3rem] my-[.1rem] text-center p-[.05rem]">
+          个人中心
+        </p>
+        <p
+          onClick={logout}
+          className="hover:bg-[var(--gray)] rounded-[.06rem] cursor-pointer leading-[.3rem] my-[.1rem] text-center p-[.05rem]"
+        >
+          退出
+        </p>
+      </div>
+    );
+  }
   return (
-    <Dropdown menu={{ items }} arrow>
+    <Dropdown arrow dropdownRender={customDropdown}>
       <a onClick={(e) => e.preventDefault()} className="hover:text-[#333]">
-        <span>{props.adminId}</span>
-        <CaretDownOutlined />
+        <Avatar size={32} className="mr-[.14rem]" icon={<UserOutlined />} />
+        <span className="mr-[.08rem] text-[#333]">
+          {props.userInfo.adminId ?? "--"}
+        </span>
+        <CaretDownOutlined className="text-[333]" />
       </a>
     </Dropdown>
   );

@@ -9,8 +9,8 @@ import { Button, Form, Input, message } from "antd";
 import { useState } from "react";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { GetAccessKeyInterface, GetUserInfo, LoginInterFace } from "@/api";
-import { encrypt, encryptByDES, setSession } from "@/utils/base";
-import { useNavigate } from "react-router-dom";
+import { encrypt, encryptByDES, getSession, setSession } from "@/utils/base";
+import { Navigate, useNavigate } from "react-router-dom";
 const Login = () => {
   return (
     <Card bgImg={loginBg} bgColor="#f6f7f9" className="w-[100vw] h-[100vh]">
@@ -28,6 +28,8 @@ const Login = () => {
 
 const FormComp = () => {
   let navigate = useNavigate();
+  let userInfo = getSession("userInfo");
+  let token = getSession("token");
   let [formInitVal, setFormInitVal] = useState({
     username: "",
     password: "",
@@ -51,7 +53,7 @@ const FormComp = () => {
           // 存放token
           setSession("token", res.data);
           GetUserInfo().then((res) => {
-            console.log('res: ', res);
+            console.log("res: ", res);
             if (!res.status) return;
             setSession("userInfo", res);
             navigate("/aupay/assets");
@@ -60,7 +62,11 @@ const FormComp = () => {
       });
     });
   }
-  return (
+  return userInfo && token ? (
+    <>
+    <Navigate to='/aupay/assets'/>
+    </>
+  ) : (
     <Form
       autoComplete="off"
       initialValues={formInitVal}

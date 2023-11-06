@@ -1,6 +1,7 @@
 export const activePath = {
   "/aupay/data": ["/aupay/data"],
   "/aupay/assets": ["/aupay/assets"],
+  "/aupay/user":["/aupay/user"],
   "/aupay/user/detail/user": ["/aupay/user","/aupay/user/detail/user"],
   "/aupay/user/detail/assetsChanges": ["/aupay/user","/aupay/user/detail/assetsChanges"],
   "/aupay/user/detail/trade": ["/aupay/user","/aupay/user/detail/trade"],

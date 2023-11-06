@@ -16,7 +16,7 @@ export const LoginInterFace = (data) => {
 }
 // 3.登出 GET admin/logout
 export const LogoutInterFace = () => {
-  return _http.getReq({
+  return _http.postReq({
     url: `${staffPrefix}/logout`,
   })
 }
