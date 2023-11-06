@@ -3,9 +3,11 @@ import type { MenuProps } from "antd";
 import styleScope from "./header.module.less";
 const { Header } = Layout;
 import { UserOutlined, CaretDownOutlined } from "@ant-design/icons";
-import { timeFormate } from "@/utils/base";
+import { getSession, timeFormate } from "@/utils/base";
 import Icon from "@/Components/Icon";
+import { useState } from "react";
 const LayoutHeader = ({ colorBgContainer }: any) => {
+ let [userInfo] =  useState(getSession('userInfo'))
   return (
     <Header
       style={{ padding: 0, background: colorBgContainer }}
@@ -13,7 +15,7 @@ const LayoutHeader = ({ colorBgContainer }: any) => {
     >
       <div className="flex items-center justify-end pr-[.3rem]">
         <p className={styleScope["time"]}>
-          {timeFormate(new Date(), "YYYY-MM-DD HH:mm")}
+          {timeFormate(userInfo.loginTime, "YYYY-MM-DD HH:mm")}
         </p>
         <Badge count={0} showZero={false} className="mx-[.24rem]">
           <Icon
@@ -23,12 +25,12 @@ const LayoutHeader = ({ colorBgContainer }: any) => {
           ></Icon>
         </Badge>
         <Avatar size={32} className="mr-[.14rem]" icon={<UserOutlined />} />
-        <DropDownScope />
+        <DropDownScope userInfo={userInfo}/>
       </div>
     </Header>
   );
 };
-const DropDownScope = () => {
+const DropDownScope = (props) => {
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -36,9 +38,9 @@ const DropDownScope = () => {
     },
   ];
   return (
-    <Dropdown menu={{ items }}>
+    <Dropdown menu={{ items }} arrow>
       <a onClick={(e) => e.preventDefault()} className="hover:text-[#333]">
-        <span>amy gao</span>
+        <span>{props.adminId}</span>
         <CaretDownOutlined />
       </a>
     </Dropdown>
