@@ -1,6 +1,6 @@
 import Message from "@/Components/Message";
 import { Breadcrumb, Layout } from "antd";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import messageIcon from "@/assets/images/message.svg";
 import siteIcon from "@/assets/images/site.svg";
 import styleScope from "./content.module.less";
@@ -12,11 +12,12 @@ import store from "@/store";
 let { Content } = Layout;
 const LayoutContent = () => {
   let messageRefs = useRef<any>({});
+  let { pathname } = useLocation();
   let [contentH, setContentH] = useState(0);
   let userInfo = getSession("userInfo");
   let [usename] = useState(() => userInfo["adminId"]);
   let [showMessage, setShowMessage] = useState("");
-  let [isShowLoginTip, setIsShowLoginTip] = useState(true)
+  let [isShowLoginTip, setIsShowLoginTip] = useState<Boolean>(false);
   let [breadcrumb, setBreadcrumb] = useState(
     store.getState().breadcrumbReducer
   );
@@ -32,14 +33,14 @@ const LayoutContent = () => {
     store.subscribe(() => {
       setBreadcrumb(store.getState().breadcrumbReducer);
     });
-    setTimeout(()=>{
-      setIsShowLoginTip(false)
-    }, 3000)
+    if (pathname == "/aupay/assets") {
+      setIsShowLoginTip(true);
+    }
+    setTimeout(() => {
+      setIsShowLoginTip(false);
+    }, 3000);
     setContentH(height);
   }, []);
-  function crtSite() {
-    store.dispatch({ type: "ADD_BREADCRUMB", data: [{ title: "资产统计66" }] });
-  }
   return (
     <Content
       className="overflow-y-auto"
@@ -76,10 +77,8 @@ const LayoutContent = () => {
           ref={messageRefs}
           message={
             <div className={styleScope["bread-crumb"]}>
-              <span className="!text-[#AAA]" onClick={crtSite}>
-                当前位置：
-              </span>
-              <Breadcrumb items={breadcrumb} />
+              <span className="!text-[#AAA]">当前位置：</span>
+              <Breadcrumb separator=">" items={breadcrumb} />
             </div>
           }
           className="text-[#333] mb-[.24rem] bg-[#FFF]"

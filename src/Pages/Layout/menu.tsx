@@ -4,52 +4,34 @@ import { mergeClassName } from "@/utils/base";
 import Icon from "@/Components/Icon";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import urlMap from "./urlMapTitle";
+import store from "@/store";
+import { activePath, activePathToName } from "./activeRouterConfig";
 const LayoutMenu = () => {
   let [stop] = useStopPropagation();
   let navigate = useNavigate();
   let { pathname } = useLocation();
-  console.log("pathname: ", pathname);
   function menuSelectCb({ key, domEvent }) {
     stop(domEvent, () => {
-      navigate(key, { state: { _title: urlMap[key] } });
+      let activeKey = activePathToName[key];
+      let activeP = activePath[key];
+      navigate(key, { state: { _title: activeKey } });
+      if (activeKey.length > 1) {
+        let res = activeKey.map((item, idx, arr) => {
+          return idx === arr.length - 1
+            ? { title: activeKey }
+            : { title: item, href: activeP[idx] };
+        });
+        store.dispatch({ type: "ADD_BREADCRUMB", data: res });
+      } else {
+        store.dispatch({
+          type: "ADD_BREADCRUMB",
+          data: [{ title: activePathToName[key] }],
+        });
+      }
+      // store.store.dispatch({ type: "ADD_BREADCRUMB", data: [{ title:  }] });
     });
   }
-  const activePath = {
-    "/aupay/data": ["/aupay/data"],
-    "/aupay/assets": ["/aupay/assets"],
-    "/aupay/user/detail/user": ["/aupay/user"],
-    "/aupay/user/detail/assetsChanges": ["/aupay/user"],
-    "/aupay/user/detail/trade": ["/aupay/user"],
-    "/aupay/user/detail/draw": ["/aupay/user"],
-    "/aupay/user/detail/recharge": ["/aupay/user"],
-    "/aupay/address/user": ["/aupay/address", "/aupay/address/user"],
-    "/aupay/address/transfer": ["/aupay/address", "/aupay/address/transfer"],
-    "/aupay/address/reserve": ["/aupay/address", "/aupay/address/reserve"],
-    "/aupay/address/draw": ["/aupay/address", "/aupay/address/draw"],
-    "/aupay/address/minerFees": ["/aupay/address", "/aupay/address/minerFees"],
-    "/aupay/ozbet": ["/aupay/ozbet"],
-    "/aupay/ozbet/assets": ["/aupay/ozbet", "/aupay/ozbet/assets"],
-    "/aupay/ozbet/draw": ["/aupay/ozbet", "/aupay/ozbet/draw"],
-    "/aupay/ozbet/assets/transfer-records": [
-      "/aupay/ozbet",
-      "/aupay/ozbet/assets",
-    ],
-    "/aupay/personal": ["/aupay/personal"],
-    "/aupay/system/staff-manage": [
-      "/aupay/system",
-      "/aupay/system/staff-manage",
-    ],
-    "/aupay/system/logs-manage": ["/aupay/system", "/aupay/system/logs-manage"],
-    "/aupay/system/rate-manage": ["/aupay/system", "/aupay/system/rate-manage"],
-    "/aupay/system/draw": ["/aupay/system", "/aupay/system/draw"],
-    "/aupay/system/automated": ["/aupay/system", "/aupay/system/automated"],
-    "/aupay/system/ip-record": ["/aupay/system", "/aupay/system/ip-record"],
-    "/aupay/system/ip-manage": ["/aupay/system", "/aupay/system/ip-manage"],
-    "/aupay/notice": ["/aupay/notice"],
-    "/aupay/notice/add": ["/aupay/notice"],
-    "/aupay/system/staff-manage/detail": ["/aupay/system/staff-manage"],
-  };
+
   return (
     <Menu
       theme="light"

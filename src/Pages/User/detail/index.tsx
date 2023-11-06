@@ -1,6 +1,10 @@
 import { Tabs } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-
+import store from "@/store";
+import {
+  activePath,
+  activePathToName,
+} from "@/Pages/Layout/activeRouterConfig";
 const UserDetail = () => {
   let navigate = useNavigate();
   let { pathname } = useLocation();
@@ -28,7 +32,22 @@ const UserDetail = () => {
     },
   ];
   function onChange(key: string) {
+    let activeKey = activePathToName[key];
+    let activeP = activePath[key];
     navigate(key);
+    if (activeKey.length > 1) {
+      let res = activeKey.map((item, idx, arr) => {
+        return idx === arr.length - 1
+          ? { title: item }
+          : { title: item, href: activeP[idx] };
+      });
+      store.dispatch({ type: "ADD_BREADCRUMB", data: res});
+    } else {
+      store.dispatch({
+        type: "ADD_BREADCRUMB",
+        data: [{ title: activePathToName[key] }],
+      });
+    }
   }
   return (
     <>
