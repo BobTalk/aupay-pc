@@ -5,8 +5,7 @@ import { initialState } from "../state";
 function breadcrumbReducer(state = initialState, action) {
   switch (action.type) {
     case ADD_BREADCRUMB:
-      state?.breadcrumbList.push(action.data)
-      return state;
+      return action.data;
     case CHANGE_BREADCRUMB:
       return { ...state };
     default:
