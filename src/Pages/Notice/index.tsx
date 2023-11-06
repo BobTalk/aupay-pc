@@ -1,29 +1,49 @@
 /**
- * @summary 地址
+ * @summary 公告
  */
 import { PlusOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import styleScope from "./index.module.less";
 import TableScope from "./table-mock.jsx";
-import { mergeClassName } from "@/utils/base";
+import { getSession, mergeClassName } from "@/utils/base";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import ModalScope from "@/Components/Modal";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { UpdateAnnouncementInterFace } from "@/api";
 const NoticeList = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const tableRefEl = useRef<any>({ current: undefined });
   let [stop] = useStopPropagation();
   let navigate = useNavigate();
   let { pathname } = useLocation();
   let [visiable, setVisiable] = useState(false);
+  let [notice, setNotice] = useState<any>({});
+  function noticeToggleOkCb(...arg) {
+    UpdateAnnouncementInterFace({
+      title: notice?.title,
+      content: notice?.content,
+      isShow: !notice?.isShow,
+      isRoll: notice?.isRoll,
+    }).then((res) => {
+      if (res.status) {
+        message.success(res.message);
+        setVisiable(!visiable);
+        tableRefEl.current?.getTableInfo();
+      } else {
+        message.error(res.message);
+      }
+    });
+  }
   function toggleVisiable(e, crt, index) {
     stop(e, () => {
-      console.log("crt: ", crt);
+      setNotice(crt);
       setVisiable(!visiable);
     });
   }
   function addNotice(e) {
     stop(e, () => {
-      navigate("/aupay/notice/add");
+      navigate("/aupay/notice/add", { state: { module: "add", id:getSession('userInfo').adminId} });
     });
   }
   function editorCb(e) {
@@ -48,14 +68,18 @@ const NoticeList = () => {
       <div
         className={mergeClassName("bg-[var(--white)]", styleScope["table-box"])}
       >
-        <TableScope onEditor={editorCb} onShowOrHidden={toggleVisiable} />
+        <TableScope
+          ref={tableRefEl}
+          onEditor={editorCb}
+          onShowOrHidden={toggleVisiable}
+        />
       </div>
       <ModalScope
         showFooter={true}
         cancelText="关闭"
         okText="确定"
-        onOk={toggleVisiable}
-        onCancel={toggleVisiable}
+        onOk={noticeToggleOkCb}
+        onCancel={() => setVisiable(!visiable)}
         open={visiable}
         style={{
           header: {
@@ -73,17 +97,15 @@ const NoticeList = () => {
         title={
           <span className="flex items-center font-normal">
             <i className={styleScope["icon"]}></i>
-            {true ? "隐藏" : "显示"}公告
+            {notice.isShow ? "隐藏" : "显示"}公告
           </span>
         }
       >
         <div className={styleScope["modal-box"]}>
           <p>公告标题</p>
-          <span>我们这里是公告标题内容文字</span>
+          <span>{notice.title}</span>
           <p className="mt-[.16rem]">公告内容</p>
-          <span>
-            我们这里是公告内容介绍文案我们这里是公告内容介绍文案我们这里是公告
-          </span>
+          <span>{notice.content}</span>
         </div>
       </ModalScope>
     </>

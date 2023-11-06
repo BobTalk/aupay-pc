@@ -2,9 +2,12 @@ import { EyeOutlined, EyeInvisibleOutlined, DeleteOutlined } from '@ant-design/i
 import Icon from '@/Components/Icon';
 import { Checkbox, Typography } from 'antd'
 import TableComp from "@/Components/Table";
+import { FindAnnouncementListInterFace } from "@/api";
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import dayjs from 'dayjs';
 
-const TableScope = (props) => {
-  const pagination = {
+const TableScope = (props, ref) => {
+  let [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
     total: 10,
@@ -13,72 +16,62 @@ const TableScope = (props) => {
     },
     showSizeChanger: false,
     showQuickJumper: true,
-  }
-  const dataSource = [
-    {
-      key: "table1",
-      assetsType: 'USDT',
-      walletProtocol: 'USDT-ERC20',
-      createTime: "2023.7.17 15:22:20",
-      tradeType: '充币',
-      num: 189,
-      payAddr: '0x32983464f44',
-      tradeId: '0x32983464f440x32983464f44',
-      tradeConfirmNum: 87,
-    },
-
-  ]
+  })
+  let [dataSource, setDataSource] = useState()
   const columns = [
     {
       title: '主页滚动',
-      key: 'assetsType',
-      dataIndex: 'assetsType',
+      key: 'isRoll',
+      dataIndex: 'isRoll',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render: (_, record) => (<Checkbox checked={true} />)
+      render: (_, record) => (<Checkbox checked={_} />)
     },
     {
       title: '公告标题',
-      key: 'walletProtocol',
-      dataIndex: 'walletProtocol',
+      key: 'title',
+      dataIndex: 'title',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '公告内容',
-      key: 'createTime',
-      dataIndex: 'createTime',
+      key: 'content',
+      dataIndex: 'content',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '时间',
-      key: 'tradeType',
-      dataIndex: 'tradeType',
+      key: 'createTime',
+      dataIndex: 'createTime',
       responsive: ['xl'],
       ellipsis: true,
-      align: 'left'
+      align: 'left',
+      render: (_, record) => {
+        return dayjs(_).format('YYYY.MM.DD')
+      }
     },
     {
       title: '员工ID',
-      key: 'num',
-      dataIndex: 'num',
+      key: 'id',
+      dataIndex: 'id',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '显示状态',
-      key: 'payAddr',
-      dataIndex: 'payAddr',
+      key: 'isShow',
+      dataIndex: 'isShow',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
       render: (_, record, index) => {
-        return true ? <span onClick={(e) => showCb(e, record, index)} className="text-[var(--blue)] cursor-pointer">
+        return _ ? <span onClick={(e) => showCb(e, record, index)} className="text-[var(--blue)] cursor-pointer">
           <EyeOutlined />
           <span className="ml-[.1rem]">已显示</span>
         </span> : <span onClick={(e) => hiddenCb(e, record, index)} className="text-[var(--menu-color)] cursor-pointer">
@@ -121,7 +114,32 @@ const TableScope = (props) => {
   function hiddenCb(e, crt, index) {
     props?.onShowOrHidden?.(e, crt, index)
   }
-
+  // 获取列表数据
+  function getTableInfo() {
+    FindAnnouncementListInterFace({
+      pageNo: pagination.current,
+      pageSize: pagination.pageSize,
+      conditions: null
+    }).then(res => {
+      setDataSource(res.data)
+      setPagination({
+        current: res.pageNo,
+        pageSize: res.pageSize,
+        total: res.data.length,
+        showTotal: function (total, range) {
+          return `${Math.ceil(total / range[1]) > 1 ? 1 + ' - ' + Math.ceil(total / range[1]) : 1} 页 共${total}条`
+        },
+        showSizeChanger: false,
+        showQuickJumper: true,
+      })
+    })
+  }
+  useImperativeHandle(ref, ()=>({
+    getTableInfo
+  }), [])
+  useEffect(() => {
+    getTableInfo()
+  }, [])
   return <TableComp
     themeObj={{
       headerBorderRadius: 0,
@@ -132,4 +150,4 @@ const TableScope = (props) => {
   />
 }
 
-export default TableScope
+export default forwardRef(TableScope)

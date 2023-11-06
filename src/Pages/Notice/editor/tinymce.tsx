@@ -17,7 +17,7 @@ Quill.register(
   },
   true
 );
-function EditorPanel() {
+function EditorPanel(props) {
   const modules = {
     history:{
       delay: 2000,
@@ -50,16 +50,17 @@ function EditorPanel() {
     "emoji-textarea": false, //我不需要emoji展示在文本框所以设置为false
     "emoji-shortname": true,
   };
-  let [text, setText] = useState();
+  // let [text, setText] = useState();
   function handleChange(val) {
     console.log("val: ", val);
-    setText(val);
+    // setText(val);
+    props?.onChange(val)
   }
   return (
     <ReactQuill
       modules={modules}
       placeholder="请输入内容"
-      value={text}
+      value={props.value}
       onChange={handleChange}
     />
   );
