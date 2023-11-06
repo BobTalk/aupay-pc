@@ -4,8 +4,11 @@ import styleScope from "./index.module.less";
 import { Input } from "antd";
 import { useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
+import { getSession } from "@/utils/base";
 const PersonalInfo = () => {
   let [isEditor, setIsEditor] = useState(false);
+  let userInfo = getSession('userInfo')
+  console.log('userInfo: ', userInfo);
   let [stop] = useStopPropagation();
   function isEditorCb(e) {
     stop(e, () => {
@@ -21,7 +24,7 @@ const PersonalInfo = () => {
             onClick={isEditorCb}
             className="flex flex-1 justify-end cursor-pointer text-[var(--blue)] text-[14px] font-medium"
           >
-            编辑个人资料
+            {isEditor ? "保存" : "编辑个人资料"}
           </span>
         }
       >
@@ -33,7 +36,7 @@ const PersonalInfo = () => {
           <p>
             <span>备注：</span>
             {isEditor ? (
-              <Input value="哇哈哈哈出萨湖大，哈哈扩大好看的话" />
+              <Input defaultValue="哇哈哈哈出萨湖大，哈哈扩大好看的话" />
             ) : (
               <span>哇哈哈哈出萨湖大，哈哈扩大好看的话</span>
             )}
@@ -41,7 +44,7 @@ const PersonalInfo = () => {
           <p>
             <span>联系方式：</span>
             {isEditor ? (
-              <Input value="13423234424" />
+              <Input defaultValue="13423234424" />
             ) : (
               <span>13423234424</span>
             )}
