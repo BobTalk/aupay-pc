@@ -142,8 +142,8 @@ const IpSystemManage = () => {
     let time = filterTime.current?.timeStr ?? [];
     tableRefEl.current.getTableList({
       search: note || null,
-      beginTime: time[0] ?? null,
-      endTime: time[1] ?? null,
+      beginTime: time[0] || null,
+      endTime: time[1] || null,
     });
   }
   function deleteAndDisableAndEnable(crt) {
@@ -188,7 +188,6 @@ const IpSystemManage = () => {
       operationId: operationIdEnum["add"],
     }).then((res) => {
       if (res.status) {
-        console.log("res>>>>: ", res);
         googleToken.current = res.data;
         setAddIpAddrOpen(!addIpAddrOpen);
         setGoogleCodeOpen(!googleCodeOpen);
@@ -220,8 +219,8 @@ const IpSystemManage = () => {
     tableRefEl.current.updateParmas(
       {
         search: note || null,
-        beginTime: time[0] ?? null,
-        endTime: time[1] ?? null,
+        beginTime: time[0] || null,
+        endTime: time[1] || null,
       },
       {
         current,

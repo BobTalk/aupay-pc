@@ -7,7 +7,6 @@ import dayjs from 'dayjs';
 const TableScope = (props, ref) => {
   function clickCb(pagination) {
     props?.onPaginationCb?.(pagination)
-
   }
   function deleteCb(e, crt) {
     props?.onDelete(e, crt, '删除IP地址')
@@ -133,11 +132,6 @@ const TableScope = (props, ref) => {
   return <TableComp
     themeObj={{
       headerBorderRadius: 0,
-    }}
-    paginationThemeObj={{
-      token:{
-        margin: 20
-      }
     }}
     onChange={clickCb}
     dataSource={dataSource}
