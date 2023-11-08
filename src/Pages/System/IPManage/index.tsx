@@ -141,9 +141,9 @@ const IpSystemManage = () => {
     let note = filterNote.current.input?.value;
     let time = filterTime.current?.timeStr ?? [];
     tableRefEl.current.getTableList({
-      search: note,
-      beginTime: time[0],
-      endTime: time[1],
+      search: note || null,
+      beginTime: time[0] ?? null,
+      endTime: time[1] ?? null,
     });
   }
   function deleteAndDisableAndEnable(crt) {
@@ -217,15 +217,18 @@ const IpSystemManage = () => {
   function paginationCb({ current, pageSize, total }) {
     let note = filterNote.current.input?.value;
     let time = filterTime.current?.timeStr ?? [];
-    tableRefEl.current.updateParmas({
-      search: note,
-      beginTime: time[0],
-      endTime: time[1],
-    },{
-      current,
-      pageSize,
-      total,
-    });
+    tableRefEl.current.updateParmas(
+      {
+        search: note || null,
+        beginTime: time[0] ?? null,
+        endTime: time[1] ?? null,
+      },
+      {
+        current,
+        pageSize,
+        total,
+      }
+    );
   }
   return (
     <>
