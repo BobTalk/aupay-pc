@@ -1,16 +1,22 @@
 import { LockOutlined, UnlockOutlined, DeleteOutlined } from '@ant-design/icons';
 import TableComp from "@/Components/Table";
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { FindAdminIpInterFace } from "@/api";
-const TableScope = (props) => {
+import { message } from 'antd';
+import dayjs from 'dayjs';
+const TableScope = (props, ref) => {
+  function clickCb(pagination) {
+    props?.onPaginationCb?.(pagination)
+
+  }
   function deleteCb(e, crt) {
     props?.onDelete(e, crt, '删除IP地址')
   }
   function disableCb(e, crt) {
-    props?.onDisableCb(e, crt, '禁用IP地址')
+    props?.onDisableCb(e, crt, '启用IP地址')
   }
   function enableCb(e, crt) {
-    props?.onEnableCb(e, crt, '启用IP地址')
+    props?.onEnableCb(e, crt, '禁用IP地址')
   }
   let [pagination, setPagination] = useState({
     current: 1,
@@ -22,57 +28,45 @@ const TableScope = (props) => {
     showSizeChanger: false,
     showQuickJumper: true,
   })
-  const dataSource = [
-    {
-      key: "table1",
-      assetsType: 'USDT',
-      walletProtocol: 'USDT-ERC20',
-      createTime: "2023.7.17 15:22:20",
-      tradeType: '充币',
-      num: 189,
-      payAddr: '0x32983464f44',
-      tradeId: '0x32983464f440x32983464f44',
-      tradeConfirmNum: 87,
-    },
-
-  ]
+  let [dataSource, setDataSource] = useState([])
   const columns = [
     {
       title: '编号',
-      key: 'assetsType',
-      dataIndex: 'assetsType',
+      key: 'id',
+      dataIndex: 'id',
       responsive: ['xl'],
       ellipsis: false,
       align: 'left'
     },
     {
       title: 'IP地址',
-      key: 'walletProtocol',
-      dataIndex: 'walletProtocol',
+      key: 'ip',
+      dataIndex: 'ip',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '备注',
-      key: 'createTime',
-      dataIndex: 'createTime',
+      key: 'note',
+      dataIndex: 'note',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '添加时间',
-      key: 'tradeType',
-      dataIndex: 'tradeType',
+      key: 'createTime',
+      dataIndex: 'createTime',
       responsive: ['xl'],
       ellipsis: true,
-      align: 'left'
+      align: 'left',
+      render: (_) => dayjs(_).format("YYYY.MM.DD")
     },
     {
       title: '员工ID',
-      key: 'num',
-      dataIndex: 'num',
+      key: 'creator',
+      dataIndex: 'creator',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
@@ -87,7 +81,7 @@ const TableScope = (props) => {
       align: 'left',
       render: (_, record) => {
         return <div className='flex items-center gap-[.2rem]'>
-          {true ?
+          {!record.state ?
             <div className='text-[var(--pink)] cursor-pointer' onClick={(e) => { disableCb(e, record) }}>
               <LockOutlined className='mr-[.1rem]' />已禁用
             </div>
@@ -102,25 +96,48 @@ const TableScope = (props) => {
       }
     },
   ]
-  function getTableList() {
+  function getTableList(conditions, paginationParams) {
     FindAdminIpInterFace({
-      pageNo: pagination.current,
-      pageSize: pagination.pageSize,
-      conditions: {}
+      pageNo: paginationParams?.current ?? pagination.current,
+      pageSize: paginationParams?.pageSize ?? pagination.pageSize,
+      conditions
     }).then(res => {
-      console.log('res: ', res);
+      if (res.status) {
+        setDataSource(res?.data?.map(item => (item.key = item.id, item)) ?? [])
+        setPagination(pagination => ({
+          ...pagination,
+          current: res.pageNo,
+          pageSize: res.pageSize,
+          total: res.total
+        }))
+      } else {
+        message.error(res.message)
+      }
     })
+  }
+  function updateParmas(filterParams, paginationParams) {
+    setPagination(pagination => ({
+      ...pagination,
+      ...paginationParams
+    }))
+    getTableList(filterParams, paginationParams)
   }
   useEffect(() => {
     getTableList()
-   }, [])
+  }, [])
+
+  useImperativeHandle(ref, () => ({
+    getTableList,
+    updateParmas
+  }), [])
   return <TableComp
     themeObj={{
       headerBorderRadius: 0,
     }}
+    onChange={clickCb}
     dataSource={dataSource}
     columns={columns}
     pagination={pagination}
   />
 }
-export default TableScope
+export default forwardRef(TableScope)

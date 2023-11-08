@@ -5,17 +5,25 @@ type TableCompPropsType = {
   dataSource: Array<any>;
   columns: Array<any>;
   pagination?: false | {};
+  onChange?:()=>{},
   children?: ReactNode;
   border?: boolean;
   themeObj?: Object;
   paginationThemeObj?: Object;
-  components?:Object,
-  virtual?:boolean,
+  components?: Object;
+  virtual?: boolean;
   [key: string]: any;
 };
 const TableComp = (props: TableCompPropsType) => {
-  console.log('props: ', props);
-  let { dataSource, columns, pagination, border,components: comp,virtual } = props;
+  let {
+    dataSource,
+    columns,
+    pagination,
+    onChange,
+    border,
+    components: comp,
+    virtual,
+  } = props;
   return (
     <ConfigProvider
       theme={{
@@ -27,6 +35,7 @@ const TableComp = (props: TableCompPropsType) => {
       locale={zh_CN}
     >
       <Table
+        onChange={onChange}
         components={comp}
         virtual={virtual}
         bordered={border}
@@ -46,10 +55,11 @@ TableComp.defaultProps = {
   columns: [],
   sticky: true,
   pagination: false,
+  onChange:()=>{},
   border: false,
   themeObj: {},
   paginationThemeObj: {},
-  components:{},
-  virtual:true
+  components: {},
+  virtual: true,
 };
 export default TableComp;

@@ -2,21 +2,29 @@
  * @summary 地址
  */
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import styleScope from "./index.module.less";
 import RangePicker from "@/Components/RangePicker";
 import TableScope from "./table-mock.jsx";
-import { mergeClassName } from "@/utils/base";
+import { getSession, mergeClassName } from "@/utils/base";
 import ModalScope from "@/Components/Modal";
 import { useRef, useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import Icon from "@/Components/Icon";
+import {
+  AddAdminIpInterFace,
+  DeleteAdminIpInterFace,
+  SwitchDisableAdminIpInterFace,
+  VerifyGoogleAuthInterFace,
+  VerifyPinInterFace,
+} from "@/api";
+import { operationIdEnum } from "@/Enum";
 const modalStyles = {
   header: {
     marginBottom: ".24rem",
   },
   body: {
-    gridTemplateColumns: `repeat(4, 1fr)`,
+    gridTemplateColumns: "repeat(4, 1fr)",
     gap: ".15rem",
     paddingInline: ".5rem",
   },
@@ -26,6 +34,8 @@ const IpSystemManage = () => {
   const inputRef2 = useRef();
   const inputRef3 = useRef();
   const inputRef4 = useRef();
+  const formRefEl = useRef<any>();
+  const tableRefEl = useRef<any>();
   let [stop] = useStopPropagation();
   let [modalOpen, setModalOpen] = useState<Boolean>(false);
   let [deleteOpen, setDeleteOpen] = useState<Boolean>(false);
@@ -33,10 +43,31 @@ const IpSystemManage = () => {
   let [addIpAddrOpen, setAddIpAddrOpen] = useState<Boolean>(false);
   let [googleCodeOpen, setGoogleCodeOpen] = useState(false);
   let [tipMessage, setTipMessage] = useState(false);
+  let [tipMessageFlag, setTipMessageFlag] = useState(false);
+  let [moduleOrigin, setModuleOrigin] = useState("");
+  let filterNote = useRef<any>();
+  let filterTime = useRef<any>();
+  let userInfo = getSession("userInfo");
   let [formInitVal, setFormInitVal] = useState({
     googleCode: "",
   });
 
+  let [formAddAddrInitVal, setFormAddAddrInitVal] = useState({
+    IpAddr: "",
+    note: "",
+  });
+  let [currentData, setCurrentData] = useState<{ ip: ""; note: "" } | any>({
+    ip: "",
+    note: "",
+  });
+  let PINInitVal = useRef({
+    one: "",
+    two: "",
+    three: "",
+    foure: "",
+  });
+  let token = useRef("");
+  let googleToken = useRef("");
   function inputKeyUpCb(e, prvNode) {
     let keyCode = e.keyCode;
     if (prvNode && keyCode === 8) {
@@ -46,40 +77,172 @@ const IpSystemManage = () => {
   }
   function addIpAddr() {
     setModalOpen(!modalOpen);
+    setModuleOrigin("add");
+    setCurrentData({});
   }
+  // 开启回调
   function enableCb(e, crt, title) {
     stop(e, () => {
+      setModalOpen(!modalOpen);
+      setModuleOrigin("enable");
       setDeleteTile(title);
-      setDeleteOpen(!deleteOpen);
+      setCurrentData(crt);
     });
   }
+  // 禁用回调
   function disableCb(e, crt, title) {
     stop(e, () => {
       setDeleteTile(title);
-      setDeleteOpen(!deleteOpen);
+      setModalOpen(!modalOpen);
+      setModuleOrigin("disable");
+      setCurrentData(crt);
     });
   }
+  // 删除
   function deleteCb(e, crt, title) {
     stop(e, () => {
       setDeleteTile(title);
-      setDeleteOpen(!deleteOpen);
+      setModalOpen(!modalOpen);
+      setModuleOrigin("delete");
+      setCurrentData(crt);
     });
   }
-  function inputChange(e, reactNode) {
+  function pinOkCb() {
+    let { one, two, three, foure } = PINInitVal.current;
+    if (["enable", "delete", "disable", "add"].includes(moduleOrigin)) {
+      VerifyPinInterFace({
+        pin: `${one}${two}${three}${foure}`,
+        operationId: ["enable", "disable"].includes(moduleOrigin)
+          ? operationIdEnum["enableOrEnable"]
+          : moduleOrigin == "delete"
+          ? operationIdEnum["delete"]
+          : operationIdEnum["add"],
+      }).then((res) => {
+        if (res.status) {
+          token.current = res.data;
+
+          if (moduleOrigin == "add") {
+            setGoogleCodeOpen(!googleCodeOpen);
+          } else {
+            setDeleteOpen(true);
+          }
+          setModalOpen(!modalOpen);
+          formRefEl.current.resetFields(["one", "two", "three", "foure"]);
+        } else {
+          message.error(res.message);
+        }
+      });
+    }
+  }
+  function pinCancelCb() {
+    setModalOpen(!modalOpen);
+  }
+  function callGetTableFn() {
+    let note = filterNote.current.input?.value;
+    let time = filterTime.current?.timeStr ?? [];
+    tableRefEl.current.getTableList({
+      search: note,
+      beginTime: time[0],
+      endTime: time[1],
+    });
+  }
+  function deleteAndDisableAndEnable(crt) {
+    if (moduleOrigin == "delete") {
+      DeleteAdminIpInterFace(crt.id, {
+        "Pin-Token": token.current,
+      }).then((res) => {
+        if (res.status) {
+          setDeleteOpen(false);
+          callGetTableFn();
+        } else {
+          message.error(res.message);
+        }
+      });
+      return;
+    }
+    SwitchDisableAdminIpInterFace(crt.id, {
+      "Pin-Token": token.current,
+    }).then((res) => {
+      if (res.status) {
+        setDeleteOpen(false);
+        callGetTableFn();
+      } else {
+        message.error(res.message);
+      }
+    });
+  }
+  function inputChange(e, reactNode, key) {
     stop(e, () => {
       let val = e.target.value;
+      PINInitVal.current[key] = val;
+      formRefEl.current.setFieldValue(key, "*");
       if (val && reactNode) {
         reactNode.current.focus();
       }
     });
   }
-
+  function googleOkCb(values) {
+    let { googleCode } = values;
+    VerifyGoogleAuthInterFace({
+      googleCode,
+      operationId: operationIdEnum["add"],
+    }).then((res) => {
+      if (res.status) {
+        console.log("res>>>>: ", res);
+        googleToken.current = res.data;
+        setAddIpAddrOpen(!addIpAddrOpen);
+        setGoogleCodeOpen(!googleCodeOpen);
+      } else {
+        message.error(res.message);
+      }
+    });
+  }
+  function addIpAddrCb(values) {
+    let { IpAddr, note } = values;
+    AddAdminIpInterFace(
+      { ip: IpAddr, note },
+      {
+        "Pin-token": token.current,
+        "Google-Auth-Token": googleToken.current,
+      }
+    ).then((res) => {
+      setAddIpAddrOpen(false);
+      setTipMessage(!tipMessage);
+      setTipMessageFlag(res.status);
+      if (res.status) {
+        callGetTableFn();
+      }
+    });
+  }
+  function paginationCb({ current, pageSize, total }) {
+    let note = filterNote.current.input?.value;
+    let time = filterTime.current?.timeStr ?? [];
+    tableRefEl.current.updateParmas({
+      search: note,
+      beginTime: time[0],
+      endTime: time[1],
+    },{
+      current,
+      pageSize,
+      total,
+    });
+  }
   return (
     <>
       <div className={styleScope["filter-box"]}>
-        <Input placeholder="备注" size="large" className="w-[3.2rem]" />
-        <RangePicker size="large" />
-        <Button type="primary" size="large" icon={<SearchOutlined />}>
+        <Input
+          ref={filterNote}
+          placeholder="备注"
+          size="large"
+          className="w-[3.2rem]"
+        />
+        <RangePicker ref={filterTime} size="large" />
+        <Button
+          type="primary"
+          size="large"
+          onClick={callGetTableFn}
+          icon={<SearchOutlined />}
+        >
           查询
         </Button>
         <div className="flex flex-1 justify-end">
@@ -97,20 +260,27 @@ const IpSystemManage = () => {
         className={mergeClassName("bg-[var(--white)]", styleScope["table-box"])}
       >
         <TableScope
+          ref={tableRefEl}
           onDelete={deleteCb}
           onDisableCb={disableCb}
           onEnableCb={enableCb}
+          onPaginationCb={paginationCb}
         />
       </div>
       {/* PIN */}
       <ModalScope
-        style={modalStyles}
-        showFooter={true}
-        onOk={() => {
-          setModalOpen(!modalOpen);
-          setGoogleCodeOpen(!googleCodeOpen);
+        style={{
+          header: {
+            marginBottom: ".24rem",
+          },
+          body: {
+            gridTemplateColumns: "1fr",
+            gap: ".15rem",
+            paddingInline: "0",
+          },
         }}
-        onCancel={() => setModalOpen(!modalOpen)}
+        onCancel={pinCancelCb}
+        showFooter={false}
         open={modalOpen}
         title={
           <span className="flex items-center font-normal">
@@ -118,41 +288,64 @@ const IpSystemManage = () => {
           </span>
         }
       >
-        <Input
-          ref={inputRef1}
-          maxLength={1}
-          onKeyUp={(e) => inputKeyUpCb(e, undefined)}
-          onChange={(e) => inputChange(e, inputRef2)}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-        <Input
-          ref={inputRef2}
-          onKeyUp={(e) => inputKeyUpCb(e, inputRef1)}
-          onChange={(e) => inputChange(e, inputRef3)}
-          maxLength={1}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-        <Input
-          onKeyUp={(e) => inputKeyUpCb(e, inputRef2)}
-          onChange={(e) => inputChange(e, inputRef4)}
-          ref={inputRef3}
-          maxLength={1}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-        <Input
-          onKeyUp={(e) => inputKeyUpCb(e, inputRef3)}
-          onChange={(e) => inputChange(e, undefined)}
-          ref={inputRef4}
-          maxLength={1}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
+        <div>
+          <Form onFinish={pinOkCb} ref={formRefEl} initialValues={PINInitVal}>
+            <div className="flex gap-[.2rem] px-[.5rem]">
+              <Form.Item name="one">
+                <Input
+                  ref={inputRef1}
+                  maxLength={1}
+                  onKeyUp={(e) => inputKeyUpCb(e, undefined)}
+                  onChange={(e) => inputChange(e, inputRef2, "one")}
+                  className={styleScope["input-border"]}
+                  bordered={false}
+                />
+              </Form.Item>
+              <Form.Item name="two">
+                <Input
+                  ref={inputRef2}
+                  onKeyUp={(e) => inputKeyUpCb(e, inputRef1)}
+                  onChange={(e) => inputChange(e, inputRef3, "two")}
+                  maxLength={1}
+                  className={styleScope["input-border"]}
+                  bordered={false}
+                />
+              </Form.Item>
+              <Form.Item name="three">
+                <Input
+                  onKeyUp={(e) => inputKeyUpCb(e, inputRef2)}
+                  onChange={(e) => inputChange(e, inputRef4, "three")}
+                  ref={inputRef3}
+                  maxLength={1}
+                  className={styleScope["input-border"]}
+                  bordered={false}
+                />
+              </Form.Item>
+              <Form.Item name="foure">
+                <Input
+                  onKeyUp={(e) => inputKeyUpCb(e, inputRef3)}
+                  onChange={(e) => inputChange(e, undefined, "foure")}
+                  ref={inputRef4}
+                  maxLength={1}
+                  className={styleScope["input-border"]}
+                  bordered={false}
+                />
+              </Form.Item>
+            </div>
+            <Form.Item className="border-t border-t-[var(--border-color)] flex justify-end pt-[.2rem] pr-[.2rem]">
+              <Button onClick={pinCancelCb} className="mr-[.1rem]">
+                取消
+              </Button>
+              <Button type="primary" htmlType="submit">
+                确定
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
       </ModalScope>
       {/* google验证 */}
       <ModalScope
+        onCancel={() => setGoogleCodeOpen(!googleCodeOpen)}
         showFooter={false}
         title={
           <span className="flex items-center font-normal">
@@ -165,6 +358,7 @@ const IpSystemManage = () => {
           layout="vertical"
           className="_reset-form w-full"
           initialValues={formInitVal}
+          onFinish={googleOkCb}
         >
           <Form.Item
             className="hidden_start px-[.3rem]"
@@ -183,14 +377,7 @@ const IpSystemManage = () => {
             <Button onClick={() => setGoogleCodeOpen(!googleCodeOpen)}>
               <span className="text-[#999]">关闭</span>
             </Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                console.log("---google---");
-                setGoogleCodeOpen(!googleCodeOpen);
-                setAddIpAddrOpen(!addIpAddrOpen);
-              }}
-            >
+            <Button type="primary" htmlType="submit">
               确定
             </Button>
           </Form.Item>
@@ -198,6 +385,7 @@ const IpSystemManage = () => {
       </ModalScope>
       {/* 新增IP地址 */}
       <ModalScope
+        onCancel={() => setAddIpAddrOpen(false)}
         showFooter={false}
         title={
           <span className="flex items-center font-normal">
@@ -208,22 +396,25 @@ const IpSystemManage = () => {
       >
         <Form
           layout="vertical"
+          onFinish={addIpAddrCb}
           className="_reset-form w-full"
-          initialValues={formInitVal}
+          initialValues={formAddAddrInitVal}
         >
           <Form.Item
             className="hidden_start px-[.3rem]"
             label={<span className="text-[#546078]">员工ID</span>}
           >
-            <Input value={"win.win"} disabled />
+            <Input value={userInfo.adminId} disabled />
           </Form.Item>
           <Form.Item
+            name="IpAddr"
             className="hidden_start px-[.3rem]"
             label={<span className="text-[#546078]">IP地址</span>}
           >
             <Input placeholder="请输入IP地址" />
           </Form.Item>
           <Form.Item
+            name="note"
             className="hidden_start px-[.3rem] text-area"
             label={<span className="text-[#546078]">备注</span>}
           >
@@ -242,13 +433,7 @@ const IpSystemManage = () => {
             >
               <span className="text-[#999]">关闭</span>
             </Button>
-            <Button
-              onClick={() => {
-                setTipMessage(true);
-                setAddIpAddrOpen(false);
-              }}
-              type="primary"
-            >
+            <Button htmlType="submit" type="primary">
               确定
             </Button>
           </Form.Item>
@@ -267,7 +452,7 @@ const IpSystemManage = () => {
         open={tipMessage}
       >
         <div className="grid place-items-center">
-          {true ? (
+          {tipMessageFlag ? (
             <>
               <Icon
                 className="text-[var(--green)] !text-[66px]"
@@ -293,7 +478,7 @@ const IpSystemManage = () => {
       {/* 删除/禁用/启用 */}
       <ModalScope
         showFooter={true}
-        onOk={() => setDeleteOpen(false)}
+        onOk={() => deleteAndDisableAndEnable(currentData)}
         onCancel={() => setDeleteOpen(false)}
         title={
           <span className="flex items-center font-normal">
@@ -306,13 +491,13 @@ const IpSystemManage = () => {
         <Form
           layout="vertical"
           className="_reset-form w-full"
-          initialValues={formInitVal}
+          initialValues={currentData}
         >
           <Form.Item
             className="hidden_start px-[.3rem]"
             label={<span className="text-[#546078]">IP地址</span>}
           >
-            <Input disabled placeholder="请输入IP地址" />
+            <Input disabled placeholder="请输入IP地址" value={currentData.ip} />
           </Form.Item>
           <Form.Item
             className="hidden_start px-[.3rem] text-area"
@@ -321,6 +506,7 @@ const IpSystemManage = () => {
             <Input.TextArea
               disabled
               autoSize={{ minRows: 2, maxRows: 6 }}
+              value={currentData.note}
               placeholder="请输入备注内容"
             />
           </Form.Item>

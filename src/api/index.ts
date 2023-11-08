@@ -35,10 +35,9 @@ export const UpdatePinInterFace = (data) => {
   })
 }
 // 6.绑定谷歌验证器 GET admin/bindGoogleAuth
-export const BindGoogleAuthInterFace = (data) => {
+export const BindGoogleAuthInterFace = () => {
   return _http.getReq({
     url: `${staffPrefix}/bindGoogleAuth`,
-    data
   })
 }
 // 7.修改个人信息  PUT admin/updateBaseInfo {nickname mobile}
@@ -55,13 +54,13 @@ export const GetUserInfo = () => {
   })
 }
 // 8.通用验证PIN码 GET admin/verifyPin?pin=PIN&operationId=OPERATION_ID
-export const VerifyPinInterFace = (obj: { pin: '', operationId: '' }) => {
+export const VerifyPinInterFace = (obj: { pin: string, operationId: number }) => {
   return _http.getReq({
     url: `${staffPrefix}/verifyPin?pin=${obj.pin}&operationId=${obj.operationId}`,
   })
 }
 // 9.通用谷歌验证 GET admin/verifyGoogleAuth?googleCode=GOOGLECODE&operationId=OPERATION_ID
-export const VerifyGoogleAuthInterFace = (obj: { googleCode: '', operationId: '' }) => {
+export const VerifyGoogleAuthInterFace = (obj: { googleCode: string, operationId: number }) => {
   return _http.getReq({
     url: `${staffPrefix}/verifyGoogleAuth?googleCode=${obj.googleCode}&operationId=${obj.operationId}`,
   })
@@ -80,21 +79,25 @@ export const FindAdminIpInterFace = (data) => {
   })
 }
 // 12.添加管理IP GET admin/addAdminIp {ip address note}
-export const AddAdminIpInterFace = (obj: { ip: '', address: '', note: '' }) => {
-  return _http.getReq({
-    url: `${staffPrefix}/addAdminIp?ip=${obj.ip}&address=${obj.address}&note=${obj.note}`,
+export const AddAdminIpInterFace = (data: { ip: '', note: '' },headers:{}) => {
+  return _http.postReq({
+    url: `${staffPrefix}/addAdminIp`,
+    data,
+    headers
   })
 }
 // 13.开关管理IP PUT admin/switchDisableAdminIp?id=ID
-export const SwitchDisableAdminIpInterFace = (id) => {
+export const SwitchDisableAdminIpInterFace = (id, headers:{}) => {
   return _http.putReq({
     url: `${staffPrefix}/switchDisableAdminIp?id=${id}`,
+    headers
   })
 }
 // 14.删除管理IP DELETE admin/deleteAdminIp?id=ID
-export const DeleteAdminIpInterFace = (id) => {
+export const DeleteAdminIpInterFace = (id, headers) => {
   return _http.deleteReq({
     url: `${staffPrefix}/deleteAdminIp?id=${id}`,
+    headers
   })
 }
 // 15.查看管理IP日志 POST admin/findAdminIpLog {pageNo pageSize conditions}
