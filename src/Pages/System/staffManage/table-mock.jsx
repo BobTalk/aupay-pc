@@ -2,12 +2,12 @@ import { EyeFilled } from '@ant-design/icons';
 import { NavLink, useNavigate } from 'react-router-dom';
 import TableComp from "@/Components/Table";
 import { message } from 'antd';
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { FindAdminListInterFace } from "@/api";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import store from '@/store'
 import dayjs from 'dayjs';
-const TableScope = (props) => {
+const TableScope = (props, ref) => {
   let navigate = useNavigate()
   let [stop] = useStopPropagation();
   function isEffectiveCb(e, crt) {
@@ -127,24 +127,40 @@ const TableScope = (props) => {
       })
     })
   }
-  function getTableList() {
+  function getTableList(conditions, paginationParams) {
     FindAdminListInterFace({
-      pageNo: pagination.current,
-      pageSize: pagination.pageSize,
-      conditions: {}
+      pageNo: paginationParams?.current ?? pagination.current,
+      pageSize: paginationParams?.pageSize ?? pagination.pageSize,
+      conditions
     }).then(res => {
       if (res.status) {
-        message.success(res.message)
         let r = res.data?.map((item, idx) => (item.key = idx, item))
         setDataSource(r)
+        setPagination(pagination => ({
+          ...pagination,
+          current: res.pageNo,
+          pageSize: res.pageSize,
+          total: res.total
+        }))
       } else {
         message.error(res.message)
       }
     })
   }
+  function updateParmas(filterParams, paginationParams) {
+    setPagination(pagination => ({
+      ...pagination,
+      ...paginationParams
+    }))
+    getTableList(filterParams, paginationParams)
+  }
   useEffect(() => {
     getTableList()
   }, [])
+  useImperativeHandle(ref, () => ({
+    getTableList,
+    updateParmas
+  }), [])
   return <TableComp
     themeObj={{
       headerBorderRadius: 0,
@@ -154,4 +170,4 @@ const TableScope = (props) => {
     pagination={pagination}
   />
 }
-export default TableScope
+export default forwardRef(TableScope)

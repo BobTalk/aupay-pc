@@ -2,15 +2,19 @@
  * @summary 地址
  */
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, Select, message } from "antd";
 import styleScope from "./index.module.less";
-import RangePicker from "@/Components/RangePicker";
 import TableScope from "./table-mock.jsx";
-import { mergeClassName } from "@/utils/base";
+import { getSession, mergeClassName } from "@/utils/base";
 import ModalScope from "@/Components/Modal";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { useRef, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import {
+  AddStaffInfo,
+  VerifyGoogleAuthInterFace,
+  VerifyPinInterFace,
+} from "@/api";
 const modalStyles = {
   header: {
     marginBottom: ".24rem",
@@ -26,24 +30,47 @@ const StaffSystemManage = () => {
   const inputRef2 = useRef();
   const inputRef3 = useRef();
   const inputRef4 = useRef();
+  const tableRefEl = useRef<any>();
+  const filterNote = useRef<any>();
+  const formRefEl = useRef<any>();
+  const token = useRef<any>();
+  const googleToken = useRef<any>();
+  const googleRef = useRef<any>();
+  const addStaffRef = useRef<any>();
+  const countryCode = useRef(86);
+  let PINInitVal = useRef<any>({
+    one: "",
+    two: "",
+    three: "",
+    foure: "",
+  });
   const { pathname } = useLocation();
   let [stop] = useStopPropagation();
   let [PINOpen, setPinOpen] = useState<Boolean>(false);
   let [googleCodeOpen, setGoogleCodeOpen] = useState(false);
   let [addStaffOpen, setAddStaffOpen] = useState(false);
+  let [addStaffInitVal, setAddStaffInitVal] = useState({
+    adminId: "",
+    email: "",
+    phone: "",
+    dep: "",
+    note: "",
+  });
   let [formInitVal, setFormInitVal] = useState({
     googleCode: "",
   });
-  function inputKeyUpCb(e, prvNode) {
+  function inputKeyUpCb(e, prvNode, key) {
     let keyCode = e.keyCode;
-    if (prvNode && keyCode === 8) {
-      e.target.value = "";
+    if (keyCode === 8) {
+      formRefEl.current.setFieldValue(key, "");
       prvNode.current.focus();
     }
   }
-  function inputChange(e, reactNode) {
+  function inputChange(e, reactNode, key) {
     stop(e, () => {
       let val = e.target.value;
+      PINInitVal.current[key] = val;
+      formRefEl.current.setFieldValue(key, "*");
       if (val && reactNode) {
         reactNode.current.focus();
       }
@@ -55,16 +82,116 @@ const StaffSystemManage = () => {
       setPinOpen(!PINOpen);
     });
   }
+  // 校验PIN
+  function pinOkCb() {
+    let { one, two, three, foure } = PINInitVal.current;
+    VerifyPinInterFace({
+      pin: `${one}${two}${three}${foure}`,
+      operationId: 230,
+    }).then((res) => {
+      console.log("res: ", res);
+      if (res.status) {
+        token.current = res.data;
+        setPinOpen(!PINOpen);
+        setGoogleCodeOpen(!googleCodeOpen);
+        PINInitVal.current = {};
+        formRefEl.current.resetFields(["one", "two", "three", "foure"]);
+      } else {
+        message.error(res.message);
+      }
+    });
+  }
   // 员工账户状态
   function isEffectiveCb(e, crt) {}
+  function callGetTableFn() {
+    let note = filterNote.current.input?.value;
+    tableRefEl.current.getTableList({
+      search: note || null,
+    });
+  }
+  function paginationCb({ current, pageSize, total }) {
+    let note = filterNote.current.input?.value;
+    tableRefEl.current.updateParmas(
+      {
+        search: note || null,
+      },
+      {
+        current,
+        pageSize,
+        total,
+      }
+    );
+  }
+  function googleOkCb(values) {
+    let { googleCode } = values;
+    VerifyGoogleAuthInterFace({
+      googleCode,
+      operationId: 230,
+    }).then((res) => {
+      if (res.status) {
+        googleToken.current = res.data;
+        googleRef.current.setFieldValue("googleCode", "");
+        setAddStaffOpen(!addStaffOpen);
+        setGoogleCodeOpen(!googleCodeOpen);
+      } else {
+        message.error(res.message);
+      }
+    });
+  }
+  function addStaffSubmitCb(values) {
+    console.log("values: ", values);
+    let { adminId, email, phone, dep, note } = values;
+    console.log(countryCode.current);
+    AddStaffInfo(
+      {
+        adminId,
+        note,
+        email,
+        mobile: `${countryCode.current} ${phone}`,
+        department: dep,
+      },
+      {
+        "Pin-token": token.current,
+        "Google-Auth-Token": googleToken.current,
+      }
+    ).then((res) => {
+      if (res.status) {
+        console.log('addStaffRef.current: ', addStaffRef.current);
+        addStaffRef.current.resetFields(
+          ["adminId",
+          "email",
+          "phone",
+          "dep",
+          "note"]
+        );
+        setAddStaffOpen(!addStaffOpen);
+        callGetTableFn();
+      } else {
+        message.error(res.message);
+      }
+    });
+  }
+  function countryCodeCb(val) {
+    countryCode.current = val;
+  }
   return pathname === "/aupay/system/staff-manage/detail" ? (
     <Outlet />
   ) : (
     <>
       <div className={styleScope["filter-box"]}>
-        <Input placeholder="备注搜索" size="large" className="w-[3.2rem]" />
-        <RangePicker size="large" />
-        <Button type="primary" size="large" icon={<SearchOutlined />}>
+        <Input
+          allowClear
+          ref={filterNote}
+          placeholder="员工ID"
+          size="large"
+          className="w-[3.2rem]"
+        />
+        <Button
+          onClick={callGetTableFn}
+          type="primary"
+          size="large"
+          icon={<SearchOutlined />}
+        >
           查询
         </Button>
         <div className="flex flex-1 justify-end">
@@ -81,16 +208,25 @@ const StaffSystemManage = () => {
       <div
         className={mergeClassName("bg-[var(--white)]", styleScope["table-box"])}
       >
-        <TableScope onState={isEffectiveCb} />
+        <TableScope
+          ref={tableRefEl}
+          onPaginationCb={paginationCb}
+          onState={isEffectiveCb}
+        />
       </div>
       {/* PIN */}
       <ModalScope
-        style={modalStyles}
-        showFooter={true}
-        onOk={() => {
-          setPinOpen(!PINOpen);
-          setGoogleCodeOpen(!googleCodeOpen);
+        style={{
+          header: {
+            marginBottom: ".24rem",
+          },
+          body: {
+            gridTemplateColumns: "1fr",
+            gap: ".15rem",
+            paddingInline: "0",
+          },
         }}
+        showFooter={false}
         onCancel={() => setPinOpen(!PINOpen)}
         open={PINOpen}
         title={
@@ -99,38 +235,63 @@ const StaffSystemManage = () => {
           </span>
         }
       >
-        <Input
-          ref={inputRef1}
-          maxLength={1}
-          onKeyUp={(e) => inputKeyUpCb(e, undefined)}
-          onChange={(e) => inputChange(e, inputRef2)}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-        <Input
-          ref={inputRef2}
-          onKeyUp={(e) => inputKeyUpCb(e, inputRef1)}
-          onChange={(e) => inputChange(e, inputRef3)}
-          maxLength={1}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-        <Input
-          onKeyUp={(e) => inputKeyUpCb(e, inputRef2)}
-          onChange={(e) => inputChange(e, inputRef4)}
-          ref={inputRef3}
-          maxLength={1}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-        <Input
-          onKeyUp={(e) => inputKeyUpCb(e, inputRef3)}
-          onChange={(e) => inputChange(e, undefined)}
-          ref={inputRef4}
-          maxLength={1}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
+        <div>
+          <Form onFinish={pinOkCb} ref={formRefEl} initialValues={PINInitVal}>
+            <div className="flex gap-[.2rem] px-[.5rem]">
+              <Form.Item name="one">
+                <Input
+                  ref={inputRef1}
+                  maxLength={1}
+                  onKeyUp={(e) => inputKeyUpCb(e, undefined, "one")}
+                  onChange={(e) => inputChange(e, inputRef2, "one")}
+                  className={styleScope["input-border"]}
+                  bordered={false}
+                />
+              </Form.Item>
+              <Form.Item name="two">
+                <Input
+                  ref={inputRef2}
+                  onKeyUp={(e) => inputKeyUpCb(e, inputRef1, "two")}
+                  onChange={(e) => inputChange(e, inputRef3, "two")}
+                  maxLength={1}
+                  className={styleScope["input-border"]}
+                  bordered={false}
+                />
+              </Form.Item>
+              <Form.Item name="three">
+                <Input
+                  onKeyUp={(e) => inputKeyUpCb(e, inputRef2, "three")}
+                  onChange={(e) => inputChange(e, inputRef4, "three")}
+                  ref={inputRef3}
+                  maxLength={1}
+                  className={styleScope["input-border"]}
+                  bordered={false}
+                />
+              </Form.Item>
+              <Form.Item name="foure">
+                <Input
+                  onKeyUp={(e) => inputKeyUpCb(e, inputRef3, "foure")}
+                  onChange={(e) => inputChange(e, undefined, "foure")}
+                  ref={inputRef4}
+                  maxLength={1}
+                  className={styleScope["input-border"]}
+                  bordered={false}
+                />
+              </Form.Item>
+            </div>
+            <Form.Item className="border-t border-t-[var(--border-color)] flex justify-end pt-[.2rem] pr-[.2rem]">
+              <Button
+                onClick={() => setPinOpen(!PINOpen)}
+                className="mr-[.1rem]"
+              >
+                取消
+              </Button>
+              <Button type="primary" htmlType="submit">
+                确定
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
       </ModalScope>
       {/* google验证 */}
       <ModalScope
@@ -143,9 +304,11 @@ const StaffSystemManage = () => {
         open={googleCodeOpen}
       >
         <Form
+          ref={googleRef}
           layout="vertical"
           className="_reset-form w-full"
           initialValues={formInitVal}
+          onFinish={googleOkCb}
         >
           <Form.Item
             className="hidden_start px-[.3rem]"
@@ -164,13 +327,7 @@ const StaffSystemManage = () => {
             <Button onClick={() => setGoogleCodeOpen(!googleCodeOpen)}>
               <span className="text-[#999]">关闭</span>
             </Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                setGoogleCodeOpen(!googleCodeOpen);
-                setAddStaffOpen(!addStaffOpen);
-              }}
-            >
+            <Button type="primary" htmlType="submit">
               确定
             </Button>
           </Form.Item>
@@ -179,6 +336,7 @@ const StaffSystemManage = () => {
       {/* 新增员工 */}
       <ModalScope
         showFooter={false}
+        onCancel={() => setAddStaffOpen(false)}
         title={
           <span className="flex items-center font-normal">
             <i className={styleScope["icon"]}></i>新增员工
@@ -188,48 +346,56 @@ const StaffSystemManage = () => {
       >
         <Form
           layout="vertical"
+          ref={addStaffRef}
           className="_reset-form w-full"
-          initialValues={formInitVal}
+          initialValues={addStaffInitVal}
+          onFinish={addStaffSubmitCb}
         >
           <Form.Item
+            name="adminId"
             className="hidden_start px-[.3rem]"
             label={<span className="text-[#546078]">员工ID</span>}
           >
-            <Input value={"win.win"} disabled />
+            <Input placeholder="请输入员工ID" />
           </Form.Item>
           <Form.Item
+            name="email"
             className="hidden_start px-[.3rem]"
             label={<span className="text-[#546078]">邮箱</span>}
           >
             <Input placeholder="请输入邮箱" />
           </Form.Item>
           <Form.Item
+            name="phone"
             className="hidden_start px-[.3rem]"
             label={<span className="text-[#546078]">联系方式</span>}
           >
             <Input
               size="large"
-              addonBefore={<AddonBeforePhone />}
+              addonBefore={<AddonBeforePhone onCountryCodeCb={countryCodeCb} />}
               placeholder="请输入联系方式"
             />
           </Form.Item>
           <Form.Item
+            name="dep"
             className="hidden_start px-[.3rem]"
             label={<span className="text-[#546078]">部门</span>}
           >
             <Select
               size="large"
-              placeholder="请选择"
-              defaultValue="001"
-              options={[{ value: "001", label: "总裁办" }]}
+              placeholder="请选择部门"
+              options={[
+                { value: "1", label: "研发部" },
+                { value: "2", label: "产品部" },
+              ]}
             />
           </Form.Item>
           <Form.Item
+            name="note"
             className="hidden_start px-[.3rem] text-area"
             label={<span className="text-[#546078]">备注</span>}
           >
             <Input.TextArea
-              className=""
               autoSize={{ minRows: 4, maxRows: 6 }}
               rows={6}
               placeholder="请输入备注"
@@ -243,12 +409,7 @@ const StaffSystemManage = () => {
             >
               <span className="text-[#999]">关闭</span>
             </Button>
-            <Button
-              onClick={() => {
-                setAddStaffOpen(!addStaffOpen);
-              }}
-              type="primary"
-            >
+            <Button htmlType="submit" type="primary">
               确定
             </Button>
           </Form.Item>
@@ -257,7 +418,10 @@ const StaffSystemManage = () => {
     </>
   );
 };
-const AddonBeforePhone = () => {
+const AddonBeforePhone = (props) => {
+  function selectChangeCb(val) {
+    props?.onCountryCodeCb?.(val);
+  }
   return (
     <div className="flex items-center">
       <PlusOutlined className="text-[14px] text-[#333]" />
@@ -265,6 +429,7 @@ const AddonBeforePhone = () => {
         className="text-[14px] text-[#333]"
         size="large"
         defaultValue="86"
+        onChange={selectChangeCb}
         options={[{ value: "86", label: "86" }]}
       />
     </div>

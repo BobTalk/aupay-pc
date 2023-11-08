@@ -7,6 +7,14 @@ export const GetAccessKeyInterface = () => {
     url: `${staffPrefix}/getAccessKey`
   })
 }
+// 新增员工 adminId note email mobile department
+export const AddStaffInfo = (data,headers={}) => {
+  return _http.postReq({
+    url: `${staffPrefix}/openAdmin`,
+    data,
+    headers
+  })
+}
 // 2.登录  POST admin/login {adminId password googleCode}
 export const LoginInterFace = (data) => {
   return _http.postReq({

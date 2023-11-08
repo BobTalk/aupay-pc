@@ -47,6 +47,8 @@ const IpSystemManage = () => {
   let [moduleOrigin, setModuleOrigin] = useState("");
   let filterNote = useRef<any>();
   let filterTime = useRef<any>();
+  let googleRef = useRef<any>();
+  let addStaffRef = useRef<any>();
   let userInfo = getSession("userInfo");
   let [formInitVal, setFormInitVal] = useState({
     googleCode: "",
@@ -60,7 +62,7 @@ const IpSystemManage = () => {
     ip: "",
     note: "",
   });
-  let PINInitVal = useRef({
+  let PINInitVal = useRef<any>({
     one: "",
     two: "",
     three: "",
@@ -68,10 +70,10 @@ const IpSystemManage = () => {
   });
   let token = useRef("");
   let googleToken = useRef("");
-  function inputKeyUpCb(e, prvNode) {
+  function inputKeyUpCb(e, prvNode, key) {
     let keyCode = e.keyCode;
-    if (prvNode && keyCode === 8) {
-      e.target.value = "";
+    if (keyCode === 8) {
+      formRefEl.current.setFieldValue(key, "");
       prvNode.current.focus();
     }
   }
@@ -127,6 +129,7 @@ const IpSystemManage = () => {
             setDeleteOpen(true);
           }
           setModalOpen(!modalOpen);
+          PINInitVal.current = {};
           formRefEl.current.resetFields(["one", "two", "three", "foure"]);
         } else {
           message.error(res.message);
@@ -191,6 +194,7 @@ const IpSystemManage = () => {
         googleToken.current = res.data;
         setAddIpAddrOpen(!addIpAddrOpen);
         setGoogleCodeOpen(!googleCodeOpen);
+        googleRef.current.setFieldValue("googleCode", "");
       } else {
         message.error(res.message);
       }
@@ -209,6 +213,7 @@ const IpSystemManage = () => {
       setTipMessage(!tipMessage);
       setTipMessageFlag(res.status);
       if (res.status) {
+        addStaffRef.current.resetFields(['IpAddr', 'note'])
         callGetTableFn();
       }
     });
@@ -298,7 +303,7 @@ const IpSystemManage = () => {
                 <Input
                   ref={inputRef1}
                   maxLength={1}
-                  onKeyUp={(e) => inputKeyUpCb(e, undefined)}
+                  onKeyUp={(e) => inputKeyUpCb(e, undefined, "one")}
                   onChange={(e) => inputChange(e, inputRef2, "one")}
                   className={styleScope["input-border"]}
                   bordered={false}
@@ -307,7 +312,7 @@ const IpSystemManage = () => {
               <Form.Item name="two">
                 <Input
                   ref={inputRef2}
-                  onKeyUp={(e) => inputKeyUpCb(e, inputRef1)}
+                  onKeyUp={(e) => inputKeyUpCb(e, inputRef1, "two")}
                   onChange={(e) => inputChange(e, inputRef3, "two")}
                   maxLength={1}
                   className={styleScope["input-border"]}
@@ -316,7 +321,7 @@ const IpSystemManage = () => {
               </Form.Item>
               <Form.Item name="three">
                 <Input
-                  onKeyUp={(e) => inputKeyUpCb(e, inputRef2)}
+                  onKeyUp={(e) => inputKeyUpCb(e, inputRef2, "three")}
                   onChange={(e) => inputChange(e, inputRef4, "three")}
                   ref={inputRef3}
                   maxLength={1}
@@ -326,7 +331,7 @@ const IpSystemManage = () => {
               </Form.Item>
               <Form.Item name="foure">
                 <Input
-                  onKeyUp={(e) => inputKeyUpCb(e, inputRef3)}
+                  onKeyUp={(e) => inputKeyUpCb(e, inputRef3, "foure")}
                   onChange={(e) => inputChange(e, undefined, "foure")}
                   ref={inputRef4}
                   maxLength={1}
@@ -358,6 +363,7 @@ const IpSystemManage = () => {
         open={googleCodeOpen}
       >
         <Form
+          ref={googleRef}
           layout="vertical"
           className="_reset-form w-full"
           initialValues={formInitVal}
@@ -399,6 +405,7 @@ const IpSystemManage = () => {
       >
         <Form
           layout="vertical"
+          ref={addStaffRef}
           onFinish={addIpAddrCb}
           className="_reset-form w-full"
           initialValues={formAddAddrInitVal}
