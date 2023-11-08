@@ -1,6 +1,7 @@
 import { ConfigProvider, Table } from "antd";
 import { ReactNode } from "react";
 import zh_CN from "antd/es/locale/zh_CN";
+import styleScope from "./table.module.less";
 type TableCompPropsType = {
   dataSource: Array<any>;
   columns: Array<any>;
@@ -34,7 +35,8 @@ const TableComp = (props: TableCompPropsType) => {
       }}
       locale={zh_CN}
     >
-      <Table
+     <div className={styleScope['table-reset']}>
+     <Table
         onChange={onChange}
         components={comp}
         virtual={virtual}
@@ -47,6 +49,7 @@ const TableComp = (props: TableCompPropsType) => {
       >
         {props.children}
       </Table>
+     </div>
     </ConfigProvider>
   );
 };

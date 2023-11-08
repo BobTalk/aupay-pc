@@ -17,7 +17,9 @@ const LayoutContent = () => {
   let userInfo = getSession("userInfo");
   let [usename] = useState(() => userInfo["adminId"]);
   let [showMessage, setShowMessage] = useState("");
-  let [isShowLoginTip, setIsShowLoginTip] = useState<Boolean>(getSession('loginTip'));
+  let [isShowLoginTip, setIsShowLoginTip] = useState<Boolean>(
+    getSession("loginTip")
+  );
   let [breadcrumb, setBreadcrumb] = useState(
     store.getState().breadcrumbReducer
   );
@@ -25,20 +27,19 @@ const LayoutContent = () => {
   function close(e) {
     stop(e, () => {
       setShowMessage("hidden");
-      setIsShowLoginTip(true)
-      setSession('loginTip', true)
+      setIsShowLoginTip(true);
+      setSession("loginTip", true);
     });
   }
-  useEffect(()=>{
+  useEffect(() => {
     setBreadcrumb(store.getState().breadcrumbReducer);
-  },[store.getState().breadcrumbReducer])
+  }, [store.getState().breadcrumbReducer]);
   useEffect(() => {
     let { height } = messageRefs.current.getBoundingClientRect();
     setContentH(height);
   }, []);
   return (
     <Content
-      className="overflow-y-auto"
       style={{
         padding: ".16rem .24rem",
         background: "var(--gray)",
@@ -85,6 +86,7 @@ const LayoutContent = () => {
         style={{
           height: `calc(100% - ${contentH}px - 0.32rem)`,
         }}
+        className="overflow-y-auto"
       >
         <Outlet />
       </div>

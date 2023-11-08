@@ -234,6 +234,7 @@ const IpSystemManage = () => {
     <>
       <div className={styleScope["filter-box"]}>
         <Input
+          allowClear
           ref={filterNote}
           placeholder="备注"
           size="large"

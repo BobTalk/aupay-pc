@@ -134,6 +134,11 @@ const TableScope = (props, ref) => {
     themeObj={{
       headerBorderRadius: 0,
     }}
+    paginationThemeObj={{
+      token:{
+        margin: 20
+      }
+    }}
     onChange={clickCb}
     dataSource={dataSource}
     columns={columns}
