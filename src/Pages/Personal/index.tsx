@@ -1,31 +1,70 @@
 import Icon from "@/Components/Icon";
 import CommonModule from "./common";
 import styleScope from "./index.module.less";
-import { Input } from "antd";
-import { useState } from "react";
+import { Button, Form, Input, message } from "antd";
+import { useRef, useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { getSession, setSession } from "@/utils/base";
 import ModalScope from "@/Components/Modal";
-import { BindGoogleAuthInterFace, GetUserInfo } from "@/api";
+import {
+  BindGoogleAuthInterFace,
+  GetUserInfo,
+  UpdateBaseInfoInterFace,
+  UpdatePasswordInterFace,
+  UpdatePinInterFace,
+} from "@/api";
 import Image from "@/Components/Image";
 const PersonalInfo = () => {
+  const updateInfoRefs = useRef<any>();
   let [isEditor, setIsEditor] = useState(false);
-  let userInfo = getSession("userInfo");
-  console.log("userInfo: ", userInfo);
+  let userData = getSession("userInfo");
+  let [userInfo, setUserInfo] = useState(() => {
+    let [countryCode, mobile] = userData.mobile.split(" ");
+    return {
+      ...userData,
+      countryCode: countryCode.length > 5 ? 86 : countryCode,
+      mobile: mobile ?? countryCode,
+    };
+  });
   let [stop] = useStopPropagation();
   let [bindGoogleOpen, setBindGoogleOpen] = useState(false);
+  let [updateModuleOpen, setUpdateModuleOpen] = useState(false);
   let [googleImageUrl, setGoogleImageUrl] = useState();
   let [isBind, setIsBind] = useState(false);
+  let [modalOrigin, setModalOrigin] = useState("");
+  let [updateInfoList, setUpdateInfoList] = useState({
+    oldInfo: "",
+    newInfo: "",
+    confirmInfo: "",
+  });
+  function updateMobileCb(e) {
+    setUserInfo((info) => ({
+      ...info,
+      mobile: e.target.value,
+    }));
+  }
   function isEditorCb(e) {
     stop(e, () => {
       setIsEditor(!isEditor);
+      if (isEditor) {
+        UpdateBaseInfoInterFace({
+          mobile: userInfo.countryCode + " " + userInfo.mobile,
+        }).then((res) => {
+          if (res.status) {
+            message.success(res.message);
+            GetUserInfo().then((res) => {
+              setSession("userInfo", res);
+            });
+          } else {
+            message.error(res.message);
+          }
+        });
+      }
     });
   }
-  function bindGoogle() {
+  function bindGoogleCb() {
     if (userInfo.googleSecret) return;
-    console.log(9);
     BindGoogleAuthInterFace().then((res) => {
-      console.log("res: ", res);
       if (res.status) {
         setBindGoogleOpen(!bindGoogleOpen);
         setGoogleImageUrl(res.data);
@@ -33,6 +72,55 @@ const PersonalInfo = () => {
         GetUserInfo().then((res) => {
           setSession("userInfo", res);
         });
+      }
+    });
+  }
+  function updatePinCb() {
+    setModalOrigin("pin");
+    setUpdateModuleOpen(!updateModuleOpen);
+  }
+  function updatePwdCb() {
+    setModalOrigin("pwd");
+    setUpdateModuleOpen(!updateModuleOpen);
+  }
+  function updataModuleCancelCb() {
+    setUpdateModuleOpen(!updateModuleOpen);
+  }
+  function confirmSubmitCb(values) {
+    let { oldInfo, newInfo, confirmInfo } = values;
+    if (modalOrigin == "pin") {
+      UpdatePinInterFace({
+        oldPin: oldInfo,
+        newPin: confirmInfo,
+      }).then((res) => {
+        if (res.status) {
+          message.success(res.message);
+          setUpdateModuleOpen(!updateModuleOpen);
+          updateInfoRefs.current.resetFields([
+            "oldInfo",
+            "newInfo",
+            "confirmInfo",
+          ]);
+        } else {
+          message.error(res.message);
+        }
+      });
+      return;
+    }
+    UpdatePasswordInterFace({
+      oldPassword: oldInfo,
+      newPassword: confirmInfo,
+    }).then((res) => {
+      if (res.status) {
+        message.success(res.message);
+        setUpdateModuleOpen(!updateModuleOpen);
+        updateInfoRefs.current.resetFields([
+          "oldInfo",
+          "newInfo",
+          "confirmInfo",
+        ]);
+      } else {
+        message.error(res.message);
       }
     });
   }
@@ -52,27 +140,28 @@ const PersonalInfo = () => {
         <div className={styleScope["info-box"]}>
           <p>
             <span>员工ID：</span>
-            <span>小吴飞翔</span>
+            <span>{userInfo.adminId}</span>
           </p>
           <p>
             <span>备注：</span>
-            {isEditor ? (
-              <Input defaultValue="哇哈哈哈出萨湖大，哈哈扩大好看的话" />
-            ) : (
-              <span>哇哈哈哈出萨湖大，哈哈扩大好看的话</span>
-            )}
+            <span>{userInfo.note ?? "--"}</span>
           </p>
           <p>
             <span>联系方式：</span>
             {isEditor ? (
-              <Input defaultValue="13423234424" />
+              <Input
+                type="mobile"
+                maxLength={11}
+                onChange={updateMobileCb}
+                defaultValue={userInfo.mobile ?? "--"}
+              />
             ) : (
-              <span>13423234424</span>
+              <span>{userInfo.mobile ?? "--"}</span>
             )}
           </p>
           <p>
             <span>部门：</span>
-            <span>事业部</span>
+            <span>{userInfo.department ?? "--"}</span>
           </p>
         </div>
       </CommonModule>
@@ -96,7 +185,7 @@ const PersonalInfo = () => {
             <span className="text-[14px] text-[#666]">邮箱</span>
             <p className="text-[14px]">
               <span className="text-[#333] mr-[.2rem]">
-                13423234424@163.com
+                {userInfo.email ?? "--"}
               </span>
             </p>
           </div>
@@ -114,7 +203,12 @@ const PersonalInfo = () => {
             <span className="text-[#666]">登录密码</span>
             <span>
               <span className="mr-[.24rem] text-[#333]">******</span>
-              <span className="text-[#0385F2] cursor-pointer">修改</span>
+              <span
+                onClick={updatePwdCb}
+                className="text-[#0385F2] cursor-pointer"
+              >
+                修改
+              </span>
             </span>
           </p>
         </div>
@@ -131,7 +225,12 @@ const PersonalInfo = () => {
             <span className="text-[#666]">PIN码</span>
             <span>
               <span className="mr-[.24rem] text-[#333]">******</span>
-              <span className="text-[#0385F2] cursor-pointer">修改</span>
+              <span
+                onClick={updatePinCb}
+                className="text-[#0385F2] cursor-pointer"
+              >
+                修改
+              </span>
             </span>
           </p>
         </div>
@@ -147,7 +246,7 @@ const PersonalInfo = () => {
           <p className="flex justify-between items-center text-[14px] flex-1 leading-[.3rem] pb-[.2rem] border-b border-[#C5CAD0] border-dashed">
             <span className="text-[#666]">Google验证器</span>
             <span
-              onClick={bindGoogle}
+              onClick={bindGoogleCb}
               className="text-[#0385F2] cursor-pointer"
             >
               {userInfo.googleSecret || isBind ? "已绑定" : "未绑定"}{" "}
@@ -179,6 +278,79 @@ const PersonalInfo = () => {
             妥善保存此二维码
           </p>
         </Image>
+      </ModalScope>
+      <ModalScope
+        onCancel={updataModuleCancelCb}
+        cancelText="关闭"
+        showFooter={false}
+        title={
+          <span className="flex items-center font-normal">
+            <i className={styleScope["icon"]}></i>修改
+            {modalOrigin == "pin" ? "PIN码" : "登录密码"}
+          </span>
+        }
+        open={updateModuleOpen}
+      >
+        <Form
+          ref={updateInfoRefs}
+          initialValues={updateInfoList}
+          layout="vertical"
+          onFinish={confirmSubmitCb}
+          className="w-full"
+        >
+          <div className="px-[.3rem]">
+            <Form.Item
+              name="oldInfo"
+              label={
+                <span className="text-[var(--menu-color)]">
+                  {modalOrigin == "pin" ? "输入旧PIN码" : "输入原密码"}
+                </span>
+              }
+            >
+              <Input.Password
+                size="large"
+                maxLength={modalOrigin == "pin" ? 4 : null}
+                placeholder="请输入"
+              />
+            </Form.Item>
+            <Form.Item
+              name="newInfo"
+              label={
+                <span className="text-[var(--menu-color)]">
+                  {modalOrigin == "pin" ? "输入新PIN码" : "输入新密码"}
+                </span>
+              }
+            >
+              <Input.Password
+                size="large"
+                maxLength={modalOrigin == "pin" ? 4 : null}
+                placeholder="请输入"
+              />
+            </Form.Item>
+            <Form.Item
+              name="confirmInfo"
+              label={
+                <span className="text-[var(--menu-color)]">
+                  {modalOrigin == "pin" ? "确认新PIN码" : "确认新密码"}
+                </span>
+              }
+            >
+              <Input.Password
+                size="large"
+                maxLength={modalOrigin == "pin" ? 4 : null}
+                placeholder="请输入"
+              />
+            </Form.Item>
+          </div>
+          <Form.Item className="flex border-t border-t-[var(--border-color)] pt-[.2rem] mb-[.2rem] justify-end">
+            <Button onClick={updataModuleCancelCb} className="mr-[.1rem]">
+              关闭
+            </Button>
+            <Button className="mr-[.3rem]" type="primary" htmlType="submit">
+              确认
+            </Button>
+          </Form.Item>
+        </Form>
       </ModalScope>
     </>
   );
