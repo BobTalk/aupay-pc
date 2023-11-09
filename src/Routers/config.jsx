@@ -47,21 +47,25 @@ const RouteList = [
   },
   {
     path: "/aupay",
+    title:"权限中心",
     element: <LayoutPage />,
     isAuth: true,
     children: [
       {
         path: "assets",
+        title:"资产统计",
         element: <AssetsCount />,
         isAuth: true,
       },
       {
         path: "data",
+        title:"数据统计",
         element: <DataCount />,
         isAuth: true,
       },
       {
         path: "user",
+        title:"用户管理",
         element: <UserManage />,
         isAuth: true,
         children: [
@@ -98,35 +102,40 @@ const RouteList = [
             ]
           }
         ]
-
       },
       {
         path: 'address',
+        title: "地址管理",
         element: <AddressManage />,
         isAuth: true,
         children: [
           {
             path: 'user',
+            title: "用户地址",
             element: <UserAddress />,
             isAuth: true,
           },
           {
             path: 'transfer',
+            title:"中转地址",
             element: <TransferAddress />,
             isAuth: true,
           },
           {
             path: 'reserve',
+            title:"储备资产",
             element: <ReserveAddress />,
             isAuth: true,
           },
           {
             path: 'draw',
+            title:"提币地址",
             element: <DrawAddress />,
             isAuth: true,
           },
           {
             path: 'minerFees',
+            title:"矿工费地址",
             element: <MinerFeesAddress />,
             isAuth: true,
           },
@@ -134,11 +143,13 @@ const RouteList = [
       },
       {
         path: 'ozbet',
+        title:"ozbet",
         element: <Ozbet />,
         isAuth: true,
         children: [
           {
             path: 'assets',
+            title:"",
             element: <AssetsAddr />,
             isAuth: true,
             children: [

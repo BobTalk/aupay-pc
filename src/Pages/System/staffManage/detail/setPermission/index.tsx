@@ -1,9 +1,14 @@
 import { KeyOutlined, SaveOutlined } from "@ant-design/icons";
 import styleScope from "./index.module.less";
-import { Button, ConfigProvider, Tree,theme } from "antd";
-import { mergeClassName } from "@/utils/base";
+import { Button, ConfigProvider, Tree, theme } from "antd";
+import { getSession, mergeClassName } from "@/utils/base";
+import { FindPermissionListInterFace } from "@/api";
+import { useEffect, useState } from "react";
 
 const SetPermission = () => {
+  let userData = getSession("userInfo");
+  let [userInfo, setUserInfo] = useState(userData);
+  let [activeTreeNode, setActiveTreeNode] = useState([]);
   const treeData = [
     {
       title: "记录中心",
@@ -24,11 +29,20 @@ const SetPermission = () => {
       ],
     },
   ];
+  function treeCheckCb() {}
+  function getPermissionList() {
+    FindPermissionListInterFace().then((res) => {
+      console.log("res: ", res);
+    });
+  }
+  useEffect(() => {
+    getPermissionList();
+  }, []);
   return (
     <div className="pt-[.33rem] px-[.24rem] pb-[.24rem] bg-[var(--white)] mt-[.16rem] h-full rounded-[.06rem]">
       <div className="flex items-center justify-between">
         <p className="text-[16px] text-[#333] font-medium">
-          员工ID：<span>Alex.yin</span>
+          员工ID：<span>{userInfo.adminId}</span>
         </p>
         <Button size="large" type="primary" icon={<KeyOutlined />}>
           权限调整
@@ -41,8 +55,8 @@ const SetPermission = () => {
         theme={{
           components: {
             Tree: {
-              borderRadius:0,
-              borderRadiusSM:0,
+              borderRadius: 0,
+              borderRadiusSM: 0,
               titleHeight: 54,
               controlItemBgHover: "rgba(28,99,255,0.05)",
             },
@@ -51,6 +65,8 @@ const SetPermission = () => {
       >
         <Tree
           blockNode
+          onCheck={treeCheckCb}
+          defaultCheckedKeys={activeTreeNode}
           className={mergeClassName(
             `${styleScope["reset-tree"]}`,
             "mt-[.36rem]"
