@@ -12,6 +12,8 @@ import {
   useState,
 } from "react";
 import { createStyles } from "antd-style";
+import PinScopeComp from "@/Pages/PinModal";
+import GoogleScopeComp from "@/Pages/GoogleModal";
 const useStyle = createStyles(({ token }) => ({
   "my-modal-body": {
     display: "grid",
@@ -68,121 +70,14 @@ const ValidatorComp = (props: any, ref: any) => {
     onTipOk,
     onTipCancel,
   } = publicData;
-  const inputRef1 = useRef();
-  const inputRef2 = useRef();
-  const inputRef3 = useRef();
-  const inputRef4 = useRef();
-  let [formInitVal, setFormInitVal] = useState({
-    googleCode: "",
-  });
-  function inputChangeCb(e, reactNode) {
-    let val = e.target.value;
-    if (val && reactNode) {
-      reactNode.current.focus();
-    }
-  }
-  function inputKeyUpCb(e, prvNode) {
-    let keyCode = e.keyCode;
-    if (prvNode && keyCode === 8) {
-      e.target.value = "";
-      prvNode.current.focus();
-    }
-  }
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      formInitVal,
-    }),
-    [formInitVal]
-  );
   return (
     <>
       {/* PIN */}
-      <ModalScope
-        cancelText="关闭"
-        classNames={classNames}
-        showFooter={true}
-        onOk={onPINOk}
-        onCancel={onPINCancel}
-        open={PINOpen}
-        title={
-          <span className="flex items-center font-normal">
-            <i className={styleScope["icon"]}></i>验证PIN
-          </span>
-        }
-      >
-        <Input
-          ref={inputRef1}
-          maxLength={1}
-          onKeyUp={(e) => inputKeyUpCb(e, undefined)}
-          onChange={(e) => inputChangeCb(e, inputRef2)}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-        <Input
-          ref={inputRef2}
-          onKeyUp={(e) => inputKeyUpCb(e, inputRef1)}
-          onChange={(e) => inputChangeCb(e, inputRef3)}
-          maxLength={1}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-        <Input
-          onKeyUp={(e) => inputKeyUpCb(e, inputRef2)}
-          onChange={(e) => inputChangeCb(e, inputRef4)}
-          ref={inputRef3}
-          maxLength={1}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-        <Input
-          onKeyUp={(e) => inputKeyUpCb(e, inputRef3)}
-          onChange={(e) => inputChangeCb(e, undefined)}
-          ref={inputRef4}
-          maxLength={1}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-      </ModalScope>
+      <PinScopeComp onFinish={onPINOk} onCancel={onPINCancel} open={PINOpen} />
       {/* google验证 */}
-      <ModalScope
-        showFooter={false}
-        title={
-          <span className="flex items-center font-normal">
-            <i className={styleScope["icon"]}></i>验证Google
-          </span>
-        }
-        open={googleCodeOpen}
-      >
-        <Form
-          layout="vertical"
-          className="_reset-form w-full"
-          initialValues={formInitVal}
-        >
-          <Form.Item
-            className="hidden_start px-[.3rem]"
-            label={<span className="text-[#546078]">Google验证码</span>}
-            name="googleCode"
-            rules={[
-              {
-                required: true,
-                message: "请输入Google验证码",
-              },
-            ]}
-          >
-            <Input placeholder="请输入Google验证码" />
-          </Form.Item>
-          <Form.Item className={styleScope["btn-list"]}>
-            <Button onClick={onGoogleCancel}>
-              <span className="text-[#999]">关闭</span>
-            </Button>
-            <Button onClick={onGoogleOk} type="primary">
-              确定
-            </Button>
-          </Form.Item>
-        </Form>
-      </ModalScope>
+      <GoogleScopeComp open={googleCodeOpen} onFinish={onGoogleOk} onCancel={onGoogleCancel}/>
+
       <ModalScope
         cancelText="取消"
         showFooter={true}

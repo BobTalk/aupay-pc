@@ -14,10 +14,12 @@ import {
   UpdatePinInterFace,
 } from "@/api";
 import Image from "@/Components/Image";
+import { departmentEnum } from "@/Enum";
 const PersonalInfo = () => {
   const updateInfoRefs = useRef<any>();
   let [isEditor, setIsEditor] = useState(false);
   let userData = getSession("userInfo");
+  let dep = JSON.parse(JSON.stringify(departmentEnum));
   let [userInfo, setUserInfo] = useState(() => {
     let [countryCode, mobile] = userData.mobile.split(" ");
     return {
@@ -161,7 +163,7 @@ const PersonalInfo = () => {
           </p>
           <p>
             <span>部门：</span>
-            <span>{userInfo.department ?? "--"}</span>
+            <span>{dep[userInfo.department] ?? "--"}</span>
           </p>
         </div>
       </CommonModule>

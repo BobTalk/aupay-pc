@@ -143,15 +143,17 @@ export const FindAdminOperationLoglistInterFace = (data) => {
   })
 }
 // 20.关停管理员账号 PUT admin/closeAdmin?adminId=ADMINID
-export const CloseAdminInterFace = (id) => {
+export const CloseAdminInterFace = (id,headers={}) => {
   return _http.putReq({
     url: `${staffPrefix}/closeAdmin?adminId=${id}`,
+    headers
   })
 }
 // 21.冻结解冻管理员 PUT admin/switchFreezeAdmin?adminId=ADMINID
-export const SwitchFreezeAdminInterFace = (id) => {
+export const SwitchFreezeAdminInterFace = (id,headers={}) => {
   return _http.putReq({
     url: `${staffPrefix}/switchFreezeAdmin?adminId=${id}`,
+    headers
   })
 }
 // 22.设置员工部门 PUT admin/setAdminDepartment?adminId=ADMINID&department=DEPARTMENT
@@ -161,21 +163,24 @@ export const SetAdminDepartmentInterFace = (obj: { id: '', department: "" }) => 
   })
 }
 // 23.重置员工密码 PUT admin/resetAdminPassword?adminId=ADMINID
-export const ResetAdminPasswordInterFace = (id) => {
+export const ResetAdminPasswordInterFace = (id,headers={}) => {
   return _http.putReq({
     url: `${staffPrefix}/resetAdminPassword?adminId=${id}`,
+    headers
   })
 }
 // 24.重置员工PIN码 PUT admin/resetAdminPin?adminId=ADMINID
-export const ResetAdminPinInterFace = (id) => {
+export const ResetAdminPinInterFace = (id,headers={}) => {
   return _http.putReq({
     url: `${staffPrefix}/resetAdminPin?adminId=${id}`,
+    headers
   })
 }
 // 25.重置员工谷歌验证 PUT admin/resetAdminGoogleAuth?adminId=ADMINID
-export const ResetAdminGoogleAuthInterFace = (id) => {
+export const ResetAdminGoogleAuthInterFace = (id,headers={}) => {
   return _http.putReq({
     url: `${staffPrefix}/resetAdminGoogleAuth?adminId=${id}`,
+    headers
   })
 }
 // 26.获取公告列表 POST operate/operation/findAnnouncementList {pageNo pageSize conditions}

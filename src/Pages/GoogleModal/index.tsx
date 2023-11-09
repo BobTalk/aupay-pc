@@ -8,7 +8,11 @@ const GoogleScopeComp = (props) => {
     googleCode: "",
   });
   function googleOkCb(values) {
-    props?.onFinish?.(values);
+    new Promise((resolve) => {
+      resolve(props?.onFinish?.(values));
+    }).then(() => {
+      googleRef.current.resetFields(["googleCode"]);
+    });
   }
   function cancelCb() {
     new Promise((resolve) => {
