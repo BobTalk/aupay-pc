@@ -64,7 +64,7 @@ const PinScopeComp = (props) => {
       }}
       onCancel={pinCancelCb}
       showFooter={false}
-      open={props.modalOpen}
+      open={props.open}
       title={
         <span className="flex items-center font-normal">
           <i className={styleScope["icon"]}></i>验证PIN

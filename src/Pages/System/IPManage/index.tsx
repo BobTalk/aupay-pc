@@ -21,18 +21,7 @@ import {
 import { operationIdEnum } from "@/Enum";
 import PinScopeComp from "@/Pages/PinModal";
 import GoogleScopeComp from "@/Pages/GoogleModal";
-const modalStyles = {
-  header: {
-    marginBottom: ".24rem",
-  },
-  body: {
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gap: ".15rem",
-    paddingInline: ".5rem",
-  },
-};
 const IpSystemManage = () => {
-  const formRefEl = useRef<any>();
   const tableRefEl = useRef<any>();
   let [stop] = useStopPropagation();
   let [modalOpen, setModalOpen] = useState<Boolean>(false);
@@ -48,9 +37,6 @@ const IpSystemManage = () => {
   let googleRef = useRef<any>();
   let addStaffRef = useRef<any>();
   let userInfo = getSession("userInfo");
-  let [formInitVal, setFormInitVal] = useState({
-    googleCode: "",
-  });
 
   let [formAddAddrInitVal, setFormAddAddrInitVal] = useState({
     IpAddr: "",
@@ -255,13 +241,13 @@ const IpSystemManage = () => {
       <PinScopeComp
         onCancel={pinCancelCb}
         onFinish={pinOkCb}
-        modalOpen={modalOpen}
+        open={modalOpen}
       />
       {/* google验证 */}
       <GoogleScopeComp
-        googleCodeOpen={googleCodeOpen}
         onFinish={googleOkCb}
         onCancel={cancelCb}
+        open={googleCodeOpen}
       />
       {/* 新增IP地址 */}
       <ModalScope

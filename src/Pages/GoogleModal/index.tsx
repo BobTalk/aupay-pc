@@ -26,7 +26,7 @@ const GoogleScopeComp = (props) => {
           <i className={styleScope["icon"]}></i>验证Google
         </span>
       }
-      open={props.googleCodeOpen}
+      open={props.open}
     >
       <Form
         ref={googleRef}
