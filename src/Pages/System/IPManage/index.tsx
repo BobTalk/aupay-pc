@@ -20,6 +20,7 @@ import {
 } from "@/api";
 import { operationIdEnum } from "@/Enum";
 import PinScopeComp from "@/Pages/PinModal";
+import GoogleScopeComp from "@/Pages/GoogleModal";
 const modalStyles = {
   header: {
     marginBottom: ".24rem",
@@ -156,7 +157,9 @@ const IpSystemManage = () => {
       }
     });
   }
-
+  function cancelCb() {
+    setGoogleCodeOpen(!googleCodeOpen);
+  }
   function googleOkCb(values) {
     let { googleCode } = values;
     VerifyGoogleAuthInterFace({
@@ -255,46 +258,11 @@ const IpSystemManage = () => {
         modalOpen={modalOpen}
       />
       {/* google验证 */}
-      <ModalScope
-        onCancel={() => setGoogleCodeOpen(!googleCodeOpen)}
-        showFooter={false}
-        title={
-          <span className="flex items-center font-normal">
-            <i className={styleScope["icon"]}></i>验证Google
-          </span>
-        }
-        open={googleCodeOpen}
-      >
-        <Form
-          ref={googleRef}
-          layout="vertical"
-          className="_reset-form w-full"
-          initialValues={formInitVal}
-          onFinish={googleOkCb}
-        >
-          <Form.Item
-            className="hidden_start px-[.3rem]"
-            label={<span className="text-[#546078]">Google验证码</span>}
-            name="googleCode"
-            rules={[
-              {
-                required: true,
-                message: "请输入Google验证码",
-              },
-            ]}
-          >
-            <Input placeholder="请输入Google验证码" />
-          </Form.Item>
-          <Form.Item className={styleScope["btn-list"]}>
-            <Button onClick={() => setGoogleCodeOpen(!googleCodeOpen)}>
-              <span className="text-[#999]">关闭</span>
-            </Button>
-            <Button type="primary" htmlType="submit">
-              确定
-            </Button>
-          </Form.Item>
-        </Form>
-      </ModalScope>
+      <GoogleScopeComp
+        googleCodeOpen={googleCodeOpen}
+        onFinish={googleOkCb}
+        onCancel={cancelCb}
+      />
       {/* 新增IP地址 */}
       <ModalScope
         onCancel={() => setAddIpAddrOpen(false)}
