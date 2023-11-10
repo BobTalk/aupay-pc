@@ -1,44 +1,29 @@
 .reset-tree {
-  :global(.ant-tree-checkbox) {
+  .center {
     display: flex;
-    height: 54px;
     align-items: center;
-    margin-top: 0;
-    margin-inline-end: 0;
+  }
+
+  :global(.ant-tree-treenode) {
+    display: flex;
+    align-items: center;
+    height: 50px;
   }
 
   :global(.ant-tree-switcher) {
-    display: grid;
-    place-items: center;
-    color: #959aa0;
-    width: 50px;
+    display: flex;
+    align-items: center;
   }
 
-  :global(.ant-tree-indent) {
-    width: 0;
+  :global(.ant-tree-checkbox) {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    margin-top: 0;
   }
-:global(.ant-tree-treenode){
-  &:not(:first-child){
-    margin-left: 20px;
+  :global(.ant-tree-node-content-wrapper) {
+    display: flex;
+    height: 100%;
+    align-items: center;
   }
-  &:hover{
-    // :global(.ant-tree-checkbox){
-    //   background-color: rgba(28,99,255,0.05);
-    // }
-    :global(.ant-tree-node-content-wrapper){
-      background-color: rgba(28,99,255,0.05);
-    }
-  }
-}
-  :global(.ant-tree-switcher-icon) {
-    font-size: 12px !important;
-  }
-
-  // :global(.ant-tree-list-holder-inner){
-  //   height: 54px;
-  //   :global(.ant-tree-treenode){
-  //     height: inherit;
-  //     align-items: center;
-  //   }
-  // }
 }

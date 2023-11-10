@@ -73,31 +73,37 @@ const RouteList = [
             path: 'detail',
             element: <UserDetail />,
             isAuth: true,
+            title:"详情",
             children: [
               {
                 path: 'user',
                 element: <UserDetailInfo />,
                 isAuth: true,
+                title:"用户详情",
               },
               {
                 path: 'recharge',
                 element: <RechargeDetailInfo />,
                 isAuth: true,
+                title:"充币记录",
               },
               {
                 path: 'draw',
                 element: <DrawDetailInfo />,
                 isAuth: true,
+                title:"提币记录",
               },
               {
                 path: 'trade',
                 element: <TradeDetailInfo />,
                 isAuth: true,
+                title:"交易记录",
               },
               {
                 path: 'assetsChanges',
                 element: <AssetsChangesDetailInfo />,
                 isAuth: true,
+                title:"资产变动记录",
               }
             ]
           }
@@ -149,7 +155,7 @@ const RouteList = [
         children: [
           {
             path: 'assets',
-            title:"",
+            title:"Ozbet资产地址",
             element: <AssetsAddr />,
             isAuth: true,
             children: [
@@ -162,6 +168,7 @@ const RouteList = [
           },
           {
             path: 'draw',
+            title:"Ozbet提款地址",
             element: <DrawAddr />,
             isAuth: true,
             children: [
@@ -177,41 +184,49 @@ const RouteList = [
       },
       {
         path: 'system',
+        title:"系统管理",
         element: <System />,
         isAuth: true,
         children: [
           {
             path: 'ip-manage',
+            title: "IP管理",
             element: <IPManage />,
             isAuth: true,
           },
           {
             path: 'ip-record',
+            title: "IP记录",
             element: <IPRecord />,
             isAuth: true,
           },
           {
             path: 'automated',
+            title: "自动化配置",
             element: <AutomatedConfig />,
             isAuth: true,
           },
           {
             path: 'draw',
+            title: "提币设置",
             element: <DrawConfig />,
             isAuth: true,
           },
           {
             path: 'rate-manage',
+            title: "汇率管理",
             element: <RateManage />,
             isAuth: true,
           },
           {
             path: 'logs-manage',
+            title: "日志记录",
             element: <LogsManage />,
             isAuth: true,
           },
           {
             path: 'staff-manage',
+            title: "员工管理",
             element: <StaffManage />,
             isAuth: true,
             children: [
@@ -227,6 +242,7 @@ const RouteList = [
       {
         path: 'notice',
         element: <NoticeList />,
+        title: "公告列表",
         isAuth: true,
         children: [
           {
@@ -243,6 +259,7 @@ const RouteList = [
       },
       {
         path: 'personal',
+        title: "个人资料",
         element: <PersonalInfo />,
         isAuth: true,
       },

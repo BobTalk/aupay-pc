@@ -84,7 +84,7 @@ const LayoutContent = () => {
       )}
       <div
         style={{
-          height: `calc(100% - ${contentH}px - 0.32rem)`,
+          height: `calc(100% - ${contentH}px - 0.24rem)`,
         }}
         className="overflow-y-auto"
       >

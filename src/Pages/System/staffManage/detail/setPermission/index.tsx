@@ -1,34 +1,32 @@
 import { KeyOutlined, SaveOutlined } from "@ant-design/icons";
 import styleScope from "./index.module.less";
+import RouteList from "@/Routers/config";
 import { Button, ConfigProvider, Tree, theme } from "antd";
 import { getSession, mergeClassName } from "@/utils/base";
 import { FindPermissionListInterFace } from "@/api";
 import { useEffect, useState } from "react";
-
+import { cloneDeep } from "lodash";
 const SetPermission = () => {
   let userData = getSession("userInfo");
   let [userInfo, setUserInfo] = useState(userData);
-  let [activeTreeNode, setActiveTreeNode] = useState([]);
-  const treeData = [
-    {
-      title: "记录中心",
-      key: "0-0",
-      children: [
-        {
-          title: "充值中心",
-          key: "0-0-0",
-        },
-        {
-          title: "提款记录",
-          key: "0-0-1",
-        },
-        {
-          title: "转账记录",
-          key: "0-0-2",
-        },
-      ],
-    },
-  ];
+  let [activeTreeNode, setActiveTreeNode] = useState(['/aupay/address/user']);
+  console.log(RouteList);
+  function filterRouter(routerList = [], parentPath = null) {
+    return routerList.map((item, index) => {
+      let p = parentPath ? parentPath + "/" + item.path : item.path;
+      if (item?.children?.length) {
+        filterRouter(item?.children, p);
+      }
+      if (item.title && item.isAuth) {
+        item.key = p;
+        return item;
+      } else {
+        Reflect.deleteProperty(routerList, index);
+      }
+    });
+  }
+  const treeData = filterRouter(cloneDeep(RouteList)).filter(Boolean);
+  console.log("treeData: ", treeData);
   function treeCheckCb() {}
   function getPermissionList() {
     FindPermissionListInterFace().then((res) => {
@@ -57,7 +55,6 @@ const SetPermission = () => {
             Tree: {
               borderRadius: 0,
               borderRadiusSM: 0,
-              titleHeight: 54,
               controlItemBgHover: "rgba(28,99,255,0.05)",
             },
           },
