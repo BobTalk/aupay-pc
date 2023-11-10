@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import TableComp from '@/Components/Table'
 import { mergeClassName } from "@/utils/base";
 import styleScope from "./index.module.less";
-import { InputNumber, Typography, Form, ConfigProvider } from "antd";
+import { formatUnit } from "@/utils/base.ts";
+import { UpdateWithdrawConfigInterFace, FindWithdrawConfigInterFace } from "@/api";
+import { InputNumber, Typography, Form, ConfigProvider, message } from "antd";
 import Icon from '@/Components/Icon';
 const TableConfig = (props) => {
   const [form] = Form.useForm();
-  function into(e, crt) {
-    props.into?.(e, crt)
-  }
+
   let [data, setData] = useState([
     {
       key: "table1",
@@ -37,46 +37,55 @@ const TableConfig = (props) => {
   ]);
   // 保存编辑信息
   async function submitCb(e, crt, index) {
-    const row = await form.validateFields()
-    let newData = data.toSpliced(index, 1, {
-      ...crt,
-      supplementaryMinerFees: row.supplementaryMinerFees ?? crt.supplementaryMinerFees,
+    const { triggerAmount, supplementAmount } = await form.validateFields()
+    crt.triggerAmount = triggerAmount ?? crt.triggerAmount
+    crt.supplementAmount = supplementAmount ?? crt.supplementAmount
+
+    UpdateWithdrawConfigInterFace(crt).then(res => {
+      if (res.status) {
+        setData(data)
+        setEditingKey("");
+        message.success(res.message)
+      } else {
+        message.error(res.message)
+      }
     })
-    setData(newData)
-    setEditingKey("");
+
   }
   let columns = [
     {
       title: "钱包协议",
-      key: "walletProtocol",
-      dataIndex: "walletProtocol",
+      key: "currencyChain",
+      dataIndex: "currencyChain",
       responsive: ["xl"],
       ellipsis: true,
       align: "center",
+      render: (_, { currencyId, currencyChain }) => formatUnit(currencyId, currencyChain).agreement
     },
 
 
     {
       title: "地址",
-      key: "tradeConfirmNum",
-      dataIndex: "tradeConfirmNum",
+      key: "address",
+      dataIndex: "address",
       responsive: ["xl"],
       ellipsis: true,
       align: "center",
+      render: (_) => _ ?? "--"
     },
 
 
 
     {
       title: "提币手续费",
-      key: "supplementaryMinerFees",
-      dataIndex: "supplementaryMinerFees",
+      key: "triggerAmount",
+      dataIndex: "triggerAmount",
       responsive: ["xl"],
       ellipsis: true,
       align: "center",
       render: (_, record) => {
         const editable = isEditing(record);
-        return editable ? editorEl(_, record, 'supplementaryMinerFees', 'center') : defaultEl(_, record, 'supplementaryMinerFees', 'center')
+        return editable ? editorEl(_, record, 'center') : defaultEl(_, record, 'center')
       }
     },
 
@@ -124,27 +133,37 @@ const TableConfig = (props) => {
     setEditingKey(record.key);
   };
 
-  let editorEl = (_, record, key, site) => {
-    return <Form.Item name={key} className={mergeClassName("flex items-center mb-0", styleScope[site])} >
-      <div className="w-full">
-        <span className="text-[14px] text-[#333]">≤</span>
-        <InputNumber size="small" className="mx-[.1rem]" defaultValue={_} />
-        <span className="text-[14px] text-[#333]">则补充</span>
-        <InputNumber size="small" className="mx-[.1rem]" defaultValue={_} />
-      </div>
-    </Form.Item>
+  let editorEl = (_, record, site) => {
+    return <div className={mergeClassName(`${styleScope[site]}`, "flex items-center")} >
+      <span className="text-[14px] text-[#333]">≤</span>
+      <Form.Item name='triggerAmount' className={mergeClassName("flex items-center mb-0")} >
+        <InputNumber size="small" min={0} className="mx-[.1rem]" defaultValue={record["triggerAmount"]} />
+      </Form.Item>
+      <span className="text-[14px] text-[#333]">则补充</span>
+      <Form.Item name='supplementAmount' className={mergeClassName("flex items-center mb-0", styleScope[site])} >
+        <InputNumber size="small" min={0} className="mx-[.1rem]" defaultValue={record["supplementAmount"]} />
+      </Form.Item>
+    </div>
   }
   let defaultEl = (_, record, key) => {
     return <div className="flex items-center">
       <div className="w-full">
         <span className="text-[14px] text-[#333]">≤</span>
-        <InputNumber disabled size="small" className="mx-[.1rem]" defaultValue={_} />
+        <InputNumber disabled size="small" className="mx-[.1rem]" defaultValue={record["triggerAmount"]} />
         <span className="text-[14px] text-[#333]">则补充</span>
-        <InputNumber disabled size="small" className="mx-[.1rem]" defaultValue={_} />
+        <InputNumber disabled size="small" className="mx-[.1rem]" defaultValue={record["supplementAmount"]} />
       </div>
     </div>
   }
-
+  function getTableList() {
+    FindWithdrawConfigInterFace().then(res => {
+      console.log('res: ', res);
+      setData(res?.data?.map((item, idx) => (item.key = idx, item)) ?? [])
+    })
+  }
+  useLayoutEffect(() => {
+    getTableList()
+  }, [])
   return (
     <ConfigProvider
       theme={{
