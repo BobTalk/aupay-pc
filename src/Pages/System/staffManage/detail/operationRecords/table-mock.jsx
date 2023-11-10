@@ -1,7 +1,10 @@
 import { LockOutlined, UnlockOutlined, DeleteOutlined } from '@ant-design/icons';
 import TableComp from "@/Components/Table";
-const TableScope = (props) => {
-  const pagination = {
+import { FindAdminOperationLoglistInterFace } from '@/api'
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import dayjs from 'dayjs';
+const TableScope = (props, ref) => {
+  let [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
     total: 10,
@@ -10,62 +13,89 @@ const TableScope = (props) => {
     },
     showSizeChanger: false,
     showQuickJumper: true,
-  }
-  const dataSource = [
-    {
-      key: "table1",
-      assetsType: 'USDT',
-      walletProtocol: 'USDT-ERC20',
-      createTime: "2023.7.17 15:22:20",
-      tradeType: '充币',
-      num: 189,
-      payAddr: '0x32983464f44',
-      tradeId: '0x32983464f440x32983464f44',
-      tradeConfirmNum: 87,
-    },
+  })
+  let [dataSource, setDataSource] = useState()
 
-  ]
   const columns = [
     {
       title: '员工ID',
-      key: 'assetsType',
-      dataIndex: 'assetsType',
+      key: 'adminId',
+      dataIndex: 'adminId',
       responsive: ['xl'],
       ellipsis: false,
       align: 'left'
     },
     {
       title: '操作内容',
-      key: 'walletProtocol',
-      dataIndex: 'walletProtocol',
+      key: 'operationContent',
+      dataIndex: 'operationContent',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
-      title: 'di地址',
-      key: 'createTime',
-      dataIndex: 'createTime',
+      title: 'ip地址',
+      key: 'ip',
+      dataIndex: 'ip',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '操作时间',
-      key: 'tradeType',
-      dataIndex: 'tradeType',
+      key: 'createTime',
+      dataIndex: 'createTime',
       responsive: ['xl'],
       ellipsis: true,
-      align: 'left'
+      align: 'left',
+      render: (_) => dayjs(_).format("YYYY-MM-DD HH:mm:ss")
     },
   ]
+  function getTableList(conditions, paginationParams) {
+    FindAdminOperationLoglistInterFace({
+      pageNo: paginationParams?.current ?? pagination.current,
+      pageSize: paginationParams?.pageSize ?? pagination.pageSize,
+      conditions: {
+        adminId: props.adminId,
+        ...conditions
+      }
+    }).then(
+      res => {
+        setDataSource(res?.data?.map(item => (item.key = item.id, item)) ?? [])
+        setPagination((pgt) => ({
+          ...pgt,
+          current: res.pageNo,
+          pageSize: res.pageSize,
+          total: res.total
+        }))
+      }
+    )
+  }
+  function clickCb(pagination) {
+    props?.onPaginationCb?.(pagination)
+  }
+  function updateParmas(filterParams, paginationParams) {
+    setPagination(pagination => ({
+      ...pagination,
+      ...paginationParams
+    }))
+    getTableList(filterParams, paginationParams)
+  }
+  useImperativeHandle(ref, () => ({
+    getTableList,
+    updateParmas
+  }), [])
+  useEffect(() => {
+    getTableList()
+  }, [])
   return <TableComp
     themeObj={{
       headerBorderRadius: 0,
     }}
     dataSource={dataSource}
     columns={columns}
+    onChange={clickCb}
     pagination={pagination}
   />
 }
-export default TableScope
+export default forwardRef(TableScope)

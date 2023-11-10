@@ -3,8 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import BaseInfo from "./baseInfo";
 import SetPermission from "./setPermission";
 import OperationRecords from "./operationRecords";
+import { useLocation } from "react-router-dom";
 const StaffDetail = () => {
   const tabsRef = useRef<any>();
+  let { state: urlParams } = useLocation();
   let [defaultActiveKey, setDefaultActiveKey] = useState("baseInfo");
   let [tabsHeight, setTabsHeight] = useState();
   const items = [
@@ -44,11 +46,11 @@ const StaffDetail = () => {
         }}
       >
         {defaultActiveKey == "baseInfo" ? (
-          <BaseInfo />
+          <BaseInfo {...urlParams} />
         ) : defaultActiveKey == "setPermission" ? (
-          <SetPermission />
+          <SetPermission {...urlParams} />
         ) : (
-          <OperationRecords />
+          <OperationRecords {...urlParams} />
         )}
       </div>
     </>

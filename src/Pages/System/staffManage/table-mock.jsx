@@ -110,7 +110,7 @@ const TableScope = (props, ref) => {
   ]
   function jumpDetail(e, crt) {
     stop(e, () => {
-      navigate('/aupay/system/staff-manage/detail', { state: {} })
+      navigate('/aupay/system/staff-manage/detail', { state: {...crt} })
       store.dispatch({
         type: "ADD_BREADCRUMB",
         data: [

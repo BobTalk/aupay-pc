@@ -10,7 +10,6 @@ import { mergeClassName } from "@/utils/base";
 import ModalScope from "@/Components/Modal";
 import { useRef, useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
-import Icon from "@/Components/Icon";
 const modalStyles = {
   header: {
     marginBottom: ".24rem",
@@ -21,21 +20,55 @@ const modalStyles = {
     paddingInline: ".5rem",
   },
 };
-const OperationRecords = () => {
-  let [stop] = useStopPropagation();
 
+const OperationRecords = (props) => {
+  let [stop] = useStopPropagation();
+  let filterTime = useRef<any>();
+  let tableRefEl = useRef<any>();
+  function filterCb() {
+    let time = filterTime.current?.timeStr ?? [];
+    tableRefEl.current.updateParmas(
+      {
+        beginTime: time[0] || null,
+        endTime: time[1] || null,
+      },
+      {
+        current: 1,
+        pageSize: 10,
+      }
+    );
+  }
+  function paginationCb({ current, pageSize, total }) {
+    let time = filterTime.current?.timeStr ?? [];
+    tableRefEl.current.updateParmas(
+      {
+        beginTime: time[0] || null,
+        endTime: time[1] || null,
+      },
+      {
+        current,
+        pageSize,
+        total,
+      }
+    );
+  }
   return (
     <>
       <div className={styleScope["filter-box"]}>
-        <RangePicker size="large" />
-        <Button type="primary" size="large" icon={<SearchOutlined />}>
+        <RangePicker ref={filterTime} size="large" />
+        <Button
+          onClick={filterCb}
+          type="primary"
+          size="large"
+          icon={<SearchOutlined />}
+        >
           查询
         </Button>
       </div>
       <div
         className={mergeClassName("bg-[var(--white)]", styleScope["table-box"])}
       >
-        <TableScope />
+        <TableScope {...props} ref={tableRefEl} onPaginationCb={paginationCb} />
       </div>
     </>
   );

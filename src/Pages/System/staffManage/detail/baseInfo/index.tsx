@@ -21,9 +21,9 @@ import {
   VerifyPinInterFace,
 } from "@/api";
 
-const BaseInfo = () => {
+const BaseInfo = (props) => {
   let userData = getSession("userInfo");
-  let { current: userInfo } = useRef<any>(userData);
+  let { current: userInfo } = useRef<any>(props);
   let moduleOrigin = useRef<any>();
   let pinToken = useRef();
   let googleToken = useRef();
@@ -250,7 +250,7 @@ const BaseInfo = () => {
         <div className={styleScope["staff-info"]}>
           <p>
             <span>员工ID：</span>
-            <span>{userInfo.adminId}</span>
+            <span>{props.adminId}</span>
           </p>
           <p>
             <span>创建时间：</span>

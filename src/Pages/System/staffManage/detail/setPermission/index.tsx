@@ -13,11 +13,10 @@ import {
 import { operationIdEnum, routerMapId } from "@/Enum";
 import PinScopeComp from "@/Pages/PinModal";
 import GoogleScopeComp from "@/Pages/GoogleModal";
-const SetPermission = () => {
+const SetPermission = (props) => {
   let routerMapIdCp = JSON.parse(JSON.stringify(routerMapId));
-  let userData = getSession("userInfo");
   let activePath = getSession("activePath");
-  let [userInfo, setUserInfo] = useState(userData);
+  let [userInfo, setUserInfo] = useState(props);
   let [PinOpen, setPinOpen] = useState(false);
   let [googleOpen, setGoogleOpen] = useState(false);
   let [activeTreeNode, setActiveTreeNode] = useState(activePath);
