@@ -1,16 +1,19 @@
 import { Menu } from "antd";
 import styleScope from "./menu.module.less";
-import { mergeClassName } from "@/utils/base";
+import { getSession, mergeClassName } from "@/utils/base";
 import Icon from "@/Components/Icon";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { useLocation, useNavigate } from "react-router-dom";
 import store from "@/store";
+import { cloneDeep } from "lodash";
 import { activePath, activePathToName } from "./activeRouterConfig";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 const LayoutMenu = () => {
   let [stop] = useStopPropagation();
   let navigate = useNavigate();
+  let permissionRouter = getSession("activePath");
   let { pathname } = useLocation();
+
   function menuSelectCb({ key, domEvent }) {
     stop(domEvent, () => {
       navigate(key, { state: { _title: activePathToName[key] } });
@@ -20,7 +23,7 @@ const LayoutMenu = () => {
   function breadSite(key) {
     let activeKey = activePathToName[key];
     let activeP = activePath[key];
-    if (activeKey.length > 1) {
+    if (activeKey?.length > 1) {
       let res = activeKey.map((item, idx, arr) => {
         return idx === arr.length - 1 || !idx
           ? { title: item }
@@ -35,7 +38,7 @@ const LayoutMenu = () => {
       });
     }
   }
-  let [menuList] = useState([
+  let [menuList, setMenuList] = useState([
     {
       key: "/aupay/assets",
       icon: <Icon name="h-icon-zichantongji" className={styleScope["icon"]} />,
@@ -148,6 +151,16 @@ const LayoutMenu = () => {
       label: "个人资料",
     },
   ]);
+  function filterRouter(menuInfo = []) {
+    menuInfo = cloneDeep(menuInfo);
+    let filterRes = menuInfo.filter((item) =>
+      permissionRouter.includes(item.key)
+    );
+    setMenuList(filterRes);
+  }
+  useEffect(() => {
+    filterRouter(menuList);
+  }, []);
   useLayoutEffect(() => {
     breadSite(pathname);
   }, []);

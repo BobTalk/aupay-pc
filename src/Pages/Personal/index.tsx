@@ -8,7 +8,7 @@ import { getSession, setSession } from "@/utils/base";
 import ModalScope from "@/Components/Modal";
 import {
   BindGoogleAuthInterFace,
-  GetUserInfo,
+  GetUserInfoInterFace,
   UpdateBaseInfoInterFace,
   UpdatePasswordInterFace,
   UpdatePinInterFace,
@@ -54,7 +54,7 @@ const PersonalInfo = () => {
         }).then((res) => {
           if (res.status) {
             message.success(res.message);
-            GetUserInfo().then((res) => {
+            GetUserInfoInterFace().then((res) => {
               setSession("userInfo", res);
             });
           } else {
@@ -71,7 +71,7 @@ const PersonalInfo = () => {
         setBindGoogleOpen(!bindGoogleOpen);
         setGoogleImageUrl(res.data);
         setIsBind(true);
-        GetUserInfo().then((res) => {
+        GetUserInfoInterFace().then((res) => {
           setSession("userInfo", res);
         });
       }

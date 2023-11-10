@@ -8,7 +8,12 @@ import { Button, Form, Input, message } from "antd";
 // import GetCodeBtn from "@/Components/GetCode";
 import { useState } from "react";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import { GetAccessKeyInterface, GetUserInfo, LoginInterFace } from "@/api";
+import {
+  FindPermissionListInterFace,
+  GetAccessKeyInterface,
+  GetUserInfoInterFace,
+  LoginInterFace,
+} from "@/api";
 import { encrypt, encryptByDES, getSession, setSession } from "@/utils/base";
 import { Navigate, useNavigate } from "react-router-dom";
 const Login = () => {
@@ -41,6 +46,40 @@ const FormComp = () => {
     emailCode: "请输入邮箱验证码",
   };
 
+  function getPagePermission() {
+    FindPermissionListInterFace().then((res) => {
+      if (res.status) {
+        let { activePath, permissions } = res.data.reduce(
+          (prv, next) => {
+            prv.activePath.push(next.key);
+            prv.permissions[next["key"]] = next.permission;
+            return prv;
+          },
+          { activePath: [], permissions: {} }
+        );
+        setSession("activePath", JSON.stringify(activePath));
+        setSession("permissions", JSON.stringify(permissions));
+        if (activePath.length) {
+          if (
+            [
+              "/aupay/ozbet",
+              "/aupay/address",
+              "/aupay/system",
+              "/aupay/user",
+            ].includes(activePath[0])
+          ) {
+            navigate(activePath[1]);
+          } else {
+            navigate(activePath[0]);
+          }
+        } else {
+          navigate("/denied");
+        }
+      } else {
+        message.error(res.message);
+      }
+    });
+  }
   function onFinish(obj) {
     GetAccessKeyInterface().then(({ data }) => {
       LoginInterFace({
@@ -52,11 +91,10 @@ const FormComp = () => {
         } else {
           // 存放token
           setSession("token", res.data);
-          GetUserInfo().then((res) => {
-            console.log("res: ", res);
+          GetUserInfoInterFace().then((res) => {
             if (!res.status) return;
             setSession("userInfo", res);
-            navigate("/aupay/assets");
+            getPagePermission();
           });
         }
       });
@@ -64,7 +102,7 @@ const FormComp = () => {
   }
   return userInfo && token ? (
     <>
-    <Navigate to='/aupay/assets'/>
+      <Navigate to="/aupay/assets" />
     </>
   ) : (
     <Form

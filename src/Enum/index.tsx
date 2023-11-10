@@ -8,8 +8,38 @@ export enum operationIdEnum {
   resetPin = 30,
   resetGoogle = 31,
   resetPwd = 301,
+  setPermission=251
 }
 export enum departmentEnum {
   研发部 = 1,
   产品部 = 2,
+}
+export enum routerMapId {
+  "/aupay/assets" = 1,
+  "/aupay/data" = 2,
+  "/aupay/ozbet" = 5,
+  "/aupay/ozbet/assets" = 51,
+  "/aupay/ozbet/draw" = 52,
+  "/aupay/notice" = 6,
+  "/aupay/personal" = 8,
+  "/aupay/address" = 4,
+  "/aupay/address/user" = 41,
+  "/aupay/address/transfer" = 42,
+  "/aupay/address/reserve" = 43,
+  "/aupay/address/draw" = 44,
+  "/aupay/address/minerFees" = 45,
+  "/aupay/system" = 7,
+  "/aupay/system/ip-manage" = 71,
+  "/aupay/system/ip-record" = 72,
+  "/aupay/system/automated" = 73,
+  "/aupay/system/draw" = 74,
+  "/aupay/system/rate-manage" = 75,
+  "/aupay/system/logs-manage" = 76,
+  "/aupay/system/staff-manage" = 77,
+  "/aupay/user" = 3,
+  "/aupay/user/detail/user" = 31,
+  "/aupay/user/detail/recharge" = 32,
+  "/aupay/user/detail/draw" = 33,
+  "/aupay/user/detail/trade" = 34,
+  "/aupay/user/detail/assetsChanges" = 35
 }

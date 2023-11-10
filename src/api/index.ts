@@ -56,7 +56,7 @@ export const UpdateBaseInfoInterFace = (data) => {
   })
 }
 // 获取个人信息
-export const GetUserInfo = () => {
+export const GetUserInfoInterFace = () => {
   return _http.getReq({
     url: `${staffPrefix}/getAdminInfo`
   })
@@ -77,6 +77,14 @@ export const VerifyGoogleAuthInterFace = (obj: { googleCode: string, operationId
 export const FindPermissionListInterFace = () => {
   return _http.getReq({
     url: `${staffPrefix}/findPermissionList`,
+  })
+}
+// 权限更新
+export const UpdatePermisonListInterFace = (data,headers={}) => {
+  return _http.putReq({
+    url: `${staffPrefix}/setAdminPermission`,
+    data,
+    headers
   })
 }
 // 11.获取管理IP列表 POST admin/findAdminIp  {pageNo pageSize conditions}

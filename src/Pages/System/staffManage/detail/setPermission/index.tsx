@@ -1,16 +1,27 @@
-import { KeyOutlined, SaveOutlined } from "@ant-design/icons";
+import { KeyOutlined } from "@ant-design/icons";
 import styleScope from "./index.module.less";
 import RouteList from "@/Routers/config";
-import { Button, ConfigProvider, Tree, theme } from "antd";
-import { getSession, mergeClassName } from "@/utils/base";
-import { FindPermissionListInterFace } from "@/api";
-import { useEffect, useState } from "react";
+import { Button, ConfigProvider, Tree, message } from "antd";
+import { getSession, mergeClassName, setSession } from "@/utils/base";
+import { useRef, useState } from "react";
 import { cloneDeep } from "lodash";
+import {
+  UpdatePermisonListInterFace,
+  VerifyGoogleAuthInterFace,
+  VerifyPinInterFace,
+} from "@/api";
+import { operationIdEnum, routerMapId } from "@/Enum";
+import PinScopeComp from "@/Pages/PinModal";
+import GoogleScopeComp from "@/Pages/GoogleModal";
 const SetPermission = () => {
+  let routerMapIdCp = JSON.parse(JSON.stringify(routerMapId));
   let userData = getSession("userInfo");
+  let activePath = getSession("activePath");
   let [userInfo, setUserInfo] = useState(userData);
-  let [activeTreeNode, setActiveTreeNode] = useState(['/aupay/address/user']);
-  console.log(RouteList);
+  let [PinOpen, setPinOpen] = useState(false);
+  let [googleOpen, setGoogleOpen] = useState(false);
+  let [activeTreeNode, setActiveTreeNode] = useState(activePath);
+  let pinToken = useRef();
   function filterRouter(routerList = [], parentPath = null) {
     return routerList.map((item, index) => {
       let p = parentPath ? parentPath + "/" + item.path : item.path;
@@ -26,28 +37,81 @@ const SetPermission = () => {
     });
   }
   const treeData = filterRouter(cloneDeep(RouteList)).filter(Boolean);
-  console.log("treeData: ", treeData);
-  function treeCheckCb() {}
-  function getPermissionList() {
-    FindPermissionListInterFace().then((res) => {
-      console.log("res: ", res);
+  function treeCheckCb(keyList, info) {
+    setActiveTreeNode(keyList);
+  }
+  function savePermisionChangeCb({ googleCode }) {
+    VerifyGoogleAuthInterFace({
+      googleCode,
+      operationId: operationIdEnum["setPermission"],
+    }).then((res) => {
+      if (res.status) {
+        updatePermission(res.data);
+      } else {
+        message.error(res.message);
+      }
     });
   }
-  useEffect(() => {
-    getPermissionList();
-  }, []);
+  function updatePermission(googleToken) {
+    let idList = [];
+    for (const key of activeTreeNode) {
+      if (!idList.includes(routerMapIdCp[key])) {
+        idList.push(routerMapIdCp[key]);
+      }
+    }
+    UpdatePermisonListInterFace(
+      {
+        adminId: userInfo.adminId,
+        permissions: idList.filter(Boolean),
+      },
+      {
+        "Pin-token": pinToken.current,
+        "Google-Auth-Token": googleToken,
+      }
+    ).then((res) => {
+      if (res.status) {
+        setGoogleOpen(!googleOpen);
+        setSession("activePath", activeTreeNode);
+        message.success(res.message);
+      } else {
+        message.error(res.message);
+      }
+    });
+  }
+  function validatorPinCb() {
+    setPinOpen(!PinOpen);
+  }
+  function validatorGoogleCb() {
+    setGoogleOpen(!googleOpen);
+  }
+  function pinSubmitCb(code) {
+    VerifyPinInterFace({
+      pin: code,
+      operationId: operationIdEnum["setPermission"],
+    }).then((res) => {
+      if (res.status) {
+        pinToken.current = res.data;
+        setGoogleOpen(!googleOpen);
+        validatorPinCb();
+      } else {
+        message.error(res.message);
+      }
+    });
+  }
   return (
     <div className="pt-[.33rem] px-[.24rem] pb-[.24rem] bg-[var(--white)] mt-[.16rem] h-full rounded-[.06rem]">
       <div className="flex items-center justify-between">
         <p className="text-[16px] text-[#333] font-medium">
           员工ID：<span>{userInfo.adminId}</span>
         </p>
-        <Button size="large" type="primary" icon={<KeyOutlined />}>
+        <Button
+          onClick={validatorPinCb}
+          size="large"
+          type="primary"
+          icon={<KeyOutlined />}
+        >
           权限调整
         </Button>
-        {/* <Button size="large" className="bg-[var(--green)]" type="primary" icon={<SaveOutlined />}>
-          保存
-        </Button> */}
       </div>
       <ConfigProvider
         theme={{
@@ -72,6 +136,16 @@ const SetPermission = () => {
           treeData={treeData}
         />
       </ConfigProvider>
+      <PinScopeComp
+        open={PinOpen}
+        onFinish={pinSubmitCb}
+        onCancel={validatorPinCb}
+      />
+      <GoogleScopeComp
+        open={googleOpen}
+        onFinish={savePermisionChangeCb}
+        onCancel={validatorGoogleCb}
+      />
     </div>
   );
 };
