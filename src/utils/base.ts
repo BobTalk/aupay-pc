@@ -101,7 +101,40 @@ const thousands = (num: number): string => {
 const timeFormate = (time: string | Date, format: string = 'YYYY-MM-DD'): string => {
   return dayjs(time).format(format)
 }
-
+// 单位处理
+let formatUnit = (id: number, chain?: number) => {
+  let agreement = "";
+  let num = 0;
+  let type = '';
+  if (id === 1) {
+    agreement = "BTC";
+    type = "BTC";
+    num = 6;
+  } else if (id === 2) {
+    agreement = "ETH";
+    type = "ETH";
+    num = 6;
+  } else if (id === 3) {
+    type = "USDT";
+    if (chain === 1) {
+      agreement = "USDT-OMNI";
+      num = 6;
+    }
+    if (chain === 2) {
+      agreement = "USDT-ERC20";
+      num = 6;
+    }
+    if (chain === 3) {
+      agreement = "USDT-TRC20";
+      num = 19;
+    }
+  } else {
+    type = "TRX";
+    agreement = "TRX";
+    num = 19;
+  }
+  return { agreement, num, type };
+};
 export {
   mergeClassName,
   encrypt,
@@ -113,5 +146,6 @@ export {
   removeSession,
   encryptByDES,
   timeFormate,
-  clearSession
+  clearSession,
+  formatUnit
 }

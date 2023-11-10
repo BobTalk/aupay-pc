@@ -1,71 +1,44 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import TableComp from '@/Components/Table'
-import { Form, ConfigProvider } from "antd";
+import { FindCurrencyExchangeRateInterFace } from "@/api";
+import { ConfigProvider } from "antd";
 const TableConfig = (props) => {
-  const [form] = Form.useForm();
-  function into(e, crt) {
-    props.into?.(e, crt)
-  }
-  let [data, setData] = useState([
-    {
-      key: "table1",
-      assetsType: "USDT",
-      walletProtocol: "USDT-ERC20",
-      createTime: "2023.7.17 15:22:20",
-      tradeType: "充币",
-      num: 189,
-      payAddr: "0x32983464f44",
-      tradeId: "0x32983464f440x32983464f44",
-      tradeConfirmNum: 87,
-      supplementaryMinerFees: 89,
-    },
-    {
-      key: "table12",
-      assetsType: "USDT",
-      walletProtocol: "USDT-ERC20",
-      createTime: "2023.7.17 15:22:20",
-      tradeType: "充币",
-      num: 189,
-      payAddr: "0x32983464f44",
-      tradeId: "0x32983464f440x32983464f44",
-      tradeConfirmNum: 87,
-      supplementaryMinerFees: 89,
-    },
-  ]);
+  let [data, setData] = useState();
 
   let columns = [
     {
       title: "货币单位",
-      key: "walletProtocol",
-      dataIndex: "walletProtocol",
+      key: "name",
+      dataIndex: "name",
       responsive: ["xl"],
       ellipsis: true,
       align: "center",
     },
-
-
     {
       title: "货币缩写",
-      key: "tradeConfirmNum",
-      dataIndex: "tradeConfirmNum",
+      key: "abbreviation",
+      dataIndex: "abbreviation",
       responsive: ["xl"],
       ellipsis: true,
       align: "center",
     },
-
-
-
     {
       title: "API链接",
-      key: "drawalFee",
-      dataIndex: "drawalFee",
+      key: "apiUrl",
+      dataIndex: "apiUrl",
       responsive: ["xl"],
       ellipsis: true,
       align: "center",
-
     },
-
   ];
+  function getTableList() {
+    FindCurrencyExchangeRateInterFace().then(res => {
+      setData(res?.data?.map((item, index) => (item.key = index, item)) ?? [])
+    })
+  }
+  useLayoutEffect(() => {
+    getTableList()
+  }, [])
   return (
     <ConfigProvider
       theme={{
@@ -76,17 +49,15 @@ const TableConfig = (props) => {
           }
         }
       }} >
-      <Form form={form} component={false}>
-        <TableComp
-          themeObj={{
-            headerBorderRadius: 0,
-          }}
-          bordered={true}
-          dataSource={data}
-          columns={columns}
-          pagination={true}
-        />
-      </Form>
+      <TableComp
+        themeObj={{
+          headerBorderRadius: 0,
+        }}
+        bordered={true}
+        dataSource={data}
+        columns={columns}
+        pagination={false}
+      />
     </ConfigProvider >
   );
 };

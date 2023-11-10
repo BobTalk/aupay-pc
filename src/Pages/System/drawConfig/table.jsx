@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import TableComp from '@/Components/Table'
 import { mergeClassName } from "@/utils/base";
 import styleScope from "./index.module.less";
-import { InputNumber, Typography, Form, ConfigProvider } from "antd";
+import { UpdateWithdrawConfigInterFace, FindWithdrawConfigInterFace } from "@/api";
+import { InputNumber, Typography, Form, ConfigProvider, message } from "antd";
+import { formatUnit } from "@/utils/base.ts";
 import Icon from '@/Components/Icon';
 const TableConfig = (props) => {
   const [form] = Form.useForm();
-  function into(e, crt) {
-    props.into?.(e, crt)
-  }
+
   let [data, setData] = useState([
     {
       key: "table1",
@@ -38,81 +38,94 @@ const TableConfig = (props) => {
   // 保存编辑信息
   async function submitCb(e, crt, index) {
     const row = await form.validateFields()
-    let newData = data.toSpliced(index, 1, {
+    let newData = {
       ...crt,
-      supplementaryMinerFees: row.supplementaryMinerFees ?? crt.supplementaryMinerFees,
+      maxWithdrawAmount: +row.maxWithdrawAmount ?? +crt.maxWithdrawAmount,
+      minWithdrawAmount: +row.minWithdrawAmount ?? +crt.minWithdrawAmount,
+      transferFee: +row.transferFee ?? +crt.transferFee,
+    }
+    UpdateWithdrawConfigInterFace(newData).then(res => {
+      if (res.status) {
+        data[index] = newData
+        setData(data)
+        setEditingKey("");
+        message.success(res.message)
+      } else {
+        message.error(res.message)
+      }
     })
-    setData(newData)
-    setEditingKey("");
+
   }
   let columns = [
     {
       title: "资产类型",
-      key: "walletProtocol",
-      dataIndex: "walletProtocol",
+      key: "currencyId",
+      dataIndex: "currencyId",
       responsive: ["xl"],
       ellipsis: true,
       align: "center",
+      render: (_, { currencyId, currencyChain }) => formatUnit(currencyId, currencyChain).type
     },
 
 
     {
       title: "钱包协议",
-      key: "tradeConfirmNum",
-      dataIndex: "tradeConfirmNum",
+      key: "currencyChain",
+      dataIndex: "currencyChain",
       responsive: ["xl"],
       ellipsis: true,
       align: "center",
+      render: (_, { currencyId, currencyChain }) => formatUnit(currencyId, currencyChain).agreement
     },
 
 
 
     {
       title: "提币手续费",
-      key: "drawalFee",
-      dataIndex: "drawalFee",
+      key: "withdrawFee",
+      dataIndex: "withdrawFee",
       responsive: ["xl"],
       ellipsis: true,
       align: "center",
       render: (_, record) => {
         const editable = isEditing(record);
-        return editable ? editorEl(_, record, 'drawalFee', 'center') : defaultEl(_, record, 'drawalFee', 'center')
+        return editable ? editorEl(_, record, 'withdrawFee', 'center') : defaultEl(_, record, 'withdrawFee', 'center')
       }
     },
     {
       title: "最小提币数量USDT",
-      key: "minDrawNum",
-      dataIndex: "minDrawNum",
+      key: "minWithdrawAmount",
+      dataIndex: "minWithdrawAmount",
       responsive: ["xl"],
       ellipsis: true,
       align: "center",
       render: (_, record) => {
         const editable = isEditing(record);
-        return editable ? editorEl(_, record, 'minDrawNum', 'center') : defaultEl(_, record, 'minDrawNum', 'center')
+        return editable ? editorEl(_, record, 'minWithdrawAmount', 'center') : defaultEl(_, record, 'minWithdrawAmount', 'center')
       }
     },
     {
       title: "最大提币数量USDT",
-      key: "maxDrawNum",
-      dataIndex: "maxDrawNum",
+      key: "maxWithdrawAmount",
+      dataIndex: "maxWithdrawAmount",
       responsive: ["xl"],
       ellipsis: true,
       align: "center",
       render: (_, record) => {
         const editable = isEditing(record);
-        return editable ? editorEl(_, record, 'maxDrawNum', 'center') : defaultEl(_, record, 'maxDrawNum', 'center')
+        return editable ? editorEl(_, record, 'maxWithdrawAmount', 'center') : defaultEl(_, record, 'maxWithdrawAmount', 'center')
       }
     },
     {
       title: "转账矿工费用(推荐费用)",
-      key: "transferAccounts",
-      dataIndex: "transferAccounts",
+      key: "transferFee",
+      dataIndex: "transferFee",
       responsive: ["xl"],
       ellipsis: true,
       align: "center",
       render: (_, record) => {
         const editable = isEditing(record);
-        return editable ? editorEl(_, record, 'transferAccounts', 'center') : defaultEl(_, record, 'transferAccounts', 'center')
+        return editable ? editorEl(_, record, 'transferFee', 'center') : defaultEl(_, record, 'transferFee', 'center')
       }
     },
 
@@ -163,23 +176,25 @@ const TableConfig = (props) => {
   let editorEl = (_, record, key, site) => {
     return <Form.Item name={key} className={mergeClassName("flex items-center mb-0", styleScope[site])} >
       <div className="w-full">
-        <InputNumber size="small" className="mx-[.1rem]" defaultValue={_} />
-        {
-          key === 'transferAccounts'?<>%</>:null
-        }
+        <InputNumber min={0} size="small" className="mx-[.1rem]" defaultValue={_} />
       </div>
     </Form.Item>
   }
-  let defaultEl = (_, record, key,site) => {
+  let defaultEl = (_, record, key, site) => {
     return <div className="flex items-center">
       <div className="w-full">
-        <span>{_ ?? '--'}</span>
-        {
-          key === 'transferAccounts'?<>%</>:null
-        }
+        <span>{record[key] == 0 ? 0 : (record[key] ?? "--")}</span>
       </div>
     </div>
   }
+  function getTableList() {
+    FindWithdrawConfigInterFace().then(res => {
+      setData(res?.data?.map((item, idx) => (item.key = idx, item)) ?? [])
+    })
+  }
+  useLayoutEffect(() => {
+    getTableList()
+  }, [])
 
   return (
     <ConfigProvider
@@ -199,7 +214,7 @@ const TableConfig = (props) => {
           bordered={true}
           dataSource={data}
           columns={columns}
-          pagination={true}
+          pagination={false}
         />
       </Form>
     </ConfigProvider >

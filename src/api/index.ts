@@ -221,55 +221,56 @@ export const DeleteAnnouncementInterFace = (id) => {
 // 30.获取提币设置 GET operate/system/findWithdrawConfig 
 export const FindWithdrawConfigInterFace = () => {
   return _http.getReq({
-    url: `${noticPrefix}/system/findWithdrawConfig`,
+    url: `${noticPrefix}/sys/findWithdrawConfig`,
   })
 }
 // 31.修改提币设置 PUT operate/system/updateWithdrawConfig 
-export const UpdateWithdrawConfigInterFace = () => {
+export const UpdateWithdrawConfigInterFace = (data) => {
   return _http.putReq({
-    url: `${noticPrefix}/system/updateWithdrawConfig`,
+    url: `${noticPrefix}/sys/updateWithdrawConfig`,
+    data
   })
 }
 // 32.获取资产统计设置 GET operate/system/findUserAssetsCollectionConfig
 export const FindUserAssetsCollectionConfigInterFace = () => {
   return _http.getReq({
-    url: `${noticPrefix}/system/findUserAssetsCollectionConfig`,
+    url: `${noticPrefix}/sys/findUserAssetsCollectionConfig`,
   })
 }
 // 33.获取汇率 GET opearte/system/findCurrencyExchangeRate 
 export const FindCurrencyExchangeRateInterFace = () => {
   return _http.getReq({
-    url: `${noticPrefix}/system/findCurrencyExchangeRate`,
+    url: `${noticPrefix}/sys/findCurrencyExchangeRate`,
   })
 }
 // 34.获取中转地址配置 GET operate/system/findTransferWalletConfig
 export const FindTransferWalletConfigInterFace = () => {
   return _http.getReq({
-    url: `${noticPrefix}/system/findTransferWalletConfig`,
+    url: `${noticPrefix}/sys/findTransferWalletConfig`,
   })
 }
 // 35.修改中转地址配置 PUT operate/system/updateTransferWalletConfig
 export const UpdateTransferWalletConfigInterFace = () => {
   return _http.putReq({
-    url: `${noticPrefix}/system/updateTransferWalletConfig`,
+    url: `${noticPrefix}/sys/updateTransferWalletConfig`,
   })
 }
 
 // 36.获取储备地址配置 GET operate/system/findReserveWalletConfig
 export const FindReserveWalletConfigInterFace = () => {
   return _http.getReq({
-    url: `${noticPrefix}/system/findReserveWalletConfig`,
+    url: `${noticPrefix}/sys/findReserveWalletConfig`,
   })
 }
 // 37.修改储备地址配置 PUT operate/system/updateReserveWalletConfig
 export const UpdateReserveWalletConfigInterFace = () => {
   return _http.putReq({
-    url: `${noticPrefix}/system/updateReserveWalletConfig`,
+    url: `${noticPrefix}/sys/updateReserveWalletConfig`,
   })
 }
 // 38.修改手续费地址配置 PUT operate/system/updateFeeWalletConfig
 export const UpdateFeeWalletConfigInterFace = () => {
   return _http.putReq({
-    url: `${noticPrefix}/system/updateFeeWalletConfig`,
+    url: `${noticPrefix}/sys/updateFeeWalletConfig`,
   })
 }
