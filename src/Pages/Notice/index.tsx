@@ -23,6 +23,9 @@ const NoticeList = () => {
   let [visiable, setVisiable] = useState(false);
   let [notice, setNotice] = useState<any>({});
   function noticeToggleOkCb(...arg) {
+    updateList(notice)
+  }
+  function updateList(notice){
     UpdateAnnouncementInterFace({
       title: notice?.title,
       content: notice?.content,

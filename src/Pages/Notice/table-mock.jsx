@@ -42,7 +42,8 @@ const TableScope = (props, ref) => {
       dataIndex: 'content',
       responsive: ['xl'],
       ellipsis: true,
-      align: 'left'
+      align: 'left',
+      render: (_) => <span dangerouslySetInnerHTML={{ __html: _ }}></span>
     },
     {
       title: '时间',

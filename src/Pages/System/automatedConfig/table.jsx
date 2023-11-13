@@ -157,7 +157,6 @@ const TableConfig = (props) => {
   }
   function getTableList() {
     FindWithdrawConfigInterFace().then(res => {
-      console.log('res: ', res);
       setData(res?.data?.map((item, idx) => (item.key = idx, item)) ?? [])
     })
   }
@@ -182,7 +181,7 @@ const TableConfig = (props) => {
           bordered={true}
           dataSource={data}
           columns={columns}
-          pagination={true}
+          pagination={false}
         />
       </Form>
     </ConfigProvider >

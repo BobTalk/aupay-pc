@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "38085743",
+      "name": "DASH",
+      "font_class": "DASH",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "38085742",
+      "name": "ETH",
+      "font_class": "ETH",
+      "unicode": "e6a5",
+      "unicode_decimal": 59045
+    },
+    {
+      "icon_id": "38085746",
+      "name": "EOS",
+      "font_class": "EOS",
+      "unicode": "e6a1",
+      "unicode_decimal": 59041
+    },
+    {
+      "icon_id": "38085745",
+      "name": "USDT",
+      "font_class": "USDT",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
+      "icon_id": "38085744",
+      "name": "BTC",
+      "font_class": "BTC",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
       "icon_id": "37922896",
       "name": "close",
       "font_class": "close",

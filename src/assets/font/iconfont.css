@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 1199363 */
-  src: url('iconfont.woff2?t=1698826590649') format('woff2'),
-       url('iconfont.woff?t=1698826590649') format('woff'),
-       url('iconfont.ttf?t=1698826590649') format('truetype');
+  src: url('iconfont.woff2?t=1699854079230') format('woff2'),
+       url('iconfont.woff?t=1699854079230') format('woff'),
+       url('iconfont.ttf?t=1699854079230') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.h-icon-DASH:before {
+  content: "\e6a4";
+}
+
+.h-icon-ETH:before {
+  content: "\e6a5";
+}
+
+.h-icon-EOS:before {
+  content: "\e6a1";
+}
+
+.h-icon-USDT:before {
+  content: "\e6a2";
+}
+
+.h-icon-BTC:before {
+  content: "\e6a3";
 }
 
 .h-icon-close:before {
