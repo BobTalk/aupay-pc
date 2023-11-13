@@ -1,3 +1,4 @@
+import Icon from "@/Components/Icon";
 import Image from "@/Components/Image";
 import { ReactNode } from "react";
 type PropsType = {
@@ -13,13 +14,21 @@ type PropsType = {
 const CommonEl = (props: PropsType) => {
   return (
     <div className={props.className} style={props.style}>
-      <Image
-        src={props.src}
-        top={props.top}
-        bottom={props.bottom}
-        className={props.imgClassName}
-        style={props.imgStyle}
-      />
+      {props.src.startsWith("h-icon") ? (
+        <div className={props.imgClassName} style={props.imgStyle}>
+          {props.top}
+          <Icon name={props.src} style={{fontSize: ".48rem"}} purity={false} />
+          {props.bottom}
+        </div>
+      ) : (
+        <Image
+          src={props.src}
+          top={props.top}
+          bottom={props.bottom}
+          className={props.imgClassName}
+          style={props.imgStyle}
+        />
+      )}
       {props.children}
     </div>
   );

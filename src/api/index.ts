@@ -1,6 +1,7 @@
 import _http from '../Https'
 const staffPrefix = '/admin'
 const noticPrefix = '/operate'
+const walletPrefix = "/wallet"
 // 1.获取登录加密key  GET admin/getAccessKey
 export const GetAccessKeyInterface = () => {
   return _http.getReq({
@@ -280,5 +281,24 @@ export const UpdateReserveWalletConfigInterFace = () => {
 export const UpdateFeeWalletConfigInterFace = () => {
   return _http.putReq({
     url: `${noticPrefix}/sys/updateFeeWalletConfig`,
+  })
+}
+
+// 用户地址
+export const FindUserWalletListInterFace = ()=>{
+  return _http.getReq({
+    url:`${walletPrefix}/wallet/findUserWalletList`
+  })
+}
+// 资产地址
+export const GetApplicaitonAssetsWalletInfoInterFace = ()=>{
+  return _http.getReq({
+    url:`${walletPrefix}/wallet/getApplicaitonAssetsWalletInfo`
+  })
+}
+// 提款地址
+export const GetApplicaitonWithdrawWalletInfoInterFace = ()=>{
+  return _http.getReq({
+    url:`${walletPrefix}/wallet/getApplicaitonWithdrawWalletInfo`
   })
 }

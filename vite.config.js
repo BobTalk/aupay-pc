@@ -37,6 +37,10 @@ export default defineConfig({
       "/operate": {
         target: "http://192.168.50.162:9000",
         changeOrigin: true,
+      },
+      "/wallet": {
+        target: "http://192.168.50.162:9000",
+        changeOrigin: true,
       }
     }
   }
