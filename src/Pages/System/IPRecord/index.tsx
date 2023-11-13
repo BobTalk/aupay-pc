@@ -10,31 +10,51 @@ import { mergeClassName } from "@/utils/base";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { useRef } from "react";
 const IpSystemRecord = () => {
-const tableRefEl = useRef<any>()
-const filterNote = useRef<any>()
-const filterTime = useRef<any>()
-function paginationCb({ current, pageSize, total }) {
-  let note = filterNote.current.input?.value;
-  let time = filterTime.current?.timeStr ?? [];
-  tableRefEl.current.updateParmas(
-    {
+  const tableRefEl = useRef<any>();
+  const filterNote = useRef<any>();
+  const filterTime = useRef<any>();
+  function paginationCb({ current, pageSize, total }) {
+    let note = filterNote.current.input?.value;
+    let time = filterTime.current?.timeStr ?? [];
+    tableRefEl.current.updateParmas(
+      {
+        search: note || null,
+        beginTime: time[0] || null,
+        endTime: time[1] || null,
+      },
+      {
+        current,
+        pageSize,
+        total,
+      }
+    );
+  }
+  function callGetTableFn() {
+    let note = filterNote.current.input?.value;
+    let time = filterTime.current?.timeStr ?? [];
+    tableRefEl.current.getTableList({
       search: note || null,
       beginTime: time[0] || null,
       endTime: time[1] || null,
-    },
-    {
-      current,
-      pageSize,
-      total,
-    }
-  );
-}
+    });
+  }
   return (
     <>
       <div className={styleScope["filter-box"]}>
-        <Input ref={filterNote} placeholder="备注" size="large" className="w-[3.2rem]" />
-        <RangePicker ref={filterTime} size="large" />
-        <Button type="primary" size="large" icon={<SearchOutlined />}>
+        <Input
+          allowClear
+          ref={filterNote}
+          placeholder="备注"
+          size="large"
+          className="w-[3.2rem]"
+        />
+        <RangePicker  ref={filterTime} size="large" />
+        <Button
+          onClick={callGetTableFn}
+          type="primary"
+          size="large"
+          icon={<SearchOutlined />}
+        >
           查询
         </Button>
       </div>

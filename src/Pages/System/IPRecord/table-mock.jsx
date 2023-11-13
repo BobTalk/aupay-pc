@@ -39,7 +39,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render: (_)=> dayjs(_).format("YYYY/MM/DD HH:ss:mm")
+      render: (_)=> dayjs(_).format("YYYY/MM/DD")
     },
     {
       title: '动作',
