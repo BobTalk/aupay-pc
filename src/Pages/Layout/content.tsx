@@ -74,7 +74,7 @@ const LayoutContent = () => {
           message={
             <div className={styleScope["bread-crumb"]}>
               <span className="!text-[#AAA]">当前位置：</span>
-              <Breadcrumb separator=">" items={breadcrumb} />
+              <Breadcrumb separator="-" items={breadcrumb} />
             </div>
           }
           className="text-[#333] mb-[.24rem] bg-[#FFF]"
