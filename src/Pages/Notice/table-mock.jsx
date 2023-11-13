@@ -136,9 +136,7 @@ const TableScope = (props, ref) => {
         current: res.pageNo,
         pageSize: res.pageSize,
         total: res.data.length,
-        showTotal: function (total, range) {
-          return `${Math.ceil(total / range[1]) > 1 ? 1 + ' - ' + Math.ceil(total / range[1]) : 1} 页 共${total}条`
-        },
+        showTotal: ()=> `${res.page} - ${res.pageTotal}页 共${res.total}条`,
         showSizeChanger: false,
         showQuickJumper: true,
       })

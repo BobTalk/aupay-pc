@@ -31,6 +31,7 @@ const NoticeList = () => {
       content: notice?.content,
       isShow: !notice?.isShow,
       isRoll: notice?.isRoll,
+      id:notice.id
     }).then((res) => {
       if (res.status) {
         message.success(res.message);

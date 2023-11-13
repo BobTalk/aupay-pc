@@ -6,7 +6,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AddAnnouncementInterFace, UpdateAnnouncementInterFace } from "@/api";
 const EditorNotice = () => {
   let { state: urlParams } = useLocation();
-  console.log("urlParams: ", urlParams);
   let navigate = useNavigate();
   let [formInitalVal, setFormInitalVal] = useState({
     employeeId: urlParams.id,
@@ -39,6 +38,7 @@ const EditorNotice = () => {
         content,
         isShow: urlParams.crt.isShow,
         isRoll: urlParams.crt.isRoll,
+        id: urlParams.crt.id,
       }).then((res) => {
         if (res.status) {
           message.success(res.message);
