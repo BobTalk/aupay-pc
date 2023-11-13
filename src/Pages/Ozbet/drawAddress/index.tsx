@@ -6,7 +6,7 @@ import blueIcon from "../images/blue-icon.svg";
 import { SwapOutlined } from "@ant-design/icons";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import store from "@/store";
 import Icon from "@/Components/Icon";
 const DrawAddressOzbet = () => {
   let [stop] = useStopPropagation();
@@ -14,6 +14,21 @@ const DrawAddressOzbet = () => {
   let { pathname } = useLocation();
   function transferRecordCb(e) {
     stop(e, () => {
+      store.dispatch({
+        type: "ADD_BREADCRUMB",
+        data: [
+          {
+            title: "Ozbet",
+          },
+          {
+            title: "Ozbet提款地址",
+            href: "/aupay/ozbet/draw",
+          },
+          {
+            title: "转账记录",
+          },
+        ],
+      });
       navigate("/aupay/ozbet/draw/transfer-records");
     });
   }

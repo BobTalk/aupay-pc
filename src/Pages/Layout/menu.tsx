@@ -31,7 +31,6 @@ const LayoutMenu = () => {
       });
       store.dispatch({ type: "ADD_BREADCRUMB", data: res });
     } else {
-      console.log(activePathToName[key][0]);
       store.dispatch({
         type: "ADD_BREADCRUMB",
         data: [{ title: activePathToName[key][0] }],

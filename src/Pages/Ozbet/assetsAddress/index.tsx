@@ -4,8 +4,9 @@ import styleScope from "./index.module.less";
 import { SwapOutlined } from "@ant-design/icons";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { GetApplicaitonAssetsWalletInfoInterFace } from "@/api";
+import store from "@/store";
 import { formatUnit } from "@/utils/base";
 const AssetsAddressOzbet = () => {
   let [stop] = useStopPropagation();
@@ -14,6 +15,21 @@ const AssetsAddressOzbet = () => {
   let { pathname } = useLocation();
   function transferRecordCb(e) {
     stop(e, () => {
+      store.dispatch({
+        type: "ADD_BREADCRUMB",
+        data: [
+          {
+            title: "Ozbet",
+          },
+          {
+            title: "Ozbet资产地址",
+            href: "/aupay/ozbet/assets",
+          },
+          {
+            title: "转账记录",
+          },
+        ],
+      });
       navigate("/aupay/ozbet/assets/transfer-records");
     });
   }
@@ -52,7 +68,7 @@ const AssetsAddressOzbet = () => {
               转账记录
             </Button>
           </div>
-          <div className="flex gap-[.24rem]">
+          <div className="flex gap-[.24rem] flex-wrap">
             {moduleList.map((item) => (
               <CommonEl
                 key={item.address}
@@ -68,7 +84,10 @@ const AssetsAddressOzbet = () => {
               >
                 <div className={styleScope["info"]}>
                   <p>矿工费：</p>
-                  <p>{item.feeBalance}{item.icon}</p>
+                  <p>
+                    {item.feeBalance}
+                    {item.icon}
+                  </p>
                   <p>地址：</p>
                   <p>{item.address}</p>
                 </div>
