@@ -1,8 +1,10 @@
-import { LockOutlined, UnlockOutlined, DeleteOutlined } from '@ant-design/icons';
 import TableComp from "@/Components/Table";
-const TableScope = (props) => {
+import { FindAdminIpLogInterFace } from "@/api";
+import dayjs from "dayjs";
+import { forwardRef, useImperativeHandle, useLayoutEffect,useState } from 'react';
+const TableScope = (props, ref) => {
   
-  const pagination = {
+  let [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
     total: 10,
@@ -11,70 +13,96 @@ const TableScope = (props) => {
     },
     showSizeChanger: false,
     showQuickJumper: true,
-  }
-  const dataSource = [
-    {
-      key: "table1",
-      assetsType: 'USDT',
-      walletProtocol: 'USDT-ERC20',
-      createTime: "2023.7.17 15:22:20",
-      tradeType: '充币',
-      num: 189,
-      payAddr: '0x32983464f44',
-      tradeId: '0x32983464f440x32983464f44',
-      tradeConfirmNum: 87,
-    },
-
-  ]
+  })
+  let [dataSource, setDataSource] = useState([])
   const columns = [
     {
       title: 'IP地址',
-      key: 'walletProtocol',
-      dataIndex: 'walletProtocol',
+      key: 'ip',
+      dataIndex: 'ip',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '备注',
-      key: 'createTime',
-      dataIndex: 'createTime',
+      key: 'note',
+      dataIndex: 'note',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '添加时间',
-      key: 'tradeType',
-      dataIndex: 'tradeType',
+      key: 'createTime',
+      dataIndex: 'createTime',
       responsive: ['xl'],
       ellipsis: true,
-      align: 'left'
+      align: 'left',
+      render: (_)=> dayjs(_).format("YYYY/MM/DD HH:ss:mm")
     },
     {
       title: '动作',
-      key: 'tradeType',
-      dataIndex: 'tradeType',
+      key: 'action',
+      dataIndex: 'action',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '员工ID',
-      key: 'num',
-      dataIndex: 'num',
+      key: 'adminId',
+      dataIndex: 'adminId',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
   ]
+  function clickCb(pagination) {
+    props?.onPaginationCb?.(pagination)
+  }
+  function getTableList(conditions, paginationParams){
+    FindAdminIpLogInterFace({
+      pageNo: paginationParams?.current ?? pagination.current,
+      pageSize: paginationParams?.pageSize ?? pagination.pageSize,
+      conditions
+    }).then(res =>{
+      if (res.status) {
+        setDataSource(res?.data?.map(item => (item.key = item.id, item)) ?? [])
+        setPagination(pagination => ({
+          ...pagination,
+          current: res.pageNo,
+          pageSize: res.pageSize,
+          total: res.total,
+          showTotal: ()=> `${res.page} - ${res.pageTotal}页 共${res.total}条`
+        }))
+      } else {
+        message.error(res.message)
+      }
+    })
+  }
+  function updateParmas(filterParams, paginationParams) {
+    setPagination(pagination => ({
+      ...pagination,
+      ...paginationParams
+    }))
+    getTableList(filterParams, paginationParams)
+  }
+  useImperativeHandle(ref, () => ({
+    getTableList,
+    updateParmas
+  }), [])
+  useLayoutEffect(()=>{
+    getTableList()
+  },[])
   return <TableComp
     themeObj={{
       headerBorderRadius: 0,
     }}
+    onChange={clickCb}
     dataSource={dataSource}
     columns={columns}
     pagination={pagination}
   />
 }
-export default TableScope
+export default forwardRef(TableScope)

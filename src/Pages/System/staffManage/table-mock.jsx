@@ -140,7 +140,8 @@ const TableScope = (props, ref) => {
           ...pagination,
           current: res.pageNo,
           pageSize: res.pageSize,
-          total: res.total
+          total: res.total,
+          showTotal: ()=> `${res.page} - ${res.pageTotal}页 共${res.total}条`
         }))
       } else {
         message.error(res.message)
