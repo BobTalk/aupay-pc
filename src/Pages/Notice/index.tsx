@@ -15,7 +15,6 @@ import {
   UpdateAnnouncementInterFace,
 } from "@/api";
 const NoticeList = () => {
-  const [messageApi, contextHolder] = message.useMessage();
   const tableRefEl = useRef<any>({ current: undefined });
   let [stop] = useStopPropagation();
   let navigate = useNavigate();
@@ -23,15 +22,15 @@ const NoticeList = () => {
   let [visiable, setVisiable] = useState(false);
   let [notice, setNotice] = useState<any>({});
   function noticeToggleOkCb(...arg) {
-    updateList(notice)
+    updateList(notice);
   }
-  function updateList(notice){
+  function updateList(notice) {
     UpdateAnnouncementInterFace({
       title: notice?.title,
       content: notice?.content,
       isShow: !notice?.isShow,
       isRoll: notice?.isRoll,
-      id:notice.id
+      id: notice.id,
     }).then((res) => {
       if (res.status) {
         message.success(res.message);
@@ -92,6 +91,13 @@ const NoticeList = () => {
       });
     });
   }
+  function paginationCb({ current, pageSize, total }) {
+    tableRefEl.current.getTableInfo({
+      current,
+      pageSize,
+      total,
+    });
+  }
   return ["/aupay/notice/add", "/aupay/notice/editor"].includes(pathname) ? (
     <Outlet />
   ) : (
@@ -110,6 +116,7 @@ const NoticeList = () => {
         className={mergeClassName("bg-[var(--white)]", styleScope["table-box"])}
       >
         <TableScope
+          onPaginationCb={paginationCb}
           ref={tableRefEl}
           onEditor={editorCb}
           onDelete={deleteCb}

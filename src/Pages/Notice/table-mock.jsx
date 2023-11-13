@@ -121,10 +121,10 @@ const TableScope = (props, ref) => {
     props?.onShowOrHidden?.(e, crt, index)
   }
   // 获取列表数据
-  function getTableInfo() {
+  function getTableInfo({ current, pageSize }) {
     FindAnnouncementListInterFace({
-      pageNo: pagination.current,
-      pageSize: pagination.pageSize,
+      pageNo: current,
+      pageSize,
       conditions: null
     }).then(res => {
       let formatData = res.data.map(item => (
@@ -135,8 +135,8 @@ const TableScope = (props, ref) => {
       setPagination({
         current: res.pageNo,
         pageSize: res.pageSize,
-        total: res.data.length,
-        showTotal: ()=> `${res.page} - ${res.pageTotal}页 共${res.total}条`,
+        total: res.total,
+        showTotal: () => `${res.page} - ${res.pageTotal}页 共${res.total}条`,
         showSizeChanger: false,
         showQuickJumper: true,
       })
@@ -146,12 +146,16 @@ const TableScope = (props, ref) => {
     getTableInfo
   }), [])
   useEffect(() => {
-    getTableInfo()
+    getTableInfo(pagination)
   }, [])
+  function clickCb(pagination) {
+    props?.onPaginationCb?.(pagination)
+  }
   return <TableComp
     themeObj={{
       headerBorderRadius: 0,
     }}
+    onChange={clickCb}
     dataSource={dataSource}
     columns={columns}
     pagination={pagination}
