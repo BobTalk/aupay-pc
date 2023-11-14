@@ -285,20 +285,27 @@ export const UpdateFeeWalletConfigInterFace = () => {
 }
 
 // 用户地址
-export const FindUserWalletListInterFace = ()=>{
+export const FindUserWalletListInterFace = () => {
   return _http.getReq({
-    url:`${walletPrefix}/wallet/findUserWalletList`
+    url: `${walletPrefix}/wallet/findUserWalletList`
   })
 }
 // 资产地址
-export const GetApplicaitonAssetsWalletInfoInterFace = ()=>{
+export const GetApplicaitonAssetsWalletInfoInterFace = () => {
   return _http.getReq({
-    url:`${walletPrefix}/wallet/getApplicaitonAssetsWalletInfo`
+    url: `${walletPrefix}/wallet/getApplicaitonAssetsWalletInfo`
   })
 }
 // 提款地址
-export const GetApplicaitonWithdrawWalletInfoInterFace = ()=>{
+export const GetApplicaitonWithdrawWalletInfoInterFace = () => {
   return _http.getReq({
-    url:`${walletPrefix}/wallet/getApplicaitonWithdrawWalletInfo`
+    url: `${walletPrefix}/wallet/getApplicaitonWithdrawWalletInfo`
+  })
+}
+// 转账地址
+export const FindWalletTransferRecordInterFace = (data) => {
+  return _http.postReq({
+    url: `${walletPrefix}/wallet/findWalletTransferRecord`,
+    data
   })
 }

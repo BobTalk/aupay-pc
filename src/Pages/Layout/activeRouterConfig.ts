@@ -18,6 +18,7 @@ export const activePath = {
   "/aupay/ozbet/assets/transfer-records": [
     "/aupay/ozbet",
     "/aupay/ozbet/assets",
+    "/aupay/ozbet/assets/transfer-records"
   ],
   "/aupay/personal": ["/aupay/personal"],
   "/aupay/system/staff-manage": [
@@ -50,7 +51,7 @@ export const activePathToName = {
   "/aupay/address/minerFees": ['地址管理',"矿工费地址"],
   "/aupay/ozbet/assets": ['Ozbet',"Ozbet资产地址"],
   "/aupay/ozbet/draw": ['Ozbet',"Ozbet提款地址"],
-  "/aupay/ozbet/assets/transfer-records": ["Ozbet提款地址", "转账记录"],
+  "/aupay/ozbet/assets/transfer-records": ["Ozbet","Ozbet提款地址", "转账记录"],
   "/aupay/personal": ["个人资料"],
   "/aupay/system/staff-manage": ["系统管理","员工管理"],
   "/aupay/system/logs-manage": ["系统管理","日志记录"],
