@@ -4,7 +4,6 @@ import TableComp from "@/Components/Table";
 import { message } from 'antd';
 import { formatUnit } from "@/utils/base.ts";
 import dayjs from "dayjs";
-import { unionBy } from 'lodash'
 const TableConfig = (props, ref) => {
   const columns = [
     {
@@ -108,7 +107,6 @@ const TableConfig = (props, ref) => {
       render: (_) => _ == 1 ? "已完成" : <span className="text-[var(--green)]">进行中</span>
     },
   ]
-  const [assetsTypeList, setAssetsTypeList] = useState([])
   const [dataSource, setDataSource] = useState([])
   const [pagination, setPagination] = useState({
     current: 1,
@@ -131,20 +129,14 @@ const TableConfig = (props, ref) => {
     }
     FindWalletTransferRecordInterFace(params).then(res => {
       if (res.status) {
-        let assetsType = []
         setDataSource(res?.data?.map(item => {
           let { agreement, type } = formatUnit(item.currencyId, item.currencyChain)
-          assetsType.push({
-            value: item.currencyId,
-            label: type
-          })
           item.key = item.id
           item.agreement = agreement
           item.type = type
           return item
         }) ?? [])
 
-        setAssetsTypeList(unionBy(assetsType, 'value'))
         setPagination(pagination => ({
           ...pagination,
           current: res.pageNo,
@@ -168,11 +160,6 @@ const TableConfig = (props, ref) => {
     getTableList(undefined, pagination)
   }, [])
 
-  useEffect(() => {
-    if (!!assetsTypeList.length) {
-      props?.getAssetsTypeList?.(assetsTypeList)
-    }
-  }, [assetsTypeList])
   useImperativeHandle(ref, () => ({
     getTableList,
     updateParmas,

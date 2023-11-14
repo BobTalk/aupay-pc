@@ -329,3 +329,10 @@ export const GetReserveWalletInfoInterFace = () => {
     url: `${walletPrefix}/wallet/getReserveWalletInfo`,
   })
 }
+// 提币地址
+export const GetWithdrawWalletInfoInterFace = (data) => {
+  return _http.postReq({
+    url: `${walletPrefix}/wallet/getWithdrawWalletInfo`,
+    data
+  })
+}
