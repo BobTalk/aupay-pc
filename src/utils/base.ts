@@ -135,6 +135,15 @@ let formatUnit = (id: number, chain?: number) => {
   }
   return { agreement, num, type };
 };
+function formatEnum(enumData) {
+  let enumObj = JSON.parse(JSON.stringify(enumData))
+  let allKey = Object.keys(enumObj)
+  let r = allKey.slice(allKey.length / 2)
+  return r.map(item => ({
+    value: enumObj[item],
+    label: item
+  }))
+}
 export {
   mergeClassName,
   encrypt,
@@ -147,5 +156,6 @@ export {
   encryptByDES,
   timeFormate,
   clearSession,
-  formatUnit
+  formatUnit,
+  formatEnum
 }

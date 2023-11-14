@@ -9,7 +9,8 @@ import TableComp from "@/Components/Table";
 import { dataSource, columns, pagination } from "./table-mock.jsx";
 import geenIcon from "./images/green-icon.svg";
 import blueIcon from "./images/blue-icon.svg";
-import { mergeClassName } from "@/utils/base";
+import { formatEnum, mergeClassName } from "@/utils/base";
+import { assetsTypeEnum, tradeTypeEnum } from "@/Enum";
 const ReserveAssets = () => {
   return (
     <>
@@ -78,14 +79,14 @@ const ReserveAssets = () => {
           placeholder="资产类型"
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
-          options={[]}
+          options={formatEnum(assetsTypeEnum)}
         />
         <Select
           size="large"
           placeholder="交易类型"
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
-          options={[]}
+          options={formatEnum(tradeTypeEnum)}
         />
         <RangePicker size="large" />
         <Button type="primary" size="large" icon={<SearchOutlined />}>

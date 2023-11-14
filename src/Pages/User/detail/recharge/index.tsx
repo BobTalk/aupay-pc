@@ -7,7 +7,8 @@ import styleScope from "./index.module.less";
 import RangePicker from "@/Components/RangePicker";
 import TableComp from "@/Components/Table";
 import { dataSource, columns, pagination } from "./table-mock.jsx";
-import { mergeClassName } from "@/utils/base";
+import { formatEnum, mergeClassName } from "@/utils/base";
+import { assetsTypeEnum } from "@/Enum";
 const RechargeDetail = () => {
   return (
     <>
@@ -26,7 +27,7 @@ const RechargeDetail = () => {
           placeholder="资产类型"
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
-          options={[]}
+          options={formatEnum(assetsTypeEnum)}
         />
         <RangePicker size="large" />
         <Button type="primary" size="large" icon={<SearchOutlined />}>

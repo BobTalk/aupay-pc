@@ -317,3 +317,9 @@ export const FindWalletTransferRecordInterFace = (data) => {
     data
   })
 }
+// 转账地址
+export const GetTransferWalletWalletInfoInterFace = () => {
+  return _http.getReq({
+    url: `${walletPrefix}/wallet/getTransferWalletWalletInfo`,
+  })
+}

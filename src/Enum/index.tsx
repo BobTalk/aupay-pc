@@ -8,7 +8,7 @@ export enum operationIdEnum {
   resetPin = 30,
   resetGoogle = 31,
   resetPwd = 301,
-  setPermission=251
+  setPermission = 251,
 }
 export enum departmentEnum {
   研发部 = 1,
@@ -41,5 +41,16 @@ export enum routerMapId {
   "/aupay/user/detail/recharge" = 32,
   "/aupay/user/detail/draw" = 33,
   "/aupay/user/detail/trade" = 34,
-  "/aupay/user/detail/assetsChanges" = 35
+  "/aupay/user/detail/assetsChanges" = 35,
+}
+export enum assetsTypeEnum {
+  BTC = 1,
+  ETH = 2,
+  USDT = 3,
+  TRX = 4,
+}
+
+export enum tradeTypeEnum {
+  转入 = 6,
+  转出 = 7,
 }

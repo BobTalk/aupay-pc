@@ -6,9 +6,10 @@ import { Button, Input, Select } from "antd";
 import styleScope from "./index.module.less";
 import RangePicker from "@/Components/RangePicker";
 import TableConfig from "./table-mock.jsx";
-import { mergeClassName } from "@/utils/base";
+import { formatEnum, mergeClassName } from "@/utils/base";
 import { useEffect, useRef, useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
+import { assetsTypeEnum, tradeTypeEnum } from "@/Enum";
 const TransferRecord = () => {
   let [stop] = useStopPropagation();
   const tableRefs = useRef<any>({});
@@ -18,9 +19,7 @@ const TransferRecord = () => {
   let [assetsType, setAssetsType] = useState();
   let [tradeType, setTradeType] = useState();
   const filterInfo = useRef<any>({});
-  function getAssetsTypeList(assetsList) {
-    setAssetsList(assetsList);
-  }
+
   function filterListInfo(e, key, value) {
     stop(e, () => {
       filterInfo.current[key] = value || null;
@@ -28,7 +27,7 @@ const TransferRecord = () => {
     });
   }
   function searchByFilter() {
-    let [beginTime, endTime] = rangePickerRefs.current.timeStr??[];
+    let [beginTime, endTime] = rangePickerRefs.current.timeStr ?? [];
     filterInfo.current = {
       ...filterInfo.current,
       currencyId: assetsType || null,
@@ -71,7 +70,7 @@ const TransferRecord = () => {
           onChange={(val) => setAssetsType(val)}
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
-          options={assetsList}
+          options={formatEnum(assetsTypeEnum)}
         />
         <Select
           size="large"
@@ -80,16 +79,7 @@ const TransferRecord = () => {
           onChange={(val) => setTradeType(val)}
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
-          options={[
-            {
-              value: 6,
-              label: "转入",
-            },
-            {
-              value: 7,
-              label: "转出",
-            },
-          ]}
+          options={formatEnum(tradeTypeEnum)}
         />
         <RangePicker ref={rangePickerRefs} size="large" />
         <Button
@@ -104,7 +94,7 @@ const TransferRecord = () => {
       <div
         className={mergeClassName("bg-[var(--white)]", styleScope["table-box"])}
       >
-        <TableConfig getAssetsTypeList={getAssetsTypeList} ref={tableRefs} />
+        <TableConfig ref={tableRefs} />
       </div>
     </>
   );

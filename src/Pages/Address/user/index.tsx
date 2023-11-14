@@ -5,9 +5,10 @@ import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
 import { Button, Input, Select } from "antd";
 import styleScope from "./index.module.less";
 import TableScope from "./table-mock.jsx";
-import { mergeClassName } from "@/utils/base";
+import { formatEnum, mergeClassName } from "@/utils/base";
 import { useRef, useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
+import { assetsTypeEnum } from "@/Enum";
 const UserAddress = () => {
   let [stop] = useStopPropagation();
   let [assetsListType, setAssetsListType] = useState([]);
@@ -72,7 +73,7 @@ const UserAddress = () => {
           onChange={(val) => setAssetsType(val)}
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
-          options={assetsListType}
+          options={formatEnum(assetsTypeEnum)}
         />
         <Button
           onClick={(e) => filterCb1(e, assetsType)}

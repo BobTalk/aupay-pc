@@ -6,7 +6,8 @@ import { Button, Select } from "antd";
 import styleScope from "./index.module.less";
 import TableComp from "@/Components/Table";
 import { dataSource, columns, pagination } from "./table-mock.jsx";
-import { mergeClassName } from "@/utils/base";
+import { formatEnum, mergeClassName } from "@/utils/base";
+import { assetsTypeEnum } from "@/Enum";
 const DrawAddress = () => {
   return (
     <>
@@ -16,7 +17,7 @@ const DrawAddress = () => {
           placeholder="资产类型"
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
-          options={[]}
+          options={formatEnum(assetsTypeEnum)}
         />
 
         <Button type="primary" size="large" icon={<SearchOutlined />}>
