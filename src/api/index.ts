@@ -302,6 +302,13 @@ export const GetApplicaitonWithdrawWalletInfoInterFace = () => {
     url: `${walletPrefix}/wallet/getApplicaitonWithdrawWalletInfo`
   })
 }
+// 提款地址--修改
+export const UpdateApplicationWithdrawWalletConfigInterFace = (data) => {
+  return _http.putReq({
+    url: `${walletPrefix}/wallet/updateApplicationWithdrawWalletConfig`,
+    data
+  })
+}
 // 转账地址
 export const FindWalletTransferRecordInterFace = (data) => {
   return _http.postReq({

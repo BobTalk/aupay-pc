@@ -8,8 +8,12 @@ import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import store from "@/store";
 import Icon from "@/Components/Icon";
-import { GetApplicaitonWithdrawWalletInfoInterFace } from "@/api";
+import {
+  GetApplicaitonWithdrawWalletInfoInterFace,
+  UpdateApplicationWithdrawWalletConfigInterFace,
+} from "@/api";
 import { useLayoutEffect, useRef, useState } from "react";
+import { formatUnit } from "@/utils/base";
 const DrawAddressOzbet = () => {
   let [stop] = useStopPropagation();
   let navigate = useNavigate();
@@ -40,7 +44,17 @@ const DrawAddressOzbet = () => {
   }
   function getModuleList() {
     GetApplicaitonWithdrawWalletInfoInterFace().then((res) => {
-      setModuleList(res.data ?? []);
+      setModuleList(
+        res.data?.map((item) => {
+          let { agreement, type } = formatUnit(
+            item.currencyId,
+            item.currencyChain
+          );
+          item.type = type;
+          item.agreement = agreement;
+          return item;
+        }) ?? []
+      );
     });
   }
   useLayoutEffect(() => {
@@ -74,7 +88,11 @@ const DrawAddressOzbet = () => {
           >
             <div className="flex gap-[.24rem] flex-wrap">
               {moduleList.map((item) => (
-                <CommonComp {...item} key={item.walletId} />
+                <CommonComp
+                  {...item}
+                  key={item.walletId}
+                  onUpdateInfo={getModuleList}
+                />
               ))}
             </div>
           </div>
@@ -83,9 +101,46 @@ const DrawAddressOzbet = () => {
     </div>
   );
 };
-const CommonComp = () => {
+const CommonComp = (props) => {
+  console.log("props: ", props);
+  let [stop] = useStopPropagation();
   let [limitDisabled, setLimitDisabled] = useState(true);
   let [shortcutLimitDisabled, setShortcutLimitDisabled] = useState(true);
+  let supplementAmountRefs = useRef<any>();
+  let supplementTriggerAmountRefs = useRef<any>();
+  let withdrawSettleTriggerAmountRefs = useRef<any>();
+  function updateInfo(prams, fn) {
+    UpdateApplicationWithdrawWalletConfigInterFace(prams).then((res) => {
+      fn();
+      props?.onUpdateInfo?.();
+    });
+  }
+  function saveUpdate(e, crt, fn) {
+    stop(e, () => {
+      let amount1 = supplementAmountRefs.current.input.value;
+      let amount2 = supplementTriggerAmountRefs.current.input.value;
+      updateInfo(
+        {
+          ...crt,
+          supplementAmount: +amount1,
+          supplementTriggerAmount: +amount2,
+        },
+        fn
+      );
+    });
+  }
+  function updateInfo1(e, crt, fn) {
+    stop(e, () => {
+      let val = withdrawSettleTriggerAmountRefs.current.input.value;
+      updateInfo(
+        {
+          ...crt,
+          withdrawSettleTriggerAmount: +val,
+        },
+        fn
+      );
+    });
+  }
   return (
     <CommonEl
       src={blueIcon}
@@ -93,16 +148,22 @@ const CommonComp = () => {
       className="p-[.24rem] bg-[var(--gray)] rounded-[var(--border-radius)] min-w-[5.05rem]"
       bottom={
         <div className="grid h-full items-center ml-[.16rem] text-[#333]">
-          <p className={styleScope["type-money"]}>USDT-ERC20</p>
-          <p className="text-[22px]">152,221.00USDT</p>
+          <p className={styleScope["type-money"]}>{props.agreement}</p>
+          <p className="text-[22px]">
+            {props.balance}
+            {props.type}
+          </p>
         </div>
       }
     >
       <div className={styleScope["info"]}>
         <p>矿工费：</p>
-        <p>91,793.00ETH</p>
+        <p>
+          {props.feeBalance}
+          {props.type}
+        </p>
         <p>地址：</p>
-        <p>wrijwfnwm0isd992rsdwrijwfnwm0isd992rsd</p>
+        <p>{props.address}</p>
       </div>
       <div className={styleScope["config"]}>
         <p className="text-[var(--menu-color)] text-[14px]">
@@ -110,9 +171,18 @@ const CommonComp = () => {
         </p>
         <div className="flex items-center whitespace-nowrap">
           <Icon name="h-icon-xiaoyudengyu" />
-          <Input disabled={limitDisabled} className="mx-[.1rem] w-[.9rem]" />
+          <Input
+            ref={supplementTriggerAmountRefs}
+            key={props.supplementTriggerAmount + "A"}
+            defaultValue={props.supplementTriggerAmount}
+            disabled={limitDisabled}
+            className="mx-[.1rem] w-[.9rem]"
+          />
           <span>则补充</span>
           <Input
+            ref={supplementAmountRefs}
+            key={props.supplementAmount + "B"}
+            defaultValue={props.supplementAmount}
             disabled={limitDisabled}
             className="mr-[.16rem] ml-[.1rem]  w-[.9rem]"
           />
@@ -124,7 +194,14 @@ const CommonComp = () => {
               编辑
             </p>
           ) : (
-            <p className="text-[var(--blue)] text-[14px]  cursor-pointer">
+            <p
+              onClick={(e) =>
+                saveUpdate(e, props, () => {
+                  setLimitDisabled(!limitDisabled);
+                })
+              }
+              className="text-[var(--blue)] text-[14px]  cursor-pointer"
+            >
               保存
             </p>
           )}
@@ -134,16 +211,29 @@ const CommonComp = () => {
         </p>
         <div className="flex items-center">
           <Input
+            ref={withdrawSettleTriggerAmountRefs}
+            key={props.withdrawSettleTriggerAmount + "C"}
+            defaultValue={props.withdrawSettleTriggerAmount}
             disabled={shortcutLimitDisabled}
             className="w-[1.64rem]"
-            suffix={<span>USDT/笔</span>}
+            suffix={<span>{props.type}/笔</span>}
           />
           {shortcutLimitDisabled ? (
-            <p className="text-[var(--blue)] text-[14px] ml-[.16rem] cursor-pointer">
+            <p
+              onClick={() => setShortcutLimitDisabled(!shortcutLimitDisabled)}
+              className="text-[var(--blue)] text-[14px] ml-[.16rem] cursor-pointer"
+            >
               编辑
             </p>
           ) : (
-            <p className="text-[var(--blue)] text-[14px] ml-[.16rem] cursor-pointer">
+            <p
+              onClick={(e) =>
+                updateInfo1(e, props, () => {
+                  setShortcutLimitDisabled(!shortcutLimitDisabled);
+                })
+              }
+              className="text-[var(--blue)] text-[14px] ml-[.16rem] cursor-pointer"
+            >
               保存
             </p>
           )}
