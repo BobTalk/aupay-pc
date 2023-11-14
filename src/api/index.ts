@@ -285,9 +285,10 @@ export const UpdateFeeWalletConfigInterFace = () => {
 }
 
 // 用户地址
-export const FindUserWalletListInterFace = () => {
-  return _http.getReq({
-    url: `${walletPrefix}/wallet/findUserWalletList`
+export const FindUserWalletListInterFace = (data) => {
+  return _http.postReq({
+    url: `${walletPrefix}/wallet/findUserWalletList`,
+    data
   })
 }
 // 资产地址
