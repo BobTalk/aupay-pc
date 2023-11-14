@@ -23,7 +23,7 @@ const DrawAddress = () => {
   }
   return (
     <>
-      <div className={styleScope["filter-box"]}>
+      <div className={styleScope["filter-box"]} hidden>
         <Select
           size="large"
           allowClear
