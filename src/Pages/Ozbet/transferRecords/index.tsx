@@ -7,7 +7,7 @@ import styleScope from "./index.module.less";
 import RangePicker from "@/Components/RangePicker";
 import TableConfig from "./table-mock.jsx";
 import { formatEnum, mergeClassName } from "@/utils/base";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { assetsTypeEnum, tradeTypeEnum } from "@/Enum";
 const TransferRecord = () => {
@@ -15,7 +15,6 @@ const TransferRecord = () => {
   const tableRefs = useRef<any>({});
   const filterOrderOrAddrOrBussion = useRef<any>();
   const rangePickerRefs = useRef<any>();
-  let [assetsList, setAssetsList] = useState([]);
   let [assetsType, setAssetsType] = useState();
   let [tradeType, setTradeType] = useState();
   const filterInfo = useRef<any>({});

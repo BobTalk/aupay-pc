@@ -1,23 +1,14 @@
 /**
  * @summary 地址
  */
-import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
-import { Button, Divider, Input, Select } from "antd";
 import styleScope from "./index.module.less";
-import RangePicker from "@/Components/RangePicker";
-import TableComp from "@/Components/Table";
-import TableConfig from "./table-mock.jsx";
-import geenIcon from "./images/green-icon.svg";
-import blueIcon from "./images/blue-icon.svg";
-import { formatEnum, formatUnit, mergeClassName } from "@/utils/base";
+import { formatUnit } from "@/utils/base";
 import { useEffect, useRef, useState } from "react";
 import { GetTransferWalletWalletInfoInterFace } from "@/api";
 import Icon from "@/Components/Icon";
-import { assetsTypeEnum, tradeTypeEnum } from "@/Enum";
 import TransferRecord from "@/Pages/Ozbet/transferRecords";
 const TransferAddr = () => {
   let [dataList, setDataList] = useState([]);
-  const tableRefs = useRef<any>()
   function getList() {
     GetTransferWalletWalletInfoInterFace().then((res) => {
       setDataList(

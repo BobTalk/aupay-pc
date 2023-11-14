@@ -105,7 +105,7 @@ const TableConfig = (props, ref) => {
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render: (_) => _ == 1 ? "已完成" : '进行中'
+      render: (_) => _ == 1 ? "已完成" : <span className="text-[var(--green)]">进行中</span>
     },
   ]
   const [assetsTypeList, setAssetsTypeList] = useState([])

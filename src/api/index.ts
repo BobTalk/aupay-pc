@@ -317,9 +317,15 @@ export const FindWalletTransferRecordInterFace = (data) => {
     data
   })
 }
-// 转账地址
+// 中转地址
 export const GetTransferWalletWalletInfoInterFace = () => {
   return _http.getReq({
     url: `${walletPrefix}/wallet/getTransferWalletWalletInfo`,
+  })
+}
+// 储备资产
+export const GetReserveWalletInfoInterFace = () => {
+  return _http.getReq({
+    url: `${walletPrefix}/wallet/getReserveWalletInfo`,
   })
 }
