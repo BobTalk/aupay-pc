@@ -278,9 +278,10 @@ export const UpdateReserveWalletConfigInterFace = () => {
   })
 }
 // 38.修改手续费地址配置 PUT operate/system/updateFeeWalletConfig
-export const UpdateFeeWalletConfigInterFace = () => {
+export const UpdateFeeWalletConfigInterFace = (data) => {
   return _http.putReq({
     url: `${noticPrefix}/sys/updateFeeWalletConfig`,
+    data
   })
 }
 
@@ -334,5 +335,11 @@ export const GetWithdrawWalletInfoInterFace = (data) => {
   return _http.postReq({
     url: `${walletPrefix}/wallet/getWithdrawWalletInfo`,
     data
+  })
+}
+// 矿工费地址
+export const GetFeeWalletInfoInterFace = () => {
+  return _http.getReq({
+    url: `${walletPrefix}/wallet/getFeeWalletInfo`,
   })
 }

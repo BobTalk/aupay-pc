@@ -1,64 +1,51 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import TableComp from '@/Components/Table'
-import { InputNumber, Typography, Form, ConfigProvider } from "antd";
+import { InputNumber, Typography, Form, ConfigProvider, message } from "antd";
 import Icon from '@/Components/Icon';
+import { GetFeeWalletInfoInterFace, UpdateFeeWalletConfigInterFace } from "@/api";
+import { useStopPropagation } from "@/Hooks/StopPropagation";
+import { formatUnit } from "@/utils/base.ts";
 const TableConfig = (props) => {
+  let [stop] = useStopPropagation();
   const [form] = Form.useForm();
   function into(e, crt) {
     props.into?.(e, crt)
   }
-  let [data, setData] = useState([
-    {
-      key: "table1",
-      assetsType: "USDT",
-      walletProtocol: "USDT-ERC20",
-      createTime: "2023.7.17 15:22:20",
-      tradeType: "充币",
-      num: 189,
-      payAddr: "0x32983464f44",
-      tradeId: "0x32983464f440x32983464f44",
-      tradeConfirmNum: 87,
-      triggerQuantity: 87,
-      supplementaryMinerFees: 89,
-    },
-    {
-      key: "table12",
-      assetsType: "USDT",
-      walletProtocol: "USDT-ERC20",
-      createTime: "2023.7.17 15:22:20",
-      tradeType: "充币",
-      num: 189,
-      payAddr: "0x32983464f44",
-      tradeId: "0x32983464f440x32983464f44",
-      tradeConfirmNum: 87,
-      triggerQuantity: 87,
-      supplementaryMinerFees: 89,
-    },
-  ]);
+  let [data, setData] = useState([]);
   // 保存编辑信息
-  async function submitCb(e, crt, index) {
-    const row = await form.validateFields()
-    let newData = data.toSpliced(index, 1, {
-      ...crt,
-      supplementaryMinerFees: row.supplementaryMinerFees ?? crt.supplementaryMinerFees,
-      triggerQuantity: row.triggerQuantity ?? crt.triggerQuantity
+  function submitCb(e, crt, index) {
+    stop(e, async () => {
+      const row = await form.validateFields()
+      let crtObj = {
+        ...crt,
+        supplementAmount: +(row.supplementAmount ?? crt.supplementAmount),
+        triggerAmount: +(row.triggerAmount ?? crt.triggerAmount)
+      }
+      UpdateFeeWalletConfigInterFace(crtObj).then(res => {
+        if (res.status) {
+          let newData = data.toSpliced(index, 1, crtObj)
+          setData(newData)
+          setEditingKey("");
+          form.resetFields(['supplementAmount', 'triggerAmount'])
+        } else {
+          message.error(res.message)
+        }
+      })
     })
-    setData(newData)
-    setEditingKey("");
   }
   let columns = [
     {
       title: "钱包协议",
-      key: "walletProtocol",
-      dataIndex: "walletProtocol",
+      key: "agreement",
+      dataIndex: "agreement",
       responsive: ["xl"],
       ellipsis: true,
       align: "left",
     },
     {
       title: "资产类型",
-      key: "createTime",
-      dataIndex: "createTime",
+      key: "type",
+      dataIndex: "type",
       responsive: ["xl"],
       ellipsis: true,
       align: "left",
@@ -66,8 +53,8 @@ const TableConfig = (props) => {
 
     {
       title: "地址",
-      key: "tradeConfirmNum",
-      dataIndex: "tradeConfirmNum",
+      key: "address",
+      dataIndex: "address",
       responsive: ["xl"],
       ellipsis: true,
       align: "left",
@@ -75,34 +62,34 @@ const TableConfig = (props) => {
 
     {
       title: "矿工费余额",
-      key: "tradeConfirmNum",
-      dataIndex: "tradeConfirmNum",
+      key: "balance",
+      dataIndex: "balance",
       responsive: ["xl"],
       ellipsis: true,
       align: "left",
     },
     {
       title: "触发数量",
-      key: "triggerQuantity",
-      dataIndex: "triggerQuantity",
+      key: "triggerAmount",
+      dataIndex: "triggerAmount",
       responsive: ["xl"],
       ellipsis: true,
       align: "left",
       render: (_, record) => {
         const editable = isEditing(record);
-        return editable ? editorEl(_, record, 'triggerQuantity') : defaultEl(_, record, 'triggerQuantity')
+        return editable ? editorEl(_, record, 'triggerAmount') : defaultEl(_, record, 'triggerAmount')
       }
     },
     {
       title: "补充矿工费",
-      key: "supplementaryMinerFees",
-      dataIndex: "supplementaryMinerFees",
+      key: "supplementAmount",
+      dataIndex: "supplementAmount",
       responsive: ["xl"],
       ellipsis: true,
       align: "left",
       render: (_, record) => {
         const editable = isEditing(record);
-        return editable ? editorEl(_, record, 'supplementaryMinerFees') : defaultEl(_, record, 'supplementaryMinerFees')
+        return editable ? editorEl(_, record, 'supplementAmount') : defaultEl(_, record, 'supplementAmount')
       }
     },
 
@@ -166,7 +153,7 @@ const TableConfig = (props) => {
           <Icon name='h-icon-xiaoyudengyu' /> : null
         }
         <InputNumber size="small" className="mx-[.1rem]" defaultValue={_} />
-        <span>LTC</span></div>
+        <span>{record.type}</span></div>
     </Form.Item>
   }
   let defaultEl = (_, record, key) => {
@@ -175,10 +162,23 @@ const TableConfig = (props) => {
         <Icon name='h-icon-xiaoyudengyu' /> : null
       }
       {_}
-      <span>LTC</span>
+      <span>{record.type}</span>
     </div>
   }
-
+  function getTableList() {
+    GetFeeWalletInfoInterFace().then(res => {
+      setData(res?.data?.map(item => {
+        let { agreement, type } = formatUnit(item.currencyId, item.currencyChain)
+        item.agreement = agreement
+        item.type = type
+        item.key = item.walletId
+        return item
+      }) ?? [])
+    })
+  }
+  useLayoutEffect(() => {
+    getTableList()
+  }, [])
   return (
     <ConfigProvider
       theme={{
@@ -197,7 +197,7 @@ const TableConfig = (props) => {
           bordered={false}
           dataSource={data}
           columns={columns}
-          pagination={true}
+          pagination={false}
         />
       </Form>
     </ConfigProvider >
