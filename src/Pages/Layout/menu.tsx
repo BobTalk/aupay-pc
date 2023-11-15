@@ -13,6 +13,7 @@ const LayoutMenu = () => {
   let navigate = useNavigate();
   let permissionRouter = getSession("activePath");
   let { pathname } = useLocation();
+  let [crtPath, setCrtPath] = useState();
 
   function menuSelectCb({ key, domEvent }) {
     stop(domEvent, () => {
@@ -23,6 +24,7 @@ const LayoutMenu = () => {
   function breadSite(key) {
     let activeKey = activePathToName[key];
     let activeP = activePath[key];
+    setCrtPath(activeP);
     if (activeKey?.length > 1) {
       let res = activeKey.map((item, idx, arr) => {
         return idx === arr.length - 1 || !idx
@@ -157,14 +159,16 @@ const LayoutMenu = () => {
     );
     setMenuList(filterRes);
   }
+
   useEffect(() => {
     filterRouter(menuList);
   }, []);
   useLayoutEffect(() => {
     breadSite(pathname);
-  }, []);
+  }, [pathname]);
   return (
     <Menu
+      key={crtPath}
       theme="light"
       onSelect={menuSelectCb}
       mode="inline"
@@ -172,7 +176,8 @@ const LayoutMenu = () => {
         styleScope["menu-box"],
         "pt-[.1rem] px-[.1rem]"
       )}
-      defaultSelectedKeys={activePath[pathname]}
+      defaultOpenKeys={crtPath}
+      defaultSelectedKeys={crtPath}
       items={menuList}
     />
   );

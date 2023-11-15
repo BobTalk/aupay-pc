@@ -35,7 +35,6 @@ const LayoutHeader = ({ colorBgContainer }: any) => {
   );
 };
 const DropDownScope = (props) => {
-  console.log("props: ", props);
   let navigate = useNavigate();
   function logout() {
     LogoutInterFace().then((res) => {

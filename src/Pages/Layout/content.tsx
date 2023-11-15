@@ -12,7 +12,6 @@ import store from "@/store";
 let { Content } = Layout;
 const LayoutContent = () => {
   let messageRefs = useRef<any>({});
-  let { pathname } = useLocation();
   let [contentH, setContentH] = useState(0);
   let userInfo = getSession("userInfo");
   let [usename] = useState(() => userInfo["adminId"]);
@@ -20,9 +19,7 @@ const LayoutContent = () => {
   let [isShowLoginTip, setIsShowLoginTip] = useState<Boolean>(
     getSession("loginTip")
   );
-  let [breadcrumb, setBreadcrumb] = useState(
-    store.getState().breadcrumbReducer
-  );
+  let [breadcrumb, setBreadcrumb] = useState();
   let [stop] = useStopPropagation();
   function close(e) {
     stop(e, () => {
@@ -31,9 +28,9 @@ const LayoutContent = () => {
       setSession("loginTip", true);
     });
   }
-  useEffect(() => {
+  store.subscribe(() => {
     setBreadcrumb(store.getState().breadcrumbReducer);
-  }, [store.getState().breadcrumbReducer]);
+  });
   useEffect(() => {
     let { height } = messageRefs.current.getBoundingClientRect();
     setContentH(height);
@@ -74,7 +71,10 @@ const LayoutContent = () => {
           message={
             <div className={styleScope["bread-crumb"]}>
               <span className="!text-[#AAA]">当前位置：</span>
-              <Breadcrumb separator="-" items={breadcrumb} />
+              <Breadcrumb
+                separator="-"
+                items={breadcrumb}
+              />
             </div>
           }
           className="text-[#333] mb-[.24rem] bg-[#FFF]"

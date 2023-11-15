@@ -3,6 +3,7 @@ import { ADD_BREADCRUMB, CHANGE_BREADCRUMB } from '../constance';
 import { initialState } from "../state";
 // 定义reducer函数：纯函数
 function breadcrumbReducer(state = initialState, action) {
+  if (JSON.stringify(initialState) == JSON.stringify(action.data)) return
   switch (action.type) {
     case ADD_BREADCRUMB:
       return action.data;
