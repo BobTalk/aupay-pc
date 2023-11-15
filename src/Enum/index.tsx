@@ -10,7 +10,7 @@ export enum operationIdEnum {
   resetPwd = 301,
   setPermission = 251,
   resetAddr = 67,
-  userFreezeOrEndisable=421
+  userFreezeOrEndisable = 421,
 }
 export enum departmentEnum {
   研发部 = 1,
@@ -59,4 +59,15 @@ export enum tradeTypeEnum {
 export enum userAcountStateEnum {
   正常 = 1,
   冻结 = 2,
+}
+export enum rechargeEnum {
+  进行中 = 0,
+  已完成 = 1,
+}
+export enum assetsTypeJumpEnum {
+  ETH = `https://etherscan.io/tx/`,
+  TRX = `https://tronscan.org/#/transaction/`,
+  BTC = `https://explorer.btc.com/zh-CN/btc/transaction/`,
+  "USDT-ERC20" = `https://etherscan.io/tx/`,
+  "USDT-TRC20"=`https://tronscan.org/#/transaction/`
 }
