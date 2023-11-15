@@ -55,7 +55,10 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response: any) => {
     if (response.data.code === 401) {
-      return clearSession();
+      return (()=>{
+        clearSession()
+        window.location.reload()
+      })();
     }
     // removePending(response.config);
     return response;
