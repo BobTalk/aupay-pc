@@ -353,9 +353,10 @@ export const FindUserListInterFace = (data) => {
   })
 }
 // 40.获取用户白名单地址 GET user/user/findUserWithdrawAddress?userId=USERID
-export const FindUserWithdrawAddressInterFace = (userId) => {
+export const FindUserWithdrawAddressInterFace = (params) => {
   return _http.getReq({
-    url: `${userPrefix}/user/findUserWithdrawAddress?userId=${userId}`,
+    url: `${userPrefix}/user/findUserWithdrawAddress`,
+    params,
   })
 }
 // 41.获取用户详情 GET user/user/getUserDetail?userId=USERID
@@ -365,9 +366,11 @@ export const GetUserDetailInterFace = (userId) => {
   })
 }
 // 42.冻结解冻用户 GET user/user/switchFreezeUser?userId=USERID
-export const SwitchFreezeUserInterFace = (userId) => {
+export const SwitchFreezeUserInterFace = (params,headers={}) => {
   return _http.getReq({
-    url: `${userPrefix}/user/switchFreezeUser?userId=${userId}`,
+    url: `${userPrefix}/user/switchFreezeUser`,
+    params,
+    headers
   })
 }
 // 43.获取用户充币记录 POST user/user/findUserRechargeRecordList
@@ -396,5 +399,13 @@ export const FindUserAssetsChangeRecordInterFace = (data) => {
   return _http.postReq({
     url: `${userPrefix}/user/findUserAssetsChangeRecord`,
     data
+  })
+}
+// 重新生成地址
+export const RegenUserAssetsWalletInterFace = (params, headers={}) => {
+  return _http.getReq({
+    url: `${walletPrefix}/wallet/regenUserAssetsWallet`,
+    params,
+    headers
   })
 }

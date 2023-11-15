@@ -9,6 +9,8 @@ export enum operationIdEnum {
   resetGoogle = 31,
   resetPwd = 301,
   setPermission = 251,
+  resetAddr = 67,
+  userFreezeOrEndisable=421
 }
 export enum departmentEnum {
   研发部 = 1,

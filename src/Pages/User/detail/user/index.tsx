@@ -1,21 +1,28 @@
 /**
  * @summary 用户
  */
-import { mergeClassName } from "@/utils/base";
+import { formatUnit, mergeClassName } from "@/utils/base";
 import styleScope from "./index.module.less";
 import "@/assets/style/form.less";
-import TableComp from "@/Components/Table";
-import { dataSource, columns } from "./table-mock.jsx";
-import { DrawWhiteList, DetailAddr } from "./draw-white.jsx";
-import { EmpowerList } from "./empower-app.jsx";
+
+import TabelScopeComp from "./table-mock.jsx";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
-import { Button, Form, Input, InputNumber, Modal } from "antd";
+import { Modal, message } from "antd";
 import { memo, useLayoutEffect, useRef, useState } from "react";
-import { createStyles, useTheme } from "antd-style";
+import { createStyles } from "antd-style";
 import { useLocation } from "react-router-dom";
-import { GetUserDetailInterFace } from "@/api";
-import { userAcountStateEnum } from "@/Enum";
-const useStyle = createStyles(({ token }) => ({
+import {
+  FindUserWithdrawAddressInterFace,
+  GetUserDetailInterFace,
+  RegenUserAssetsWalletInterFace,
+  SwitchFreezeUserInterFace,
+  VerifyGoogleAuthInterFace,
+  VerifyPinInterFace,
+} from "@/api";
+import { operationIdEnum, userAcountStateEnum } from "@/Enum";
+import PinScopeComp from "@/Pages/PinModal";
+import GoogleScopeComp from "@/Pages/GoogleModal";
+const useStyle = createStyles(() => ({
   "my-modal-body": {
     display: "grid",
     gridTemplateColumns: `repeat(4, 1fr)`,
@@ -44,10 +51,14 @@ const UserDetail = () => {
   let {
     state: { crtInfo },
   } = useLocation();
-  console.log("crtInfo: ", crtInfo);
-  let [pinValidate, setPinValidate] = useState(true);
   let [userDetailInfo, useUserDetailInfo] = useState<any>({});
+  let [PINOpen, setPINOpen] = useState(false);
   let [googleCodeOpen, setGoogleCodeOpen] = useState(false);
+  let pinToken = useRef("");
+  let resetAddrInfo = useRef<any>({});
+  let EmpowerList = useRef([]);
+  let moduleFlag = useRef("");
+  let googleToken = useRef("");
   const { styles } = useStyle();
   const classNames = {
     body: styles["my-modal-body"],
@@ -65,40 +76,128 @@ const UserDetail = () => {
       padding: 0,
     },
   };
-  let [modalOpen, setModalOpen] = useState<Boolean>(false);
   let [messageTip, setMessageTip] = useState<Boolean>(false);
-  let [formInitVal, setFormInitVal] = useState({
-    googleCode: "",
-  });
+  let [drawWhiteList, setDrawWhiteList] = useState<unknown>({});
   function changeStatus() {
-    setModalOpen(!modalOpen);
-  }
-  const inputRef1 = useRef();
-  const inputRef2 = useRef();
-  const inputRef3 = useRef();
-  const inputRef4 = useRef();
-  function inputChangeCb(e, reactNode) {
-    stop(e, () => {
-      let val = e.target.value;
-      if (val && reactNode) {
-        reactNode.current.focus();
-      }
-    });
-  }
-  function inputKeyUpCb(e, prvNode) {
-    let keyCode = e.keyCode;
-    if (prvNode && keyCode === 8) {
-      e.target.value = "";
-      prvNode.current.focus();
-    }
+    pinCancelCb();
+    moduleFlag.current = "acountState";
   }
   function getPageInfo(userId) {
     GetUserDetailInterFace(userId).then((res) => {
+      EmpowerList.current = res?.userApplyApplications ?? []
       useUserDetailInfo(res);
+    });
+  }
+  function pinCancelCb() {
+    setPINOpen(!PINOpen);
+  }
+  function pinOkCb(code) {
+    VerifyPinInterFace({
+      pin: code,
+      operationId: operationIdEnum["resetAddr"],
+    }).then((res) => {
+      if (res.status) {
+        pinToken.current = res.data;
+        setGoogleCodeOpen(!googleCodeOpen);
+        setPINOpen(!PINOpen);
+      } else {
+        message.error(res.message);
+      }
+    });
+  }
+  function googleOkCb({ googleCode }) {
+    VerifyGoogleAuthInterFace({
+      googleCode,
+      operationId: operationIdEnum["resetAddr"],
+    })
+      .then(async (res) => {
+        if (moduleFlag.current == "resetAddr") {
+          let { userId, currencyId, currencyChain } = resetAddrInfo.current;
+          let resetRes = await RegenUserAssetsWalletInterFace(
+            {
+              userId,
+              currencyId,
+              currencyChain,
+            },
+            {
+              "Pin-token": pinToken.current,
+              "Google-Auth-Token": res.data,
+            }
+          );
+          message[resetRes.status ? "success" : "error"](res.message);
+          if (resetRes.status) {
+            getPageInfo(crtInfo.userId);
+            googleCancelCb();
+          }
+        } else {
+          // 账户状态
+          googleToken.current = res.data;
+          setMessageTip(!messageTip);
+          setGoogleCodeOpen(!googleCodeOpen);
+        }
+      })
+      .finally(() => {
+        moduleFlag.current = "";
+      });
+  }
+  function googleCancelCb() {
+    setGoogleCodeOpen(!googleCodeOpen);
+  }
+  // 重置地址
+  function resetAddrCb(e, crt) {
+    stop(e, () => {
+      resetAddrInfo.current = crt;
+      moduleFlag.current = "resetAddr";
+      setPINOpen(!PINOpen);
+    });
+  }
+  function tableListFormat(list = []) {
+    return list.map((item) => {
+      let { agreement, type } = formatUnit(item.currencyId, item.currencyChain);
+      item.agreement = agreement;
+      item.type = type;
+      item.key = item.id;
+      return item;
+    });
+  }
+  function isFrezzOrEndisable(e) {
+    stop(e, async () => {
+      let frezzAcount = await SwitchFreezeUserInterFace(
+        { userId: userDetailInfo.userId },
+        {
+          "Pin-token": pinToken.current,
+          "Google-Auth-Token": googleToken.current,
+        }
+      );
+      message[frezzAcount.status ? "success" : "error"](frezzAcount.message);
+      if (frezzAcount.status) {
+        useUserDetailInfo((initVal) => ({
+          ...initVal,
+          state: initVal.state == 1 ? 2 : 1,
+        }));
+        setMessageTip(!messageTip);
+      }
+    });
+  }
+  function getWhiteList(userId) {
+    FindUserWithdrawAddressInterFace({ userId }).then((res) => {
+      let formatList: any[] =
+        res?.data?.map((item) => {
+          let { agreement } = formatUnit(item.currencyId, item.currencyChain);
+          item.agreement = agreement;
+          return item;
+        }) ?? [];
+      let splitRes = formatList.reduce((prv, next) => {
+        if (!prv[next.agreement]) prv[next.agreement] = [];
+        prv[next.agreement].push(next);
+        return prv;
+      }, {});
+      setDrawWhiteList(splitRes);
     });
   }
   useLayoutEffect(() => {
     getPageInfo(crtInfo.userId);
+    getWhiteList(crtInfo.userId);
   }, []);
   return (
     <>
@@ -177,32 +276,24 @@ const UserDetail = () => {
       </div>
       <div className={mergeClassName(styleScope["card"])}>
         <TitleInfo title="资产详情" isShowStatus={false} />
-        <TableComp
-          className="mt-[.24rem]"
-          border
-          dataSource={dataSource}
-          columns={columns}
+        <TabelScopeComp
+          onResetAddr={resetAddrCb}
+          dataSource={tableListFormat(userDetailInfo.userAssets)}
         />
       </div>
       <div
         className={mergeClassName(styleScope["card"], styleScope["white-list"])}
       >
         <TitleInfo title="提币白名单" isShowStatus={false} />
-        {DrawWhiteList?.map((item, index) => (
+        {Object.keys(drawWhiteList)?.map((item, index) => (
           <>
-            <p
-              key={item + "_" + index + "A"}
-              className={styleScope["white-list--title"]}
-            >
+            <p key={item} className={styleScope["white-list--title"]}>
               {item}
             </p>
-            {DetailAddr[item].map((it, idx) => (
+            {drawWhiteList[item].map((it, idx) => (
               <>
-                <p
-                  className={styleScope["white-list--addr"]}
-                  key={"white" + it.address + "-" + idx + "-" + index}
-                >
-                  <span>【{it.title}】</span>
+                <p className={styleScope["white-list--addr"]} key={it.id}>
+                  <span>【{it.note}】</span>
                   <span>{it.address}</span>
                 </p>
               </>
@@ -213,117 +304,36 @@ const UserDetail = () => {
       <div className={mergeClassName(styleScope["card"])}>
         <TitleInfo title="快捷支付授权应用" isShowStatus={false} />
         <div className={styleScope["app-list"]}>
-          {EmpowerList.map((item, index) => (
+          {EmpowerList?.current?.map((item, index) => (
             <div
-              key={"app" + item.id + "-" + index}
+              key={"app" + item.applicaitonId + "-" + index}
               className="flex items-center"
             >
-              <img src={item.icon} alt="" />
+              <img className="w-[.55rem] h-[.55rem]" src={item.applicaitonIcon} alt="" />
               <div className={styleScope["info"]}>
-                <p>{item.name}</p>
-                <p>用户名：{item.username}</p>
+                <p>{item.applicaitonId}</p>
+                <p>用户名：{item.applicationUsername}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
       {/* PIN */}
-      <ModalScope
-        showFooter={true}
-        onOk={() => {
-          setModalOpen(!modalOpen);
-          setGoogleCodeOpen(!googleCodeOpen);
-        }}
-        onCancel={() => setModalOpen(!modalOpen)}
-        classNames={classNames}
-        open={modalOpen}
-        title={
-          <span className="flex items-center font-normal">
-            <i className={styleScope["icon"]}></i>验证PIN
-          </span>
-        }
-      >
-        <Input
-          ref={inputRef1}
-          maxLength={1}
-          onKeyUp={(e) => inputKeyUpCb(e, undefined)}
-          onChange={(e) => inputChangeCb(e, inputRef2)}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-        <Input
-          ref={inputRef2}
-          onKeyUp={(e) => inputKeyUpCb(e, inputRef1)}
-          onChange={(e) => inputChangeCb(e, inputRef3)}
-          maxLength={1}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-        <Input
-          onKeyUp={(e) => inputKeyUpCb(e, inputRef2)}
-          onChange={(e) => inputChangeCb(e, inputRef4)}
-          ref={inputRef3}
-          maxLength={1}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-        <Input
-          onKeyUp={(e) => inputKeyUpCb(e, inputRef3)}
-          onChange={(e) => inputChangeCb(e, undefined)}
-          ref={inputRef4}
-          maxLength={1}
-          className={styleScope["input-border"]}
-          bordered={false}
-        />
-      </ModalScope>
+      <PinScopeComp onFinish={pinOkCb} onCancel={pinCancelCb} open={PINOpen} />
       {/* google验证 */}
-      <ModalScope
-        classNames={classNames}
-        showFooter={false}
-        onOk={() => setGoogleCodeOpen(!googleCodeOpen)}
-        onCancel={() => setGoogleCodeOpen(!googleCodeOpen)}
-        style={modalStyles}
-        title={
-          <span className="flex items-center font-normal">
-            <i className={styleScope["icon"]}></i>验证Google
-          </span>
-        }
+      <GoogleScopeComp
         open={googleCodeOpen}
-      >
-        <Form
-          layout="vertical"
-          className="_reset-form w-full"
-          initialValues={formInitVal}
-        >
-          <Form.Item
-            className="hidden_start px-[.3rem]"
-            label={<span className="text-[#546078]">Google验证码</span>}
-            name="googleCode"
-            rules={[
-              {
-                required: true,
-                message: "请输入Google验证码",
-              },
-            ]}
-          >
-            <Input placeholder="请输入Google验证码" />
-          </Form.Item>
-          <Form.Item className={styleScope["btn-list"]}>
-            <Button>
-              <span className="text-[#999]">关闭</span>
-            </Button>
-            <Button type="primary">确定</Button>
-          </Form.Item>
-        </Form>
-      </ModalScope>
+        onFinish={googleOkCb}
+        onCancel={googleCancelCb}
+      />
       {/* 提示信息 */}
       <ModalScope
         style={modalStyles}
         showFooter={true}
         cancelText="取消"
         okText="确定"
-        onOk={() => {
-          setMessageTip(!messageTip);
+        onOk={(e) => {
+          isFrezzOrEndisable(e);
         }}
         onCancel={() => {
           setMessageTip(!messageTip);
@@ -337,10 +347,15 @@ const UserDetail = () => {
         }
       >
         <div className={styleScope["tip-box"]}>
-          {/* 恢复账号使用状态 */}
-          {/* 解冻后恢复登陆 */}
-          <p className="text-center">冻结账号：海棠多度</p>
-          <p className="mt-[.15rem] text-center">冻结后将无法登陆</p>
+          <p className="text-center">
+            {userDetailInfo["state"] == 1 ? "冻结账号" : "恢复账号使用状态"}：
+            {userDetailInfo.username}
+          </p>
+          <p className="mt-[.15rem] text-center">
+            {userDetailInfo["state"] == 1
+              ? "冻结后将无法登陆"
+              : "解冻后恢复登陆"}
+          </p>
         </div>
       </ModalScope>
     </>
