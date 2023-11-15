@@ -2,6 +2,7 @@ import _http from '../Https'
 const staffPrefix = '/admin'
 const noticPrefix = '/operate'
 const walletPrefix = "/wallet"
+const userPrefix = "/user"
 // 1.获取登录加密key  GET admin/getAccessKey
 export const GetAccessKeyInterface = () => {
   return _http.getReq({
@@ -341,5 +342,59 @@ export const GetWithdrawWalletInfoInterFace = (data) => {
 export const GetFeeWalletInfoInterFace = () => {
   return _http.getReq({
     url: `${walletPrefix}/wallet/getFeeWalletInfo`,
+  })
+}
+
+// 39.获取用户列表 POST user/user/findUserList
+export const FindUserListInterFace = (data) => {
+  return _http.postReq({
+    url: `${userPrefix}/user/findUserList`,
+    data
+  })
+}
+// 40.获取用户白名单地址 GET user/user/findUserWithdrawAddress?userId=USERID
+export const FindUserWithdrawAddressInterFace = (userId) => {
+  return _http.getReq({
+    url: `${userPrefix}/user/findUserWithdrawAddress?userId=${userId}`,
+  })
+}
+// 41.获取用户详情 GET user/user/getUserDetail?userId=USERID
+export const GetUserDetailInterFace = (userId) => {
+  return _http.getReq({
+    url: `${userPrefix}/user/getUserDetail?userId=${userId}`,
+  })
+}
+// 42.冻结解冻用户 GET user/user/switchFreezeUser?userId=USERID
+export const SwitchFreezeUserInterFace = (userId) => {
+  return _http.getReq({
+    url: `${userPrefix}/user/switchFreezeUser?userId=${userId}`,
+  })
+}
+// 43.获取用户充币记录 POST user/user/findUserRechargeRecordList
+export const FindUserRechargeRecordListInterFace = (data) => {
+  return _http.postReq({
+    url: `${userPrefix}/user/findUserRechargeRecordList`,
+    data
+  })
+}
+// 44.获取用户提款记录 POST user/user/findUserWithdrawRecordList
+export const FindUserWithdrawRecordListInterFace = (data) => {
+  return _http.postReq({
+    url: `${userPrefix}/user/findUserWithdrawRecordList`,
+    data
+  })
+}
+// 45.获取用户交易记录 POST user/user/findUserTradeRecordList
+export const  FindUserTradeRecordListInterFace = (data) => {
+  return _http.postReq({
+    url: `${userPrefix}/user/findUserTradeRecordList`,
+    data
+  })
+}
+// 46.获取用户资产变动记录 POST user/user/findUserAssetsChangeRecord
+export const FindUserAssetsChangeRecordInterFace = (data) => {
+  return _http.postReq({
+    url: `${userPrefix}/user/findUserAssetsChangeRecord`,
+    data
   })
 }

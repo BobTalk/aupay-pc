@@ -54,3 +54,7 @@ export enum tradeTypeEnum {
   转入 = 6,
   转出 = 7,
 }
+export enum userAcountStateEnum {
+  正常 = 1,
+  冻结 = 2,
+}

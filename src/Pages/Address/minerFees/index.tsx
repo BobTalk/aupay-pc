@@ -2,22 +2,23 @@
  * @summary 地址
  */
 import { SwapOutlined } from "@ant-design/icons";
-import { Button, Modal, QRCode } from "antd";
+import { Button, QRCode } from "antd";
 import styleScope from "./index.module.less";
 
 import TableConfig from "./table.jsx";
 import { mergeClassName } from "@/utils/base";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
-import { memo, useState } from "react";
-import { createStyles } from "antd-style";
-import TransferRecord from "../transferRecords";
+import { useRef, useState } from "react";
+import TransferRecord from "@/Pages/Ozbet/transferRecords";
 import ModalScope from "@/Components/Modal";
 const MinerFeesAddress = (props) => {
   let [stop] = useStopPropagation();
+  let crtInfo = useRef<any>({})
   let [qrCode, setQrCode] = useState(false);
   function intoCb(e, crt) {
     stop(e, () => {
       setQrCode(!qrCode);
+      crtInfo.current = crt
     });
   }
   function recordCb(e){
@@ -55,8 +56,8 @@ const MinerFeesAddress = (props) => {
         }
       >
         <QRCode bordered={false} value="test" />
-        <p className="text-[#222]">ETH:</p>
-        <p className="text-[#222]">03xiusfosdr903xiusfosdr903xiusfos</p>
+        <p className="text-[#222]">{crtInfo.current.type}:</p>
+        <p className="text-[#222]">{crtInfo.current.address}</p>
       </ModalScope>
     </>
   );

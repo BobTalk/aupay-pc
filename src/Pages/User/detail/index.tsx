@@ -5,43 +5,27 @@ import {
   activePath,
   activePathToName,
 } from "@/Pages/Layout/activeRouterConfig";
+import { useState } from "react";
 const UserDetail = () => {
   let navigate = useNavigate();
-  let { pathname } = useLocation();
-  const publicUrl = "/aupay/user/detail/";
-  const items = [
-    {
-      key: `${publicUrl}user`,
-      label: "用户详情",
-    },
-    {
-      key: `${publicUrl}recharge`,
-      label: "充币记录",
-    },
-    {
-      key: `${publicUrl}draw`,
-      label: "提币记录",
-    },
-    {
-      key: `${publicUrl}trade`,
-      label: "交易记录",
-    },
-    {
-      key: `${publicUrl}assetsChanges`,
-      label: "资产变动记录",
-    },
-  ];
+
+  let {
+    pathname,
+    state: { chilterRouterArr, crtInfo },
+  } = useLocation();
+
+  let [childRouter] = useState(chilterRouterArr);
   function onChange(key: string) {
     let activeKey = activePathToName[key];
     let activeP = activePath[key];
-    navigate(key);
+    navigate(key, { state: { chilterRouterArr, crtInfo } });
     if (activeKey.length > 1) {
       let res = activeKey.map((item, idx, arr) => {
-        return (idx === arr.length - 1 || !idx)
+        return idx === arr.length - 1 || !idx
           ? { title: item }
           : { title: item, href: activeP[idx] };
       });
-      store.dispatch({ type: "ADD_BREADCRUMB", data: res});
+      store.dispatch({ type: "ADD_BREADCRUMB", data: res });
     } else {
       store.dispatch({
         type: "ADD_BREADCRUMB",
@@ -54,10 +38,10 @@ const UserDetail = () => {
       <Tabs
         className="bg-[var(--white)] px-[.24rem] rounded-[.08rem]"
         defaultActiveKey={pathname}
-        items={items}
+        items={childRouter}
         onChange={onChange}
       />
-      <Outlet />
+      <Outlet key={pathname} {...crtInfo} />
     </>
   );
 };

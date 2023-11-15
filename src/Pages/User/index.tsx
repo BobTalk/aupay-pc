@@ -1,34 +1,56 @@
 import { Button, Input, Select } from "antd";
 import { SearchOutlined, CaretDownOutlined } from "@ant-design/icons";
 import styleScope from "./index.module.less";
-import Table from "@/Components/Table";
-import { useState } from "react";
-import { data, columns, pagination } from "./table-mock.jsx";
+import { useRef, useState } from "react";
+import TableScope from "./table-mock.jsx";
 import { Outlet, useLocation } from "react-router-dom";
+import { formatEnum } from "@/utils/base";
+import { userAcountStateEnum } from "@/Enum";
+import { useStopPropagation } from "@/Hooks/StopPropagation";
 const User = () => {
+  let [stop] = useStopPropagation();
+  let tableRefs = useRef<any>();
+  let filterInputRefs = useRef<any>();
   let [state, setState] = useState(undefined);
   let { pathname } = useLocation();
-  let [name, setName] = useState(undefined);
-  function tableChangeCb(
-    pge,
-    filters,
-    sorter,
-    extra: { currentDataSource; action }
-  ) {
-    console.log("pagination: ", pge);
+  function paginationCb({ current, pageSize, total }) {
+    tableRefs.current.updateParmas(
+      {
+        search: filterInputRefs.current.input.value,
+        state: +state,
+      },
+      {
+        current,
+        pageSize,
+        total,
+      }
+    );
+  }
+  function filterCb(e) {
+    stop(e, () => {
+      tableRefs.current.getTableList({
+        search: filterInputRefs.current.input.value,
+        state: +state,
+      });
+    });
   }
   return pathname == "/aupay/user" ? (
     <>
       <div className={styleScope["filter-box"]}>
         <div className={styleScope["filter-user"]}>
           <Input
+            ref={filterInputRefs}
             className="w-[3.2rem]"
-            defaultValue={name}
             size="large"
             allowClear
             placeholder="搜索用户名/Ozbet用户名/昵称/邮箱"
           />
-          <Button size="large" type="primary" icon={<SearchOutlined />}>
+          <Button
+            onClick={(e) => filterCb(e)}
+            size="large"
+            type="primary"
+            icon={<SearchOutlined />}
+          >
             搜索
           </Button>
         </div>
@@ -37,28 +59,23 @@ const User = () => {
             size="large"
             placeholder="账户状态"
             defaultValue={state}
+            onChange={(val) => setState(val)}
             allowClear
             suffixIcon={<CaretDownOutlined />}
             style={{ width: 120 }}
-            options={[
-              { value: "jack", label: "Jack" },
-              { value: "lucy", label: "Lucy" },
-              { value: "Yiminghe", label: "yiminghe" },
-              { value: "disabled", label: "Disabled", disabled: true },
-            ]}
+            options={formatEnum(userAcountStateEnum)}
           />
-          <Button size="large" type="primary" icon={<SearchOutlined />}>
+          <Button
+            size="large"
+            onClick={(e) => filterCb(e)}
+            type="primary"
+            icon={<SearchOutlined />}
+          >
             搜索
           </Button>
         </div>
       </div>
-      <Table
-        onChange={tableChangeCb}
-        dataSource={data}
-        pagination={pagination}
-        columns={columns}
-        rowClassName={styleScope["row"]}
-      />
+      <TableScope ref={tableRefs} onPaginationCb={paginationCb} />
     </>
   ) : (
     <Outlet />

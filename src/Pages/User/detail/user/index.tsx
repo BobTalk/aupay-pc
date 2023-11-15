@@ -10,8 +10,11 @@ import { DrawWhiteList, DetailAddr } from "./draw-white.jsx";
 import { EmpowerList } from "./empower-app.jsx";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { Button, Form, Input, InputNumber, Modal } from "antd";
-import { memo, useRef, useState } from "react";
+import { memo, useLayoutEffect, useRef, useState } from "react";
 import { createStyles, useTheme } from "antd-style";
+import { useLocation } from "react-router-dom";
+import { GetUserDetailInterFace } from "@/api";
+import { userAcountStateEnum } from "@/Enum";
 const useStyle = createStyles(({ token }) => ({
   "my-modal-body": {
     display: "grid",
@@ -38,7 +41,12 @@ const useStyle = createStyles(({ token }) => ({
 }));
 const UserDetail = () => {
   let [stop] = useStopPropagation();
+  let {
+    state: { crtInfo },
+  } = useLocation();
+  console.log("crtInfo: ", crtInfo);
   let [pinValidate, setPinValidate] = useState(true);
+  let [userDetailInfo, useUserDetailInfo] = useState<any>({});
   let [googleCodeOpen, setGoogleCodeOpen] = useState(false);
   const { styles } = useStyle();
   const classNames = {
@@ -84,12 +92,20 @@ const UserDetail = () => {
       prvNode.current.focus();
     }
   }
+  function getPageInfo(userId) {
+    GetUserDetailInterFace(userId).then((res) => {
+      useUserDetailInfo(res);
+    });
+  }
+  useLayoutEffect(() => {
+    getPageInfo(crtInfo.userId);
+  }, []);
   return (
     <>
       <div className={mergeClassName(styleScope["card"])}>
         <TitleInfo
           title="用户详情"
-          status="已冻结"
+          status={userAcountStateEnum[userDetailInfo["state"]]}
           onClick={changeStatus}
           isShowStatus={true}
         />
@@ -103,17 +119,19 @@ const UserDetail = () => {
                 <span>在线状态:</span>
               </p>
               <p>
-                <span>小吴飞翔</span>
-                <span>活跃</span>
-                <span>离线 / 在线</span>
+                <span>{userDetailInfo.username}</span>
+                <span>{userDetailInfo.activeState ? "活跃" : "不活跃"}</span>
+                <span>
+                  {userDetailInfo.onlineState ? "在线" : "离线"} / 在线
+                </span>
               </p>
               <p>
                 <span>最近登录时间:</span>
                 <span>最近登陆IP地址:</span>
               </p>
               <p>
-                <span>2023.7.20 11:10:09</span>
-                <span>134.232.344.24</span>
+                <span>{userDetailInfo.loginTime}</span>
+                <span>{userDetailInfo.loginIp}</span>
               </p>
             </div>
           </div>
@@ -125,16 +143,16 @@ const UserDetail = () => {
                 <span>联系方式:</span>
               </p>
               <p>
-                <span>小吴飞翔</span>
-                <span>13423234424</span>
+                <span>{userDetailInfo.username}</span>
+                <span>{userDetailInfo.mobile ?? "--"}</span>
               </p>
               <p>
                 <span>邮箱:</span>
                 <span>注册IP地址:</span>
               </p>
               <p>
-                <span>13423234424@163.com</span>
-                <span>134.232.344.24</span>
+                <span>{userDetailInfo.email}</span>
+                <span>{userDetailInfo.regIp}</span>
               </p>
             </div>
           </div>
@@ -146,8 +164,12 @@ const UserDetail = () => {
                 <span>谷歌验证器:</span>
               </p>
               <p>
-                <span>已设置</span>
-                <span>已绑定</span>
+                <span>
+                  {userDetailInfo.setAssetsPassword ? "已设置" : "未设置"}
+                </span>
+                <span>
+                  {userDetailInfo.bindGoogleAuth ? "已绑定" : "未绑定"}
+                </span>
               </p>
             </div>
           </div>
@@ -314,7 +336,7 @@ const UserDetail = () => {
           </span>
         }
       >
-        <div className={styleScope['tip-box']}>
+        <div className={styleScope["tip-box"]}>
           {/* 恢复账号使用状态 */}
           {/* 解冻后恢复登陆 */}
           <p className="text-center">冻结账号：海棠多度</p>
@@ -344,7 +366,7 @@ const ModalScope = memo(
         onOk={okCb}
         footer={props.showFooter ? undefined : null}
         cancelText={props.cancelText}
-        okText='确定'
+        okText="确定"
         onCancel={cancelCb}
         title={props.title}
         classNames={props.classNames}
