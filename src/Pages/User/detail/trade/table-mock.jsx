@@ -3,7 +3,7 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { FindUserTradeRecordListInterFace } from "@/api";
 import { formatUnit } from "@/utils/base.ts";
 import { message } from 'antd';
-import { tradeTypeEnum, rechargeEnum } from "@/Enum";
+import { tradeTypeByUserEnum, rechargeEnum } from "@/Enum";
 import dayjs from 'dayjs';
 const TableScope = (props, ref) => {
   function clickCb(pagination) {
@@ -24,8 +24,8 @@ const TableScope = (props, ref) => {
   const columns = [
     {
       title: 'aupay订单号',
-      key: 'aupayOrder',
-      dataIndex: 'aupayOrder',
+      key: 'id',
+      dataIndex: 'id',
       responsive: ['xl'],
       ellipsis: false,
       align: 'left',
@@ -55,7 +55,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: false,
       align: 'left',
-      render: (_) => tradeTypeEnum[_] ?? "--"
+      render: (_) => _ ?? "--"
     },
     {
       title: '用户名',
@@ -64,7 +64,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: false,
       align: 'left',
-      render: (_) => tradeTypeEnum[_] ?? "--"
+      render: (_) => _ ?? "--"
     },
     {
       title: '钱包协议',
@@ -73,7 +73,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: false,
       align: 'left',
-      render: (_) => tradeTypeEnum[_] ?? "--"
+      render: (_) => _ ?? "--"
     },
     {
       title: '资产类型',
@@ -82,7 +82,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: false,
       align: 'left',
-      render: (_) => tradeTypeEnum[_] ?? "--"
+      render: (_) => _ ?? "--"
     },
     {
       title: '交易类型',
@@ -91,7 +91,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: false,
       align: 'left',
-      render: (_) => tradeTypeEnum[_] ?? "--"
+      render: (_) => tradeTypeByUserEnum[_] ?? "--"
     },
     {
       title: '数量',
@@ -100,7 +100,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: false,
       align: 'left',
-      render: (_) => tradeTypeEnum[_] ?? 0
+      render: (_) => _ ?? 0
     },
     {
       title: '商品说明',

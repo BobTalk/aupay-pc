@@ -64,6 +64,10 @@ export enum rechargeEnum {
   进行中 = 0,
   已完成 = 1,
 }
+export enum tradeTypeByUserEnum{
+  充值 = 1,
+  提款 = 2
+}
 export enum assetsTypeJumpEnum {
   ETH = `https://etherscan.io/tx/`,
   TRX = `https://tronscan.org/#/transaction/`,

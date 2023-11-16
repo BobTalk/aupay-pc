@@ -17,7 +17,8 @@ const TransferRecord = () => {
   const rangePickerRefs = useRef<any>();
   // let [assetsType, setAssetsType] = useState();
   let assetsType = useRef()
-  let [tradeType, setTradeType] = useState();
+  // let [tradeType, setTradeType] = useState();
+  let tradeType = useRef()
   const filterInfo = useRef<any>({});
 
   function filterListInfo(e, key, value) {
@@ -34,7 +35,7 @@ const TransferRecord = () => {
       currencyChain: null,
       beginTime: beginTime || null,
       endTime: endTime || null,
-      tradeType: tradeType || null,
+      tradeType: tradeType.current || null,
     };
     tableRefs.current.getTableList(filterInfo.current);
   }
@@ -76,7 +77,7 @@ const TransferRecord = () => {
           size="large"
           allowClear
           placeholder="交易类型"
-          onChange={(val) => setTradeType(val)}
+          onChange={(val) => tradeType.current = val}
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
           options={formatEnum(tradeTypeEnum)}
