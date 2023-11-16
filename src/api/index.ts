@@ -200,6 +200,26 @@ export const FindAnnouncementListInterFace = (data) => {
     data
   })
 }
+// 注册活跃表格
+export const ActivationInterFace = ()=>{
+  return _http.getReq({
+    url: `${noticPrefix}/statisitical/getRegActiveStatisitical`,
+  })
+}
+// 每日资产统计
+export const FindAssetsDailyCountInterFace = (data)=>{
+  return _http.postReq({
+    url: `${noticPrefix}/statisitical/findAssetsDailyStatistics`,
+    data
+  })
+}
+// 每日业务数据统计
+export const FindBusinessCountListInterFace = (data)=>{
+  return _http.postReq({
+    url: `${noticPrefix}/statisitical/findBusinessStatisiticalList`,
+    data
+  })
+}
 // 27.添加公告 POST operate/operation/addAnnouncement {title content isShow isRoll}
 export const AddAnnouncementInterFace = (data) => {
   return _http.postReq({
