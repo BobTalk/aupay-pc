@@ -177,20 +177,12 @@ const TableScope = (props, ref) => {
       }
     })
   }
-  function updateParmas(filterParams, paginationParams) {
-    setPagination(pagination => ({
-      ...pagination,
-      ...paginationParams
-    }))
-    getTableList(filterParams, paginationParams)
-  }
   useEffect(() => {
-    getTableList()
+    getTableList({}, pagination)
   }, [])
 
   useImperativeHandle(ref, () => ({
     getTableList,
-    updateParmas
   }), [])
   return <TableComp
     themeObj={{

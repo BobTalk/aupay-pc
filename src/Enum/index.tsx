@@ -64,14 +64,20 @@ export enum rechargeEnum {
   进行中 = 0,
   已完成 = 1,
 }
-export enum tradeTypeByUserEnum{
+export enum tradeTypeByUserEnum {
   充值 = 1,
-  提款 = 2
+  提款 = 2,
+}
+export enum tradeTypeChangeEnum {
+  充币 = 1,
+  提币 = 2,
+  快捷支付 = 3,
+  快捷提款 = 4,
 }
 export enum assetsTypeJumpEnum {
   ETH = `https://etherscan.io/tx/`,
   TRX = `https://tronscan.org/#/transaction/`,
   BTC = `https://explorer.btc.com/zh-CN/btc/transaction/`,
   "USDT-ERC20" = `https://etherscan.io/tx/`,
-  "USDT-TRC20"=`https://tronscan.org/#/transaction/`
+  "USDT-TRC20" = `https://tronscan.org/#/transaction/`,
 }
