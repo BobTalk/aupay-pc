@@ -13,7 +13,7 @@ import {
 } from "@/api";
 const DataCount = () => {
   let [activationInfo, setActivationInfo] = useState({});
-  let [payCountInfo, setPayCountInfo] = useState({});
+  let [payCountInfo, setPayCountInfo] = useState([]);
   let [assetsCount, setAssetsCount] = useState([]);
   // 趋势  统计数据中 流入 - 流出
   let [assetsTrend, setAssetsTrend] = useState([]);
@@ -33,25 +33,41 @@ const DataCount = () => {
       setAssetsCount(res?.data ?? []);
     });
   }
-  function payCount() {
-    FindBusinessCountListInterFace({}).then((res) => {
+  // 资产趋势
+  function getAssetsTrend(time) {
+    FindAssetsDailyCountInterFace({
+      conditions: {
+        beginTime: time[0] ?? null,
+        endTime: time[1] ?? null,
+      },
+    }).then((res) => {
+      setAssetsTrend(res?.data ?? []);
+    });
+  }
+  function payCount(time) {
+    FindBusinessCountListInterFace({
+      conditions: {
+        beginTime: time[0] ?? null,
+        endTime: time[1] ?? null,
+      },
+    }).then((res) => {
       setPayCountInfo(res?.data ?? []);
     });
   }
   function queryAssetsCountCb(time) {
-    console.log("queryAssetsCountCb: ", time);
     getAssetsCount(time);
   }
   function queryPayCountCb(time) {
-    console.log("queryPayCountCb: ", time);
+    payCount(time);
   }
   function queryAssetsTrendCb(time) {
-    console.log("queryAssetsTrendCb: ", time);
+    getAssetsTrend(time);
   }
   useLayoutEffect(() => {
     getActivation();
     getAssetsCount([]);
-    payCount();
+    payCount([]);
+    getAssetsTrend([]);
   }, []);
   return (
     <>

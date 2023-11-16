@@ -1,20 +1,12 @@
 export default {
   color: ["#1C63FF", '#00A8FF'],
   dataset: {
-    dimentsions: ['date', "流入", "流出"],
-    source: [
-      { date: '7-10', "流入": 99, "流出": '-' },
-      { date: '7-11', "流入": '-', "流出": -25 },
-      { date: '7-12', "流入": '-', "流出": -50 },
-      { date: '7-13', "流入": 45, "流出": '-' },
-      { date: '7-14', "流入": 75, "流出": '-' },
-      { date: '7-15', "流入": '-', "流出": -87 },
-      { date: '7-16', "流入": 89, "流出": '-' },
-      { date: '7-17', "流入": '-', "流出": -68 },
-    ]
+    dimentsions: ['date', "趋势"],
+    source: []
   },
   xAxis: {
     type: 'category',
+    data:[],
     axisLine: {
       show: false
     },
@@ -48,17 +40,9 @@ export default {
   },
   series: [
     {
-      stack: 'Total',
+      data:[],
       type: 'bar',
       silent: true,
-      barWidth: 24,
-      itemStyle: {
-        borderRadius: 6
-      }
-    },
-    {
-      stack: 'Total',
-      type: 'bar',
       barWidth: 24,
       itemStyle: {
         borderRadius: 6

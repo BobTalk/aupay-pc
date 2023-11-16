@@ -16,11 +16,23 @@ type FilterPropsType = {
 };
 const Filter = (props: FilterPropsType) => {
   let [stop] = useStopPropagation();
+  let [form] = Form.useForm();
   let [formInitVal] = useState({
     rangeTime: [],
   });
-  function filterCb({rangeTime}) {
-    props?.onQuery?.(rangeTime?.map(item=> dayjs(item).format("YYYY-MM-DD"))??[])
+  async function filterCb() {
+    let { rangeTime } = await form.validateFields();
+    props?.onQuery?.(
+      rangeTime?.map((item) => dayjs(item).format("YYYY-MM-DD")) ?? []
+    );
+  }
+  function shortCutTimeCb(val) {
+    if (!val) {
+      form.setFieldValue("rangeTime", []);
+      return;
+    }
+    let prvTime = dayjs().subtract(val, "day");
+    form.setFieldValue("rangeTime", [prvTime, dayjs()]);
   }
   return (
     <>
@@ -30,6 +42,7 @@ const Filter = (props: FilterPropsType) => {
           {props.showShortcutKey ? (
             <Select
               placeholder="请选择"
+              onChange={shortCutTimeCb}
               className="w-[1.1rem] mr-[.15rem]"
               allowClear
               options={[
@@ -49,6 +62,7 @@ const Filter = (props: FilterPropsType) => {
             />
           ) : null}
           <Form
+            form={form}
             className="flex"
             onFinish={filterCb}
             initialValues={formInitVal}
