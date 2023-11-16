@@ -5,11 +5,15 @@ import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
 import { Button, Input, Select } from "antd";
 import styleScope from "./index.module.less";
 import RangePicker from "@/Components/RangePicker";
-import TableComp from "@/Components/Table";
-import { dataSource, columns, pagination } from "./table-mock.jsx";
+import TableScope from "./table-mock.jsx";
 import { formatEnum, mergeClassName } from "@/utils/base";
 import { assetsTypeEnum, tradeTypeEnum } from "@/Enum";
+import { useRef } from "react";
 const Trade = () => {
+  const tableRefEl = useRef();
+  function paginationCb({ current, pageSize, total }) {
+    
+  }
   return (
     <>
       <div className={styleScope["filter-box"]}>
@@ -44,14 +48,7 @@ const Trade = () => {
       <div
         className={mergeClassName("bg-[var(--white)]", styleScope["table-box"])}
       >
-        <TableComp
-          themeObj={{
-            headerBorderRadius: 0,
-          }}
-          dataSource={dataSource}
-          columns={columns}
-          pagination={pagination}
-        />
+        <TableScope ref={tableRefEl} onPaginationCb={paginationCb} />
       </div>
     </>
   );

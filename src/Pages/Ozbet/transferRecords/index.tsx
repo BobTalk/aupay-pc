@@ -15,7 +15,8 @@ const TransferRecord = () => {
   const tableRefs = useRef<any>({});
   const filterOrderOrAddrOrBussion = useRef<any>();
   const rangePickerRefs = useRef<any>();
-  let [assetsType, setAssetsType] = useState();
+  // let [assetsType, setAssetsType] = useState();
+  let assetsType = useRef()
   let [tradeType, setTradeType] = useState();
   const filterInfo = useRef<any>({});
 
@@ -29,7 +30,7 @@ const TransferRecord = () => {
     let [beginTime, endTime] = rangePickerRefs.current.timeStr ?? [];
     filterInfo.current = {
       ...filterInfo.current,
-      currencyId: assetsType || null,
+      currencyId: assetsType.current || null,
       currencyChain: null,
       beginTime: beginTime || null,
       endTime: endTime || null,
@@ -66,7 +67,7 @@ const TransferRecord = () => {
           size="large"
           allowClear
           placeholder="资产类型"
-          onChange={(val) => setAssetsType(val)}
+          onChange={(val) => assetsType.current=val}
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
           options={formatEnum(assetsTypeEnum)}
