@@ -14,7 +14,8 @@ const UserAddress = () => {
   let [assetsListType, setAssetsListType] = useState([]);
   let searchInputRefs = useRef<any>();
   let tableRefEl = useRef<any>();
-  let [assetsType, setAssetsType] = useState();
+  // let [assetsType, setAssetsType] = useState();
+  let  assetsType = useRef()
   function getAssetsList(list) {
     setAssetsListType(list);
   }
@@ -22,7 +23,7 @@ const UserAddress = () => {
     tableRefEl.current.updateParmas(
       {
         search: searchInputRefs.current.input.value || null,
-        tradeType: assetsType,
+        tradeType: assetsType.current,
       },
       {
         current,
@@ -35,7 +36,7 @@ const UserAddress = () => {
     stop(e, () => {
       tableRefEl.current.getTableList({
         search: val,
-        currencyId: assetsType,
+        currencyId: assetsType.current,
       });
     });
   }
@@ -70,13 +71,13 @@ const UserAddress = () => {
           size="large"
           allowClear
           placeholder="资产类型"
-          onChange={(val) => setAssetsType(val)}
+          onChange={(val) => assetsType.current = val}
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
           options={formatEnum(assetsTypeEnum)}
         />
         <Button
-          onClick={(e) => filterCb1(e, assetsType)}
+          onClick={(e) => filterCb1(e, assetsType.current)}
           type="primary"
           size="large"
           icon={<SearchOutlined />}
