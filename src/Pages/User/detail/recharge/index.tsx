@@ -8,26 +8,29 @@ import RangePicker from "@/Components/RangePicker";
 import TableScope from "./table-mock.jsx";
 import { formatEnum, mergeClassName } from "@/utils/base";
 import { assetsTypeEnum, assetsTypeJumpEnum } from "@/Enum";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 const RechargeDetail = () => {
   let assetsTypeJumpEnumObj = JSON.parse(JSON.stringify(assetsTypeJumpEnum));
   const filterNote = useRef<any>();
   const filterTime = useRef<any>();
   const tableRefEl = useRef<any>();
-  // const [assetsType, setAssetsType] = useState();
-  const assetsType = useRef()
+  const assetsType = useRef();
   const [stop] = useStopPropagation();
   function jumpCb(e, crt) {
     stop(e, () => {
-      window.open(assetsTypeJumpEnumObj[crt["agreement"]]+crt['chainTxId'], "_blank")
+      if (!crt["chainTxId"]) return;
+      window.open(
+        assetsTypeJumpEnumObj[crt["agreement"]] + crt["chainTxId"],
+        "_blank"
+      );
     });
   }
   function filterCb() {
     let note = filterNote.current.input?.value;
     let time = filterTime.current?.timeStr ?? [];
-    console.log('filterTime.current: ', filterTime.current);
-    console.log('time: ', time);
+    console.log("filterTime.current: ", filterTime.current);
+    console.log("time: ", time);
     tableRefEl.current.getTableList({
       search: note || null,
       beginTime: time[0] || null,
@@ -74,7 +77,7 @@ const RechargeDetail = () => {
         <Select
           size="large"
           allowClear
-          onChange={(val) => assetsType.current = val}
+          onChange={(val) => (assetsType.current = val)}
           placeholder="资产类型"
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
