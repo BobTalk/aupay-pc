@@ -17,9 +17,15 @@ import reserveAssetsChart from "@/assets/images/reserve_assets-chart.svg";
 import drawAddrChart from "@/assets/images/draw_addr-chart.svg";
 import styleScope from "./index.module.less";
 import Image from "@/Components/Image";
-import { mergeClassName } from "@/utils/base";
-import { FindUserAssetsCollectionConfigInterFace } from "@/api";
-import { useEffect } from "react";
+import { formatUnit, mergeClassName } from "@/utils/base";
+import {
+  GetReserveWalletInfoInterFace,
+  GetWithdrawWalletInfoInterFace,
+  GetTransferWalletWalletInfoInterFace,
+  GetApplicaitonWithdrawWalletInfoInterFace,
+  GetApplicaitonAssetsWalletInfoInterFace,
+} from "@/api";
+import { useEffect, useLayoutEffect, useState } from "react";
 const AssetsCount = () => {
   let imgList = [bgBlueLogo, bgPinkLogo, bgLogo];
   let iconList = [totalAssets, ozbetAssets, drawAssets];
@@ -78,65 +84,54 @@ const AssetsCount = () => {
       ],
     },
   ];
-  let bottomModuleData = [
-    {
-      amount: "109,230.00",
-      unit: "USDT",
-      title: "auPay提币地址",
-      detailData: [
-        {
-          title: "USDT-ERC20",
-          amount: "100,901.00",
-          unit: "USDT",
-        },
-        {
-          title: "USDT-ERC20",
-          amount: "91,793.00",
-          unit: "USDT",
-        },
-      ],
-    },
-    {
-      amount: "298,099.00",
-      unit: "USDT",
-      title: "auPay中转地址",
-      detailData: [
-        {
-          title: "USDT-ERC20",
-          amount: "131,793.00",
-          unit: "USDT",
-        },
-        {
-          title: "USDT-ERC20",
-          amount: "166,701.00",
-          unit: "USDT",
-        },
-      ],
-    },
-    {
-      amount: "71,393.00",
-      unit: "USDT",
-      title: "auPay储备资产",
-      detailData: [
-        {
-          title: "USDT-ERC20",
-          amount: "21,989.00",
-          unit: "USDT",
-        },
-        {
-          title: "USDT-ERC20",
-          amount: "30,902.00",
-          unit: "USDT",
-        },
-      ],
-    },
-  ];
-  function getPageList() {
-    FindUserAssetsCollectionConfigInterFace().then((res) => {
-      console.log("res: ", res);
+  let [bottomModuleData, setBottomModuleData] = useState([]);
+  function dataFormat(res, index, title) {
+    let filterData = res?.data?.filter((item) => item.currencyId == 3) ?? [];
+    let { detailData, amount } = filterData.reduce(
+      (prv, next) => {
+        let { agreement, type } = formatUnit(
+          next.currencyId,
+          next.currencyChain
+        );
+        prv.detailData.push({
+          title: agreement,
+          amount: next.balance,
+          unit: type,
+        });
+        prv.amount += next.balance;
+        return prv;
+      },
+      { detailData: [], amount: 0 }
+    );
+    setBottomModuleData((initVal) => {
+      if (!initVal[index]) initVal[index] = {};
+      initVal[index] = {
+        amount: amount,
+        unit: "USDT",
+        title,
+        detailData: detailData,
+      };
+      return [...initVal];
     });
   }
-  useEffect(() => {
+  async function getPageList() {
+    // 储备资产
+    let res = await GetReserveWalletInfoInterFace();
+    // 提币地址
+    let res1 = await GetWithdrawWalletInfoInterFace();
+    // 中转地址
+    let res2 = await GetTransferWalletWalletInfoInterFace();
+    // 提款地址
+    let res3 = await GetApplicaitonWithdrawWalletInfoInterFace();
+    console.log('res3: ', res3);
+    // 资产地址
+    let res4 = await GetApplicaitonAssetsWalletInfoInterFace();
+    console.log('res4: ', res4);
+    dataFormat(res1, 0, "auPay提币地址");
+    dataFormat(res2, 1, "auPay中转地址");
+    dataFormat(res, 2, "auPay储备资产");
+  }
+  useLayoutEffect(() => {
     getPageList();
   }, []);
   return (
@@ -165,7 +160,7 @@ const AssetsCount = () => {
       <div className="flex items-center gap-[.24rem] mt-[.24rem]">
         {bottomModuleData.map((item, index) => (
           <BottomCardList
-            key={item.title}
+            key={item?.title}
             icon={bIconList[index]}
             chart={bChartList[index]}
             data={item}

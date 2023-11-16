@@ -352,10 +352,9 @@ export const GetReserveWalletInfoInterFace = () => {
   })
 }
 // 提币地址
-export const GetWithdrawWalletInfoInterFace = (data) => {
+export const GetWithdrawWalletInfoInterFace = () => {
   return _http.postReq({
     url: `${walletPrefix}/wallet/getWithdrawWalletInfo`,
-    data
   })
 }
 // 矿工费地址
