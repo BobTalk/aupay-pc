@@ -31,61 +31,10 @@ const AssetsCount = () => {
   let iconList = [totalAssets, ozbetAssets, drawAssets];
   let bIconList = [drawAddrIcon, transferAddrIcon, reserveAssetsIcon];
   let bChartList = [drawAddrChart, transferAddrChart, reserveAssetsChart];
-  let topModuleData = [
-    {
-      amount: "681,299.00",
-      unit: "USDT",
-      title: "auPay总资产",
-      detailData: [
-        {
-          title: "USDT-ERC20",
-          amount: "191,793.00",
-          unit: "USDT",
-        },
-        {
-          title: "USDT-ERC20",
-          amount: "108,129.00",
-          unit: "USDT",
-        },
-      ],
-    },
-    {
-      amount: "190,289.00",
-      unit: "USDT",
-      title: "Ozbet资产",
-      detailData: [
-        {
-          title: "USDT-ERC20",
-          amount: "107,378.00",
-          unit: "USDT",
-        },
-        {
-          title: "USDT-ERC20",
-          amount: "215,687.00",
-          unit: "USDT",
-        },
-      ],
-    },
-    {
-      amount: "291,872.00",
-      unit: "USDT",
-      title: "Ozbet提币地址",
-      detailData: [
-        {
-          title: "USDT-ERC20",
-          amount: "361,920.00",
-          unit: "USDT",
-        },
-        {
-          title: "USDT-ERC20",
-          amount: "211,909.00",
-          unit: "USDT",
-        },
-      ],
-    },
-  ];
+
   let [bottomModuleData, setBottomModuleData] = useState([]);
-  function dataFormat(res, index, title) {
+  let [topModuleData, setTopModuleData] = useState([]);
+  function dataFormat(res, index, title, setFn) {
     let filterData = res?.data?.filter((item) => item.currencyId == 3) ?? [];
     let { detailData, amount } = filterData.reduce(
       (prv, next) => {
@@ -93,17 +42,23 @@ const AssetsCount = () => {
           next.currencyId,
           next.currencyChain
         );
-        prv.detailData.push({
-          title: agreement,
-          amount: next.balance,
-          unit: type,
-        });
+
+        let findObj = prv.detailData.find((item) => item.title == agreement);
+        if (findObj) {
+          findObj.amount += next.balance;
+        } else {
+          prv.detailData.push({
+            title: agreement,
+            amount: next.balance,
+            unit: type,
+          });
+        }
         prv.amount += next.balance;
         return prv;
       },
       { detailData: [], amount: 0 }
     );
-    setBottomModuleData((initVal) => {
+    setFn((initVal) => {
       if (!initVal[index]) initVal[index] = {};
       initVal[index] = {
         amount: amount,
@@ -123,13 +78,21 @@ const AssetsCount = () => {
     let res2 = await GetTransferWalletWalletInfoInterFace();
     // 提款地址
     let res3 = await GetApplicaitonWithdrawWalletInfoInterFace();
-    console.log('res3: ', res3);
     // 资产地址
     let res4 = await GetApplicaitonAssetsWalletInfoInterFace();
-    console.log('res4: ', res4);
-    dataFormat(res1, 0, "auPay提币地址");
-    dataFormat(res2, 1, "auPay中转地址");
-    dataFormat(res, 2, "auPay储备资产");
+    dataFormat(res1, 0, "auPay提币地址", setBottomModuleData);
+    dataFormat(res2, 1, "auPay中转地址", setBottomModuleData);
+    dataFormat(res, 2, "auPay储备资产", setBottomModuleData);
+    dataFormat(
+      {
+        data: [...res1.data, ...res2.data, ...res.data],
+      },
+      0,
+      "auPay总资产",
+      setTopModuleData
+    );
+    dataFormat(res3, 1, "Ozbet资产", setTopModuleData);
+    dataFormat(res4, 2, "Ozbet提币地址", setTopModuleData);
   }
   useLayoutEffect(() => {
     getPageList();
@@ -143,7 +106,7 @@ const AssetsCount = () => {
           backgroundSize: "100% 1.8rem",
         }}
       >
-        <div className="flex items-center gap-[.24rem] mb-[.17rem]">
+        <div className="flex items-center gap-[.24rem] mb-[.17rem] max-w-[]">
           {imgList.map((item, index) => (
             <TopCardList
               imgUrl={item}
@@ -171,7 +134,7 @@ const AssetsCount = () => {
   );
 };
 const BottomCardList = (props) => {
-  let { icon, chart, data } = props;
+  let { icon, chart, data = {} } = props;
   return (
     <div className="flex-1 p-[.34rem_.34rem_.22rem] bg-[var(--white)] rounded-[var(--border-radius)]">
       <div className="flex items-center justify-between gap-[.1rem]  pb-[.21rem]">
@@ -195,7 +158,7 @@ const BottomCardList = (props) => {
           >
             <span className={styleScope["b-title"]}>{item.title}</span>
             <p className={styleScope["b-amount"]}>
-              <span>{item.amount}</span>
+              <span>{item?.amount}</span>
               <span>{item.unit}</span>
             </p>
           </div>
@@ -205,13 +168,14 @@ const BottomCardList = (props) => {
   );
 };
 const TopCardList = (props) => {
-  let { imgUrl, iconUrl, data, index: parentIndex } = props;
+  let { imgUrl, iconUrl, data = {}, index: parentIndex } = props;
+
   return (
     <Card
       bgImg={imgUrl}
       className={mergeClassName(
         styleScope[`shadow${parentIndex}`],
-        "flex-1 bg-no-repeat h-full flex flex-col"
+        "flex-1 bg-no-repeat h-full flex flex-col max-w-[33.3333%]"
       )}
       style={{
         backgroundSize: "cover",
@@ -224,30 +188,60 @@ const TopCardList = (props) => {
       >
         <div className="text-[var(--white)]">
           <p className={styleScope["amount"]}>
-            {data.amount}
+            {data?.amount}
             {data.unit}
           </p>
           <p className={styleScope["title"]}>{data.title}</p>
         </div>
       </Image>
-      <div
-        className={mergeClassName(
-          styleScope[`detail-info`],
-          styleScope[`detail${parentIndex}`],
-          "flex"
-        )}
-      >
-        {data?.detailData.map((item, idx) => (
-          <div key={idx}>
-            <p>{item.title}</p>
-            <p>
-              {item.amount}
-              {item.unit}
-            </p>
-          </div>
-        ))}
-      </div>
+      <ChildList parentIndex={parentIndex} list={data.detailData} />
     </Card>
   );
+};
+const ChildList = ({ parentIndex, list = [] }) => {
+  const splitLen = 5;
+  function arrToTwoDimerndional(oldArr): any[] {
+    let num = 1,
+      temp = 0,
+      newArr = [];
+    oldArr.forEach((item, ind) => {
+      if (ind % splitLen == 0) {
+        newArr.push(oldArr.slice(temp, splitLen * num));
+        temp += splitLen;
+        num += 1;
+      }
+    });
+    return newArr;
+  }
+  function autoColumns(list) {
+    if (list.length > splitLen) {
+      return `repeat(${splitLen}, minmax(0, 1fr))`;
+    }
+    return `repeat(${list.length}, minmax(0, 1fr))`;
+  }
+
+  return arrToTwoDimerndional(list).map((arrItem, index) => (
+    <div
+      key={arrItem.length + "_" + index}
+      className={mergeClassName(
+        styleScope[`detail-info`],
+        styleScope[`detail${parentIndex}`],
+        "grid"
+      )}
+      style={{
+        gridTemplateColumns: autoColumns(list),
+      }}
+    >
+      {arrItem.map((item, idx) => (
+        <div key={idx}>
+          <p>{item.title}</p>
+          <p>
+            {item.amount}
+            {item.unit}
+          </p>
+        </div>
+      ))}
+    </div>
+  ));
 };
 export default AssetsCount;
