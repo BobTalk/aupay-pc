@@ -1,12 +1,10 @@
-import { Avatar, Badge, Dropdown, Layout, Space, message } from "antd";
-import type { MenuProps } from "antd";
+import { Avatar, Badge, Dropdown, Layout, message } from "antd";
 import styleScope from "./header.module.less";
 const { Header } = Layout;
 import { UserOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { clearSession, getSession, timeFormate } from "@/utils/base";
 import Icon from "@/Components/Icon";
 import { useState } from "react";
-import { CustomChart } from "echarts/charts";
 import { LogoutInterFace } from "@/api";
 import { useNavigate } from "react-router-dom";
 const LayoutHeader = ({ colorBgContainer }: any) => {
@@ -49,9 +47,9 @@ const DropDownScope = (props) => {
   function customDropdown(menu) {
     return (
       <div className="bg-[var(--white)] p-[.1rem]">
-        <p className="hover:bg-[var(--gray)] rounded-[.06rem] cursor-pointer leading-[.3rem] my-[.1rem] text-center p-[.05rem]">
+        {/* <p className="hover:bg-[var(--gray)] rounded-[.06rem] cursor-pointer leading-[.3rem] my-[.1rem] text-center p-[.05rem]">
           个人中心
-        </p>
+        </p> */}
         <p
           onClick={logout}
           className="hover:bg-[var(--gray)] rounded-[.06rem] cursor-pointer leading-[.3rem] my-[.1rem] text-center p-[.05rem]"
