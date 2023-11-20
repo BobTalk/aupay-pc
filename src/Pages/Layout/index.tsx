@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ConfigProvider, Layout, theme } from "antd";
+import { ConfigProvider, Layout } from "antd";
 import LayoutMenu from "./menu";
 import LayoutContent from "./content";
 import LayoutHeader from "./header";
@@ -8,10 +8,11 @@ import LayoutLogo from "./logo";
 const { Sider } = Layout;
 
 const LayoutPage: React.FC = () => {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  // const {
+  //   token: { colorBgContainer },
+  // } = theme.useToken();
   const [collapsed, setCollapsed] = useState(false);
+  // console.log('colorBgContainer: ', colorBgContainer);
   return (
     <ConfigProvider
       theme={{
@@ -79,7 +80,7 @@ const LayoutPage: React.FC = () => {
         </Sider>
         <Layout>
           <LayoutHeader
-            colorBgContainer={colorBgContainer}
+            colorBgContainer="#FFF"
             collapsed={collapsed}
             setCollapsed={setCollapsed}
           />

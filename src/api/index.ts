@@ -1,8 +1,9 @@
 import _http from '../Https'
-const staffPrefix = '/admin'
-const noticPrefix = '/operate'
-const walletPrefix = "/wallet"
-const userPrefix = "/user"
+let env = process.env.NODE_ENV == 'development'?'/':'/api/'
+const staffPrefix = `${env}admin`
+const noticPrefix = `${env}operate`
+const walletPrefix = `${env}wallet`
+const userPrefix = `${env}user`
 // 1.获取登录加密key  GET admin/getAccessKey
 export const GetAccessKeyInterface = () => {
   return _http.getReq({

@@ -6,7 +6,7 @@ type TableCompPropsType = {
   dataSource: Array<any>;
   columns: Array<any>;
   pagination?: false | {};
-  onChange?:()=>{},
+  onChange?:any,
   children?: ReactNode;
   border?: boolean;
   themeObj?: Object;
@@ -58,7 +58,7 @@ TableComp.defaultProps = {
   columns: [],
   sticky: true,
   pagination: false,
-  onChange:()=>{},
+  onChange:function name(){},
   border: false,
   themeObj: {},
   paginationThemeObj: {},
