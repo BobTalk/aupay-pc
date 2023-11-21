@@ -6,7 +6,7 @@ import { Button, Input, Select, message } from "antd";
 import styleScope from "./index.module.less";
 import RangePicker from "@/Components/RangePicker";
 import TableScope from "./table-mock.jsx";
-import { formatEnum, mergeClassName } from "@/utils/base";
+import { formatEnum, mergeClassName, timeJoin } from "@/utils/base";
 import {
   assetsTypeEnum,
   tradeTypeChangeEnum,
@@ -38,8 +38,10 @@ const Trade = () => {
     tableRefEl.current.getTableList(
       {
         search: inputVal,
-        beginTime: timeRefsArr[0] || null,
-        endTime: timeRefsArr[1] || null,
+        // beginTime: timeRefsArr[0] || null,
+        // endTime: timeRefsArr[1] || null,
+        beginTime: timeJoin(timeRefsArr[0]),
+        endTime: timeJoin(timeRefsArr[1], true),
         currencyId: +assetsTypeVal || null,
         tradeType: +tradeTypeVal || null,
       },

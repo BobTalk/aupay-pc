@@ -6,7 +6,7 @@ import { Button, Input } from "antd";
 import styleScope from "./index.module.less";
 import RangePicker from "@/Components/RangePicker";
 import TableScope from "./table-mock.jsx";
-import { mergeClassName } from "@/utils/base";
+import { mergeClassName, timeJoin } from "@/utils/base";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { useRef } from "react";
 const IpSystemRecord = () => {
@@ -19,8 +19,10 @@ const IpSystemRecord = () => {
     tableRefEl.current.updateParmas(
       {
         search: note || null,
-        beginTime: time[0] || null,
-        endTime: time[1] || null,
+        // beginTime: time[0] || null,
+        // endTime: time[1] || null,
+        beginTime: timeJoin(time[0]),
+        endTime: timeJoin(time[1], true),
       },
       {
         current,
@@ -34,8 +36,10 @@ const IpSystemRecord = () => {
     let time = filterTime.current?.timeStr ?? [];
     tableRefEl.current.getTableList({
       search: note || null,
-      beginTime: time[0] || null,
-      endTime: time[1] || null,
+      // beginTime: time[0] || null,
+      beginTime: timeJoin(time[0]),
+      endTime: timeJoin(time[1], true),
+      // endTime: time[1] || null,
     });
   }
   return (
@@ -48,7 +52,7 @@ const IpSystemRecord = () => {
           size="large"
           className="w-[3.2rem]"
         />
-        <RangePicker  ref={filterTime} size="large" />
+        <RangePicker ref={filterTime} size="large" />
         <Button
           onClick={callGetTableFn}
           type="primary"

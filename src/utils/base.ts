@@ -149,6 +149,10 @@ function formatEnum(enumData) {
     label: item
   }))
 }
+function timeJoin(time, isPre = false) {
+  if (!time) return null
+  return isPre ? time + " 23:59:59" : time + " 00:00:00"
+}
 export {
   mergeClassName,
   encrypt,
@@ -162,5 +166,6 @@ export {
   timeFormate,
   clearSession,
   formatUnit,
-  formatEnum
+  formatEnum,
+  timeJoin
 }

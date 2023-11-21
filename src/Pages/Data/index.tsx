@@ -1,4 +1,4 @@
-import { mergeClassName } from "@/utils/base";
+import { mergeClassName, timeJoin } from "@/utils/base";
 import styleScope from "./index.module.less";
 import Activation from "./activation";
 import AssetsCount from "./assetsCount";
@@ -19,7 +19,7 @@ const DataCount = () => {
   let [assetsTrend, setAssetsTrend] = useState([]);
   function getActivation() {
     ActivationInterFace().then((res) => {
-      console.log('res: ', res);
+      console.log("res: ", res);
       setActivationInfo(res ?? {});
     });
   }
@@ -27,8 +27,8 @@ const DataCount = () => {
   function getAssetsCount(time) {
     FindAssetsDailyCountInterFace({
       conditions: {
-        beginTime: time[0] ?? null,
-        endTime: time[1] ?? null,
+        beginTime: timeJoin(time[0]),
+        endTime: timeJoin(time[1], true),
       },
     }).then((res) => {
       setAssetsCount(res?.data ?? []);
@@ -38,8 +38,8 @@ const DataCount = () => {
   function getAssetsTrend(time) {
     FindAssetsDailyCountInterFace({
       conditions: {
-        beginTime: time[0] ?? null,
-        endTime: time[1] ?? null,
+        beginTime: timeJoin(time[0]),
+        endTime: timeJoin(time[1], true),
       },
     }).then((res) => {
       setAssetsTrend(res?.data ?? []);
@@ -48,8 +48,8 @@ const DataCount = () => {
   function payCount(time) {
     FindBusinessCountListInterFace({
       conditions: {
-        beginTime: time[0] ?? null,
-        endTime: time[1] ?? null,
+        beginTime: timeJoin(time[0]),
+        endTime: timeJoin(time[1], true),
       },
     }).then((res) => {
       setPayCountInfo(res?.data ?? []);

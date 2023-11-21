@@ -6,7 +6,7 @@ import { Button, Form, Input } from "antd";
 import styleScope from "./index.module.less";
 import RangePicker from "@/Components/RangePicker";
 import TableScope from "./table-mock.jsx";
-import { mergeClassName } from "@/utils/base";
+import { mergeClassName, timeJoin } from "@/utils/base";
 import ModalScope from "@/Components/Modal";
 import { useRef, useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
@@ -29,8 +29,10 @@ const OperationRecords = (props) => {
     let time = filterTime.current?.timeStr ?? [];
     tableRefEl.current.updateParmas(
       {
-        beginTime: time[0] || null,
-        endTime: time[1] || null,
+        // beginTime: time[0] || null,
+        // endTime: time[1] || null,
+        beginTime: timeJoin(time[0]),
+        endTime: timeJoin(time[1], true),
       },
       {
         current: 1,
@@ -42,8 +44,10 @@ const OperationRecords = (props) => {
     let time = filterTime.current?.timeStr ?? [];
     tableRefEl.current.updateParmas(
       {
-        beginTime: time[0] || null,
-        endTime: time[1] || null,
+        // beginTime: time[0] || null,
+        // endTime: time[1] || null,
+        beginTime: timeJoin(time[0]),
+        endTime: timeJoin(time[1], true),
       },
       {
         current,

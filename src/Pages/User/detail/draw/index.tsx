@@ -6,7 +6,7 @@ import { Button, Input, Select } from "antd";
 import styleScope from "./index.module.less";
 import RangePicker from "@/Components/RangePicker";
 import TableScope from "./table-mock.jsx";
-import { formatEnum, mergeClassName } from "@/utils/base";
+import { formatEnum, mergeClassName, timeJoin } from "@/utils/base";
 import { assetsTypeEnum, assetsTypeJumpEnum } from "@/Enum";
 import { useRef } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
@@ -33,8 +33,10 @@ const Draw = () => {
     console.log("time: ", time);
     tableRefEl.current.getTableList({
       search: note || null,
-      beginTime: time[0] || null,
-      endTime: time[1] || null,
+      // beginTime: time[0] || null,
+      // endTime: time[1] || null,
+      beginTime: timeJoin(time[0]),
+      endTime: timeJoin(time[1], true),
       currencyId: assetsType.current,
     });
   }
@@ -44,8 +46,10 @@ const Draw = () => {
     tableRefEl.current.updateParmas(
       {
         search: note || null,
-        beginTime: time[0] || null,
-        endTime: time[1] || null,
+        // beginTime: time[0] || null,
+        // endTime: time[1] || null,
+        beginTime: timeJoin(time[0]),
+        endTime: timeJoin(time[1], true),
         currencyId: assetsType.current,
       },
       {

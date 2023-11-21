@@ -6,7 +6,7 @@ import { Button, Input, Select } from "antd";
 import styleScope from "./index.module.less";
 import RangePicker from "@/Components/RangePicker";
 import TableConfig from "./table-mock.jsx";
-import { formatEnum, mergeClassName } from "@/utils/base";
+import { formatEnum, mergeClassName, timeJoin } from "@/utils/base";
 import { useRef, useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { assetsTypeEnum, tradeTypeEnum } from "@/Enum";
@@ -33,8 +33,11 @@ const TransferRecord = () => {
       ...filterInfo.current,
       currencyId: assetsType.current || null,
       currencyChain: null,
-      beginTime: beginTime || null,
-      endTime: endTime || null,
+      // beginTime: beginTime || null,
+      // endTime: endTime || null,
+      beginTime: timeJoin(beginTime),
+      endTime: timeJoin(endTime, true),
+
       tradeType: tradeType.current || null,
     };
     tableRefs.current.getTableList(filterInfo.current);

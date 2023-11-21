@@ -6,7 +6,7 @@ import { Button, Form, Input, message } from "antd";
 import styleScope from "./index.module.less";
 import RangePicker from "@/Components/RangePicker";
 import TableScope from "./table-mock.jsx";
-import { getSession, mergeClassName } from "@/utils/base";
+import { getSession, mergeClassName, timeJoin } from "@/utils/base";
 import ModalScope from "@/Components/Modal";
 import { useRef, useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
@@ -114,8 +114,10 @@ const IpSystemManage = () => {
     let time = filterTime.current?.timeStr ?? [];
     tableRefEl.current.getTableList({
       search: note || null,
-      beginTime: time[0] || null,
-      endTime: time[1] || null,
+      beginTime: timeJoin(time[0]),
+      endTime: timeJoin(time[1], true),
+      // beginTime: time[0] || null,
+      // endTime: time[1] || null,
     });
   }
   function deleteAndDisableAndEnable(crt) {
