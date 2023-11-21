@@ -20,6 +20,7 @@ const NoticeList = () => {
   let navigate = useNavigate();
   let { pathname } = useLocation();
   let [visiable, setVisiable] = useState(false);
+  let pagition = useRef<any>({});
   let [notice, setNotice] = useState<any>({});
   function noticeToggleOkCb(...arg) {
     updateList(notice);
@@ -35,7 +36,7 @@ const NoticeList = () => {
       if (res.status) {
         message.success(res.message);
         setVisiable(!visiable);
-        tableRefEl.current?.getTableInfo();
+        tableRefEl.current?.getTableInfo(pagition.current);
       } else {
         message.error(res.message);
       }
@@ -92,6 +93,7 @@ const NoticeList = () => {
     });
   }
   function paginationCb({ current, pageSize, total }) {
+    pagition.current = { current, pageSize, total };
     tableRefEl.current.getTableInfo({
       current,
       pageSize,
@@ -155,7 +157,7 @@ const NoticeList = () => {
           <p>公告标题</p>
           <span>{notice.title}</span>
           <p className="mt-[.16rem]">公告内容</p>
-          <span>{notice.content}</span>
+          <span dangerouslySetInnerHTML={{ __html: notice.content }}></span>
         </div>
       </ModalScope>
     </>

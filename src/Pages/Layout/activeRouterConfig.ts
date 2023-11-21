@@ -33,6 +33,7 @@ export const activePath = {
   "/aupay/system/ip-manage": ["/aupay/system", "/aupay/system/ip-manage"],
   "/aupay/notice": ["/aupay/notice"],
   "/aupay/notice/add": ["/aupay/notice","/aupay/notice/add"],
+  "/aupay/notice/editor": ["/aupay/notice","/aupay/notice/editor"],
   "/aupay/system/staff-manage/detail": ["/aupay/system/staff-manage","/aupay/system/staff-manage"],
 };
 export const activePathToName = {
@@ -63,4 +64,5 @@ export const activePathToName = {
   "/aupay/system/staff-manage/detail": ["系统管理","员工管理", "详情"],
   "/aupay/notice": ["公告列表"],
   "/aupay/notice/add": ["公告列表", "新增公告"],
+  "/aupay/notice/editor": ["公告列表", "编辑公告"],
 };

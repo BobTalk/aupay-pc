@@ -122,9 +122,10 @@ const TableScope = (props, ref) => {
   }
   // 获取列表数据
   function getTableInfo({ current, pageSize }) {
+    console.log('pagination: ', pagination);
     FindAnnouncementListInterFace({
-      pageNo: current,
-      pageSize,
+      pageNo: current ?? pagination.current,
+      pageSize: pageSize ?? pagination.pageSize,
       conditions: null
     }).then(res => {
       let formatData = res.data.map(item => (
@@ -148,8 +149,8 @@ const TableScope = (props, ref) => {
   useEffect(() => {
     getTableInfo(pagination)
   }, [])
-  function clickCb(pagination) {
-    props?.onPaginationCb?.(pagination)
+  function clickCb(pgt) {
+    props?.onPaginationCb?.(pgt)
   }
   return <TableComp
     themeObj={{

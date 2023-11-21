@@ -1,14 +1,15 @@
 import ModalScope from "@/Components/Modal";
 import styleScope from "./index.module.less";
 import { Button, Form, Input } from "antd";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 const PinScopeComp = (props) => {
   let [stop] = useStopPropagation();
-  const inputRef1 = useRef();
-  const inputRef2 = useRef();
-  const inputRef3 = useRef();
-  const inputRef4 = useRef();
+  let timer = useRef<any>();
+  const inputRef1 = useRef<any>();
+  const inputRef2 = useRef<any>();
+  const inputRef3 = useRef<any>();
+  const inputRef4 = useRef<any>();
   const formRefEl = useRef<any>();
   let PINInitVal = useRef<any>({
     one: "",
@@ -50,6 +51,14 @@ const PinScopeComp = (props) => {
       }
     });
   }
+  useEffect(() => {
+    if (props.open) {
+      timer.current = setTimeout(() => {
+        inputRef1.current.focus?.();
+      }, 100);
+    }
+    return () => clearTimeout(timer.current);
+  }, [props.open]);
   return (
     <ModalScope
       style={{

@@ -19,7 +19,8 @@ const DataCount = () => {
   let [assetsTrend, setAssetsTrend] = useState([]);
   function getActivation() {
     ActivationInterFace().then((res) => {
-      setActivationInfo(res?.data ?? {});
+      console.log('res: ', res);
+      setActivationInfo(res ?? {});
     });
   }
   // 资产统计

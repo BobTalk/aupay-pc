@@ -14,6 +14,7 @@ import { assetsTypeEnum, tradeTypeEnum } from "@/Enum";
 import { GetReserveWalletInfoInterFace } from "@/api";
 import { useLayoutEffect, useState } from "react";
 import TransferRecord from "@/Pages/Ozbet/transferRecords";
+import Icon from "@/Components/Icon";
 const ReserveAssets = () => {
   let [dataList, setDataList] = useState([]);
   function getModuleList() {
@@ -44,7 +45,8 @@ const ReserveAssets = () => {
             className="bg-[var(--white)] p-[.27rem_0.24rem] rounded-[.06rem]"
           >
             <div className="flex items-center">
-              <img src={geenIcon} alt="" className="w-[.48rem] h-[.48rem]" />
+              {/* <img src={geenIcon} alt="" className="w-[.48rem] h-[.48rem]" /> */}
+              <Icon purity={false} name={`h-icon-${item.type}`} style={{fontSize:'.48rem'}}/>
               <div className="ml-[.13rem] mr-[.53rem]">
                 <p className={styleScope["type"]}>{item.agreement}</p>
                 <p className={styleScope["addr"]}>{item.address}</p>

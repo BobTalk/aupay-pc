@@ -15,6 +15,8 @@ import {
   VerifyGoogleAuthInterFace,
   VerifyPinInterFace,
 } from "@/api";
+import PinScopeComp from "@/Pages/PinModal";
+import GoogleScopeComp from "@/Pages/GoogleModal";
 const modalStyles = {
   header: {
     marginBottom: ".24rem",
@@ -83,19 +85,17 @@ const StaffSystemManage = () => {
     });
   }
   // 校验PIN
-  function pinOkCb() {
-    let { one, two, three, foure } = PINInitVal.current;
+  function pinOkCb(value) {
+    // let { one, two, three, foure } = PINInitVal.current;
     VerifyPinInterFace({
-      pin: `${one}${two}${three}${foure}`,
+      pin: value,
       operationId: 230,
     }).then((res) => {
-      console.log("res: ", res);
       if (res.status) {
         token.current = res.data;
         setPinOpen(!PINOpen);
         setGoogleCodeOpen(!googleCodeOpen);
         PINInitVal.current = {};
-        formRefEl.current.resetFields(["one", "two", "three", "foure"]);
       } else {
         message.error(res.message);
       }
@@ -130,7 +130,6 @@ const StaffSystemManage = () => {
     }).then((res) => {
       if (res.status) {
         googleToken.current = res.data;
-        googleRef.current.setFieldValue("googleCode", "");
         setAddStaffOpen(!addStaffOpen);
         setGoogleCodeOpen(!googleCodeOpen);
       } else {
@@ -154,22 +153,25 @@ const StaffSystemManage = () => {
         "Pin-token": token.current,
         "Google-Auth-Token": googleToken.current,
       }
-    ).then((res) => {
-      if (res.status) {
-        console.log('addStaffRef.current: ', addStaffRef.current);
-        addStaffRef.current.resetFields(
-          ["adminId",
-          "email",
-          "phone",
-          "dep",
-          "note"]
-        );
+    )
+      .then((res) => {
+        if (res.status) {
+          addStaffRef.current.resetFields([
+            "adminId",
+            "email",
+            "phone",
+            "dep",
+            "note",
+          ]);
+
+          callGetTableFn();
+        } else {
+          message.error(res.message);
+        }
+      })
+      .finally(() => {
         setAddStaffOpen(!addStaffOpen);
-        callGetTableFn();
-      } else {
-        message.error(res.message);
-      }
-    });
+      });
   }
   function countryCodeCb(val) {
     countryCode.current = val;
@@ -215,7 +217,12 @@ const StaffSystemManage = () => {
         />
       </div>
       {/* PIN */}
-      <ModalScope
+      <PinScopeComp
+        open={PINOpen}
+        onCancel={() => setPinOpen(!PINOpen)}
+        onFinish={pinOkCb}
+      />
+      {/* <ModalScope
         style={{
           header: {
             marginBottom: ".24rem",
@@ -292,9 +299,14 @@ const StaffSystemManage = () => {
             </Form.Item>
           </Form>
         </div>
-      </ModalScope>
+      </ModalScope> */}
       {/* google验证 */}
-      <ModalScope
+      <GoogleScopeComp
+        onFinish={googleOkCb}
+        onCancel={() => setGoogleCodeOpen(!googleCodeOpen)}
+        open={googleCodeOpen}
+      />
+      {/* <ModalScope
         showFooter={false}
         title={
           <span className="flex items-center font-normal">
@@ -332,7 +344,7 @@ const StaffSystemManage = () => {
             </Button>
           </Form.Item>
         </Form>
-      </ModalScope>
+      </ModalScope> */}
       {/* 新增员工 */}
       <ModalScope
         showFooter={false}

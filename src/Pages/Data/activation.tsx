@@ -1,6 +1,9 @@
 import { mergeClassName } from "@/utils/base";
 import styleScope from "./index.module.less";
-const Activation = ({ data }) => {
+const Activation = (props) => {
+  console.log('props: ', props);
+  let { data } = props
+  console.log('data>>>: ', data);
   let {
     sumRegisterCount,
     todayRegisterCount,
@@ -50,6 +53,7 @@ const Activation = ({ data }) => {
       num: monthActiveCount ?? 0,
     },
   ];
+  
   return (
     <div
       className="grid grid-cols-3 grid-rows-3 gap-[.16rem] place-items-center]"
