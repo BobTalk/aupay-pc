@@ -13,7 +13,8 @@ const TableConfig = (props, ref) => {
       dataIndex: 'id',
       responsive: ['xl'],
       ellipsis: false,
-      align: 'left'
+      align: 'left',
+      render: (_) => _ || "--"
     },
     {
       title: '钱包协议',
@@ -22,6 +23,7 @@ const TableConfig = (props, ref) => {
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
+      render: (_) => _ || "--"
 
     },
     {
@@ -30,7 +32,8 @@ const TableConfig = (props, ref) => {
       dataIndex: 'type',
       responsive: ['xl'],
       ellipsis: true,
-      align: 'left'
+      align: 'left',
+      render: (_) => _ || "--"
     },
     {
       title: '交易类型',
@@ -47,7 +50,8 @@ const TableConfig = (props, ref) => {
       dataIndex: 'amount',
       responsive: ['xl'],
       ellipsis: true,
-      align: 'left'
+      align: 'left',
+      render: (_) => _ || 0
     },
     // {
     //   title: '目标用户名',
@@ -63,7 +67,8 @@ const TableConfig = (props, ref) => {
       dataIndex: 'fromAddress',
       responsive: ['xl'],
       ellipsis: false,
-      align: 'left'
+      align: 'left',
+      render: (_) => _ || "--"
     },
     {
       title: '交易ID',
@@ -71,7 +76,8 @@ const TableConfig = (props, ref) => {
       dataIndex: 'chainTxId',
       responsive: ['xl'],
       ellipsis: false,
-      align: 'left'
+      align: 'left',
+      render: (_) => _ || "--"
     },
     {
       title: '转入地址',
@@ -79,7 +85,8 @@ const TableConfig = (props, ref) => {
       dataIndex: 'toAddress',
       responsive: ['xl'],
       ellipsis: false,
-      align: 'left'
+      align: 'left',
+      render: (_) => _ || "--"
     },
     {
       title: '地址说明',
@@ -87,7 +94,8 @@ const TableConfig = (props, ref) => {
       dataIndex: 'toAddressInstructions',
       responsive: ['xl'],
       ellipsis: true,
-      align: 'left'
+      align: 'left',
+      render: (_) => _ || "--"
     },
     {
       title: '完成时间',

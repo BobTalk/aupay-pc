@@ -102,7 +102,7 @@ const timeFormate = (time: string | Date, format: string = 'YYYY-MM-DD'): string
   return dayjs(time).format(format)
 }
 // 单位处理
-let formatUnit = (id: number, chain?: number) => {
+let formatUnit = (id: number, chain?: number, bool?: boolean) => {
   let agreement = "";
   let num = 0;
   let type = '';
@@ -122,13 +122,18 @@ let formatUnit = (id: number, chain?: number) => {
     }
     if (chain === 2) {
       agreement = "USDT-ERC20";
-      num = 6;
+      if (bool) {
+        type = "ETH"
+      } num = 6;
     }
     if (chain === 3) {
       agreement = "USDT-TRC20";
+      if (bool) {
+        type = "TRX"
+      }
       num = 19;
     }
-  } else {
+  } else if (id === 4) {
     type = "TRX";
     agreement = "TRX";
     num = 19;

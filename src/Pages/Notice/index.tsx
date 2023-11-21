@@ -82,10 +82,11 @@ const NoticeList = () => {
     stop(e, () => {
       UpdateAnnouncementInterFace({
         isRoll: !crt.isRoll,
+        id: crt.id,
       }).then((res) => {
         if (res.status) {
           message.success(res.message);
-          tableRefEl.current.getTableInfo();
+          tableRefEl.current.getTableInfo({});
         } else {
           message.error(res.message);
         }

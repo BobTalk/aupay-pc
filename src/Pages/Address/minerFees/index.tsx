@@ -55,7 +55,7 @@ const MinerFeesAddress = (props) => {
           </span>
         }
       >
-        <QRCode bordered={false} value="test" />
+        <QRCode bordered={false} value={crtInfo.current.address} />
         <p className="text-[#222]">{crtInfo.current.type}:</p>
         <p className="text-[#222]">{crtInfo.current.address}</p>
       </ModalScope>

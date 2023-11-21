@@ -66,16 +66,16 @@ const TableScope = (props, ref) => {
     },
     {
       title: '资产余额',
-      key: 'feeBalance',
-      dataIndex: 'feeBalance',
+      key: 'balance',
+      dataIndex: 'balance',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'
     },
     {
       title: '矿工费余额',
-      key: 'balance',
-      dataIndex: 'balance',
+      key: 'feeBalance',
+      dataIndex: 'feeBalance',
       responsive: ['xl'],
       ellipsis: true,
       align: 'left'

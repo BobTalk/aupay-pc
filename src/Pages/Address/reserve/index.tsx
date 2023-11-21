@@ -1,16 +1,8 @@
 /**
  * @summary 地址
  */
-import { CaretDownOutlined, SearchOutlined } from "@ant-design/icons";
-import { Button, Divider, Input, Select } from "antd";
 import styleScope from "./index.module.less";
-import RangePicker from "@/Components/RangePicker";
-import TableComp from "@/Components/Table";
-import { dataSource, columns, pagination } from "./table-mock.jsx";
-import geenIcon from "./images/green-icon.svg";
-import blueIcon from "./images/blue-icon.svg";
-import { formatEnum, formatUnit, mergeClassName } from "@/utils/base";
-import { assetsTypeEnum, tradeTypeEnum } from "@/Enum";
+import { formatUnit } from "@/utils/base";
 import { GetReserveWalletInfoInterFace } from "@/api";
 import { useLayoutEffect, useState } from "react";
 import TransferRecord from "@/Pages/Ozbet/transferRecords";
@@ -19,12 +11,12 @@ const ReserveAssets = () => {
   let [dataList, setDataList] = useState([]);
   function getModuleList() {
     GetReserveWalletInfoInterFace().then((res) => {
-      console.log("res: ", res);
       setDataList(
         res?.data?.map((item) => {
           let { agreement, type } = formatUnit(
             item.currencyId,
-            item.currencyChain
+            item.currencyChain,
+            true
           );
           item.agreement = agreement;
           item.type = type;
@@ -46,7 +38,11 @@ const ReserveAssets = () => {
           >
             <div className="flex items-center">
               {/* <img src={geenIcon} alt="" className="w-[.48rem] h-[.48rem]" /> */}
-              <Icon purity={false} name={`h-icon-${item.type}`} style={{fontSize:'.48rem'}}/>
+              <Icon
+                purity={false}
+                name={`h-icon-${item.type}`}
+                style={{ fontSize: ".48rem" }}
+              />
               <div className="ml-[.13rem] mr-[.53rem]">
                 <p className={styleScope["type"]}>{item.agreement}</p>
                 <p className={styleScope["addr"]}>{item.address}</p>

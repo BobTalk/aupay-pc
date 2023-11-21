@@ -15,7 +15,8 @@ const TransferAddr = () => {
         res?.data?.map((item) => {
           let { agreement, type } = formatUnit(
             item.currencyId,
-            item.currencyChain
+            item.currencyChain,
+            true
           );
           item.agreement = agreement;
           item.type = type;
