@@ -13,12 +13,13 @@ const ReserveAssets = () => {
     GetReserveWalletInfoInterFace().then((res) => {
       setDataList(
         res?.data?.map((item) => {
-          let { agreement, type } = formatUnit(
+          let { agreement, type,aloneFee } = formatUnit(
             item.currencyId,
             item.currencyChain,
             true
           );
           item.agreement = agreement;
+          item.aloneFee = aloneFee
           item.type = type;
           return item;
         }) || []
@@ -61,7 +62,7 @@ const ReserveAssets = () => {
                 <span className={styleScope["aseets-name"]}>矿工费</span>
                 <span className={styleScope["assets-num"]}>
                   {item.feeBalance}
-                  {item.type}
+                  {item.aloneFee}
                 </span>
               </p>
             </div>

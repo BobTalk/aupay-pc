@@ -13,13 +13,14 @@ const TransferAddr = () => {
     GetTransferWalletWalletInfoInterFace().then((res) => {
       setDataList(
         res?.data?.map((item) => {
-          let { agreement, type } = formatUnit(
+          let { agreement, type,aloneFee } = formatUnit(
             item.currencyId,
             item.currencyChain,
             true
           );
           item.agreement = agreement;
           item.type = type;
+          item.aloneFee=aloneFee
           return item;
         }) || []
       );
@@ -54,7 +55,7 @@ const TransferAddr = () => {
               </p>
               <p className="flex justify-between">
                 <span className={styleScope["aseets-name"]}>矿工费</span>
-                <span className={styleScope["assets-num"]}>{item.feeBalance}{item.type}</span>
+                <span className={styleScope["assets-num"]}>{item.feeBalance}{item.aloneFee}</span>
               </p>
             </div>
           </div>

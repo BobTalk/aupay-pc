@@ -102,34 +102,39 @@ const timeFormate = (time: string | Date, format: string = 'YYYY-MM-DD'): string
   return dayjs(time).format(format)
 }
 // 单位处理
-let formatUnit = (id: number, chain?: number, bool?: boolean) => {
+let formatUnit = (id: number, chain?: number, bool?:boolean) => {
   let agreement = "";
   let num = 0;
   let type = '';
+  let aloneFee=""
   if (id === 1) {
     agreement = "BTC";
     type = "BTC";
+    aloneFee = 'BTC'
     num = 6;
   } else if (id === 2) {
     agreement = "ETH";
     type = "ETH";
+    aloneFee = 'ETH'
     num = 6;
   } else if (id === 3) {
     type = "USDT";
+    aloneFee="USDT"
     if (chain === 1) {
       agreement = "USDT-OMNI";
       num = 6;
     }
     if (chain === 2) {
       agreement = "USDT-ERC20";
-      if (bool) {
-        type = "ETH"
-      } num = 6;
+      if(bool){
+        aloneFee = 'ETH'
+      }
+       num = 6;
     }
     if (chain === 3) {
       agreement = "USDT-TRC20";
-      if (bool) {
-        type = "TRX"
+      if(bool){
+        aloneFee = 'ETH'
       }
       num = 19;
     }
@@ -138,7 +143,7 @@ let formatUnit = (id: number, chain?: number, bool?: boolean) => {
     agreement = "TRX";
     num = 19;
   }
-  return { agreement, num, type };
+  return { agreement, num, type,aloneFee };
 };
 function formatEnum(enumData) {
   let enumObj = JSON.parse(JSON.stringify(enumData))

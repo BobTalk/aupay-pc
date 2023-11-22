@@ -188,8 +188,10 @@ const IpSystemManage = () => {
     tableRefEl.current.updateParmas(
       {
         search: note || null,
-        beginTime: time[0] || null,
-        endTime: time[1] || null,
+        // beginTime: time[0] || null,
+        beginTime: timeJoin(time[0]),
+        endTime: timeJoin(time[1], true),
+        // endTime: time[1] || null,
       },
       {
         current,
