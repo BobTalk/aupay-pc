@@ -1,9 +1,9 @@
 import TableComp from "@/Components/Table";
 import { FindAdminIpLogInterFace } from "@/api";
 import dayjs from "dayjs";
-import { forwardRef, useImperativeHandle, useLayoutEffect,useState } from 'react';
+import { forwardRef, useImperativeHandle, useLayoutEffect, useState } from 'react';
 const TableScope = (props, ref) => {
-  
+
   let [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -39,7 +39,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render: (_)=> dayjs(_).format("YYYY/MM/DD")
+      render: (_) => _ ? dayjs(_).format("YYYY/MM/DD") : "--"
     },
     {
       title: '动作',
@@ -61,12 +61,12 @@ const TableScope = (props, ref) => {
   function clickCb(pagination) {
     props?.onPaginationCb?.(pagination)
   }
-  function getTableList(conditions, paginationParams){
+  function getTableList(conditions, paginationParams) {
     FindAdminIpLogInterFace({
       pageNo: paginationParams?.current ?? pagination.current,
       pageSize: paginationParams?.pageSize ?? pagination.pageSize,
       conditions
-    }).then(res =>{
+    }).then(res => {
       if (res.status) {
         setDataSource(res?.data?.map(item => (item.key = item.id, item)) ?? [])
         setPagination(pagination => ({
@@ -74,7 +74,7 @@ const TableScope = (props, ref) => {
           current: res.pageNo,
           pageSize: res.pageSize,
           total: res.total,
-          showTotal: ()=> `${res.page} - ${res.pageTotal}页 共${res.total}条`
+          showTotal: () => `${res.page} - ${res.pageTotal}页 共${res.total}条`
         }))
       } else {
         message.error(res.message)
@@ -92,9 +92,9 @@ const TableScope = (props, ref) => {
     getTableList,
     updateParmas
   }), [])
-  useLayoutEffect(()=>{
+  useLayoutEffect(() => {
     getTableList()
-  },[])
+  }, [])
   return <TableComp
     themeObj={{
       headerBorderRadius: 0,

@@ -60,7 +60,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render: (_) => dayjs(_).format("YYYY.MM.DD")
+      render: (_) => _ ? dayjs(_).format("YYYY.MM.DD") : "--"
     },
     {
       title: '员工ID',
@@ -108,7 +108,7 @@ const TableScope = (props, ref) => {
           current: res.pageNo,
           pageSize: res.pageSize,
           total: res.total,
-          showTotal: ()=> `${res.page} - ${res.pageTotal}页 共${res.total}条`
+          showTotal: () => `${res.page} - ${res.pageTotal}页 共${res.total}条`
         }))
       } else {
         message.error(res.message)

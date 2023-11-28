@@ -1,4 +1,3 @@
-import ReactECharts from 'echarts-for-react';
 import CommonChart from '../common';
 import { forwardRef } from 'react';
 type BarPropsType = {

@@ -53,7 +53,7 @@ const TableScope = (props, ref) => {
       ellipsis: true,
       align: 'left',
       render: (_, record) => {
-        return dayjs(_).format('YYYY.MM.DD')
+        return_ ? dayjs(_).format('YYYY.MM.DD') : "--"
       }
     },
     {

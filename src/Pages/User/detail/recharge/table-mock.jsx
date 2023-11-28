@@ -46,7 +46,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render: (_) => dayjs(_).format("YYYY/MM/DD HH:mm:ss")
+      render: (_) => _ ? dayjs(_).format("YYYY/MM/DD HH:mm:ss") : '--'
     },
     // {
     //   title: '交易类型',
@@ -104,7 +104,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render: (_) => dayjs(_).format("YYYY/MM/DD")
+      render: (_) => _ ? dayjs(_).format("YYYY/MM/DD") : "--"
     },
     {
       title: '状态', // 1, 0
@@ -122,14 +122,14 @@ const TableScope = (props, ref) => {
       dataIndex: 'operation',
       responsive: ['xl'],
       ellipsis: true,
-      render: (_, record) => (<div onClick={(e)=>jumpDetail(e,record)} className='text-[var(--blue)] cursor-pointer whitespace-nowrap'>
+      render: (_, record) => (<div onClick={(e) => jumpDetail(e, record)} className='text-[var(--blue)] cursor-pointer whitespace-nowrap'>
         <EyeFilled />
         <span className='ml-[.1rem]'>区块详情</span>
       </div>),
       align: 'left'
     },
   ]
-  function jumpDetail(e, crt){
+  function jumpDetail(e, crt) {
     props?.onJump?.(e, crt)
   }
   function getTableList(conditions, paginationParams) {
@@ -139,9 +139,9 @@ const TableScope = (props, ref) => {
       conditions
     }).then(res => {
       if (res.status) {
-        setDataSource(res?.data?.map((item,index) => {
+        setDataSource(res?.data?.map((item, index) => {
           let { agreement, type } = formatUnit(item.currencyId, item.currencyChain)
-          item.key = item.toWalletId+"_"+index
+          item.key = item.toWalletId + "_" + index
           item.agreement = agreement
           item.type = type
           return item

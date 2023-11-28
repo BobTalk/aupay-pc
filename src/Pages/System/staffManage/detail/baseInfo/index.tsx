@@ -254,7 +254,11 @@ const BaseInfo = (props) => {
           </p>
           <p>
             <span>创建时间：</span>
-            <span>{dayjs(userInfo.createTime).format("YYYY-MM-DD")}</span>
+            <span>
+              {userInfo.createTime
+                ? dayjs(userInfo.createTime).format("YYYY-MM-DD")
+                : "--"}
+            </span>
           </p>
           <p>
             <span>邮箱：</span>

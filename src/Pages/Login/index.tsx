@@ -92,7 +92,10 @@ const FormComp = () => {
           // 存放token
           setSession("token", res.data);
           GetUserInfoInterFace().then((res) => {
-            if (!res.status) return;
+            if (!res.status) {
+              message.error(res.message);
+              return;
+            }
             setSession("userInfo", res);
             getPagePermission();
           });

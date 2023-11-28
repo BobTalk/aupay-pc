@@ -95,7 +95,7 @@ const TableConfig = (props, ref) => {
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render: (_) => dayjs(_).format("YYYY/MM/DD HH:mm:ss")
+      render: (_) => _ ? dayjs(_).format("YYYY/MM/DD HH:mm:ss") : "--"
     },
     {
       title: '状态',

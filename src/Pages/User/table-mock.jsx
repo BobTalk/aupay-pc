@@ -76,7 +76,7 @@ const TableScope = (props, ref) => {
       dataIndex: 'createTime',
       responsive: ['xl'],
       ellipsis: true,
-      render: (_) => dayjs(_).format("YYYY/MM/DD")
+      render: (_) => _ ? dayjs(_).format("YYYY/MM/DD") : '--'
     },
     {
       title: 'Ozbet用户名',

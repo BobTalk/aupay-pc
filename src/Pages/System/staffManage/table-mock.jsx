@@ -74,7 +74,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render: (_, record) => dayjs(_).format("YYYY.MM.DD")
+      render: (_, record) => _ ? dayjs(_).format("YYYY.MM.DD") : "--"
     },
     {
       title: '账户状态',
@@ -110,7 +110,7 @@ const TableScope = (props, ref) => {
   ]
   function jumpDetail(e, crt) {
     stop(e, () => {
-      navigate('/aupay/system/staff-manage/detail', { state: {...crt} })
+      navigate('/aupay/system/staff-manage/detail', { state: { ...crt } })
       store.dispatch({
         type: "ADD_BREADCRUMB",
         data: [
@@ -141,7 +141,7 @@ const TableScope = (props, ref) => {
           current: res.pageNo,
           pageSize: res.pageSize,
           total: res.total,
-          showTotal: ()=> `${res.page} - ${res.pageTotal}页 共${res.total}条`
+          showTotal: () => `${res.page} - ${res.pageTotal}页 共${res.total}条`
         }))
       } else {
         message.error(res.message)

@@ -46,7 +46,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: false,
       align: 'left',
-      render: (_) => dayjs(_).format("YYYY/MM/DD HH:mm:ss")
+      render: (_) => _ ? dayjs(_).format("YYYY/MM/DD HH:mm:ss") : '--'
     },
     {
       title: '应用',
@@ -138,7 +138,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: false,
       align: 'left',
-      render: (_) => dayjs(_).format("YYYY/MM/DD")
+      render: (_) => _ ? dayjs(_).format("YYYY/MM/DD") : "--"
     },
     {
       title: '状态',

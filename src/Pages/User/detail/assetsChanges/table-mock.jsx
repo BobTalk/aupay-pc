@@ -48,7 +48,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: false,
       align: 'left',
-      render: (_) => dayjs(_).format("YYYY/MM/DD")
+      render: (_) => _ ? dayjs(_).format("YYYY/MM/DD") : '--'
     },
     {
       title: 'auPay用户名',
@@ -169,13 +169,13 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: false,
       align: 'left',
-      render: (_, record) => (<div onClick={(e)=>jumpDetail(e,record)} className='text-[var(--blue)] cursor-pointer whitespace-nowrap'>
+      render: (_, record) => (<div onClick={(e) => jumpDetail(e, record)} className='text-[var(--blue)] cursor-pointer whitespace-nowrap'>
         <EyeFilled />
         <span className='ml-[.1rem]'>区块详情</span>
       </div>),
     }
   ];
-  function jumpDetail(e, crt){
+  function jumpDetail(e, crt) {
     props?.onJump?.(e, crt)
   }
   function getTableList(conditions, paginationParams) {
