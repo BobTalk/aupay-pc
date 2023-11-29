@@ -43,7 +43,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render: (_) => <span dangerouslySetInnerHTML={{ __html: _ }}></span>
+      render: (_) => <div dangerouslySetInnerHTML={{ __html: _ || `--` }}></div>
     },
     {
       title: '时间',
@@ -53,7 +53,7 @@ const TableScope = (props, ref) => {
       ellipsis: true,
       align: 'left',
       render: (_, record) => {
-        return_ ? dayjs(_).format('YYYY.MM.DD') : "--"
+        return _ ? dayjs(_).format('YYYY.MM.DD') : "--"
       }
     },
     {

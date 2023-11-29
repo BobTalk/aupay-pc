@@ -48,7 +48,8 @@ const TableScope = (props, ref) => {
       key: 'nickname',
       dataIndex: 'nickname',
       responsive: ['xl'],
-      ellipsis: true
+      ellipsis: true,
+      render: (_) => _ ?? "--"
     },
     {
       title: '账户状态',
@@ -68,7 +69,8 @@ const TableScope = (props, ref) => {
       key: 'availableBalance',
       dataIndex: 'availableBalance',
       responsive: ['xl'],
-      ellipsis: true
+      ellipsis: true,
+      render: (_) => _ ?? 0
     },
     {
       title: '开户时间',
@@ -83,14 +85,16 @@ const TableScope = (props, ref) => {
       key: 'ozbetUsername',
       dataIndex: 'ozbetUsername',
       responsive: ['xl'],
-      ellipsis: true
+      ellipsis: true,
+      render: (_) => _ ?? "--"
     },
     {
       title: '游戏资产OZC',
       key: 'ozbetAssetsBalance',
       dataIndex: 'ozbetAssetsBalance',
       responsive: ['xl'],
-      ellipsis: true
+      ellipsis: true,
+      render: (_) => _ ?? "--"
     },
     {
       title: '创建时间',

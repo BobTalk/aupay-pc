@@ -42,6 +42,13 @@ const TransferRecord = () => {
     };
     tableRefs.current.getTableList(filterInfo.current);
   }
+  function paginationCb({ current, pageSize, total }) {
+    tableRefs.current.getTableInfo(filterInfo.current,{
+      current,
+      pageSize,
+      total,
+    });
+  }
   return (
     <>
       <div className={styleScope["filter-box"]}>
@@ -98,7 +105,7 @@ const TransferRecord = () => {
       <div
         className={mergeClassName("bg-[var(--white)]", styleScope["table-box"])}
       >
-        <TableConfig ref={tableRefs} />
+        <TableConfig ref={tableRefs} onPaginationCb={paginationCb}/>
       </div>
     </>
   );

@@ -14,6 +14,7 @@ import {
 } from "@/Enum";
 import { useRef } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
+import { useLocation } from "react-router-dom";
 const Trade = () => {
   let assetsTypeJumpEnumObj = JSON.parse(JSON.stringify(assetsTypeJumpEnum));
   let [stop] = useStopPropagation();
@@ -22,6 +23,9 @@ const Trade = () => {
   const tradeType = useRef<any>();
   const inputRefs = useRef<any>();
   const timeRefs = useRef<any>();
+  let {
+    state: { crtInfo },
+  } = useLocation();
   function paginationCb({ current, pageSize, total }) {
     getInfo({ current, pageSize, total });
   }
@@ -112,6 +116,7 @@ const Trade = () => {
       >
         <TableScope
           ref={tableRefEl}
+          userId={crtInfo.userId}
           onJump={jumpCb}
           onPaginationCb={paginationCb}
         />

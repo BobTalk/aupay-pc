@@ -134,13 +134,14 @@ let formatUnit = (id: number, chain?: number, bool?:boolean) => {
     if (chain === 3) {
       agreement = "USDT-TRC20";
       if(bool){
-        aloneFee = 'ETH'
+        aloneFee = 'TRX'
       }
       num = 19;
     }
   } else if (id === 4) {
     type = "TRX";
     agreement = "TRX";
+    aloneFee = 'TRX'
     num = 19;
   }
   return { agreement, num, type,aloneFee };

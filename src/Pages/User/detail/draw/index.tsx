@@ -10,6 +10,7 @@ import { formatEnum, mergeClassName, timeJoin } from "@/utils/base";
 import { assetsTypeEnum, assetsTypeJumpEnum } from "@/Enum";
 import { useRef } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
+import { useLocation } from "react-router-dom";
 const Draw = () => {
   let assetsTypeJumpEnumObj = JSON.parse(JSON.stringify(assetsTypeJumpEnum));
   const filterNote = useRef<any>();
@@ -17,6 +18,9 @@ const Draw = () => {
   const tableRefEl = useRef<any>();
   const assetsType = useRef();
   const [stop] = useStopPropagation();
+  let {
+    state: { crtInfo },
+  } = useLocation();
   function jumpCb(e, crt) {
     stop(e, () => {
       if (!crt["chainTxId"]) return;
@@ -29,8 +33,6 @@ const Draw = () => {
   function filterCb() {
     let note = filterNote.current.input?.value;
     let time = filterTime.current?.timeStr ?? [];
-    console.log("filterTime.current: ", filterTime.current);
-    console.log("time: ", time);
     tableRefEl.current.getTableList({
       search: note || null,
       // beginTime: time[0] || null,
@@ -102,6 +104,7 @@ const Draw = () => {
       >
         <TableScope
           ref={tableRefEl}
+          userId={crtInfo.userId}
           onJump={jumpCb}
           onPaginationCb={paginationCb}
         />

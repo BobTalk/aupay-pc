@@ -15,7 +15,6 @@ type FilterPropsType = {
   onQuery?: Function;
 };
 const Filter = (props: FilterPropsType) => {
-  let [stop] = useStopPropagation();
   let [form] = Form.useForm();
   let [formInitVal] = useState({
     rangeTime: [],

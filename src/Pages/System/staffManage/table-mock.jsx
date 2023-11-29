@@ -2,6 +2,7 @@ import { EyeFilled } from '@ant-design/icons';
 import { NavLink, useNavigate } from 'react-router-dom';
 import TableComp from "@/Components/Table";
 import { message } from 'antd';
+import { departmentEnum } from "@/Enum";
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { FindAdminListInterFace } from "@/api";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
@@ -65,7 +66,7 @@ const TableScope = (props, ref) => {
       responsive: ['xl'],
       ellipsis: true,
       align: 'left',
-      render: (_, record) => <>{_ ?? "--"}</>
+      render: (_, record) => <>{departmentEnum[_] ?? "--"}</>
     },
     {
       title: '创建时间',

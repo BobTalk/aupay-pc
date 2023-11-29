@@ -154,7 +154,10 @@ const TableScope = (props, ref) => {
     FindUserTradeRecordListInterFace({
       pageNo: paginationParams?.current ?? pagination.current,
       pageSize: paginationParams?.pageSize ?? pagination.pageSize,
-      conditions
+      conditions:{
+        userId:props.userId,
+        ...conditions
+      }
     }).then(res => {
       console.log('res: ', res);
       if (res.status) {

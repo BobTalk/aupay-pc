@@ -136,7 +136,10 @@ const TableScope = (props, ref) => {
     FindUserRechargeRecordListInterFace({
       pageNo: paginationParams?.current ?? pagination.current,
       pageSize: paginationParams?.pageSize ?? pagination.pageSize,
-      conditions
+      conditions: {
+        userId: props.userId,
+        ...conditions
+      }
     }).then(res => {
       if (res.status) {
         setDataSource(res?.data?.map((item, index) => {

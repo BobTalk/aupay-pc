@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { resolve } from "path";
 import vitePluginImp from 'vite-plugin-imp'
 import WindiCSS from 'vite-plugin-windicss'
+const proxyUrl = 'http://192.168.50.162:9000'
 export default defineConfig({
   plugins: [
     react(),
@@ -34,19 +35,20 @@ export default defineConfig({
     open: true,
     proxy: {
       "/admin": {
-        target: "http://192.168.50.162:9000",
+        target: `${proxyUrl}`,
         changeOrigin: true,
+        // rewrite: (path) => path.replace('/admin', '')
       },
       "/operate": {
-        target: "http://192.168.50.162:9000",
+        target: proxyUrl,
         changeOrigin: true,
       },
       "/wallet": {
-        target: "http://192.168.50.162:9000",
+        target: proxyUrl,
         changeOrigin: true,
       },
       "/user": {
-        target: "http://192.168.50.162:9000",
+        target: proxyUrl,
         changeOrigin: true,
       }
     }

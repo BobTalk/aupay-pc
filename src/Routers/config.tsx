@@ -2,7 +2,7 @@ import Login from "@/Pages/Login";
 import LayoutPage from "@/Pages/Layout";
 import Denied from "@/Pages/Denied";
 import AssetsCount from "@/Pages/Assets";
-import DataCount from "@/Pages/data";
+import DataCount from "@/Pages/Data";
 import UserManage from "@/Pages/User";
 import UserDetail from "@/Pages/User/detail";
 import UserDetailInfo from "@/Pages/User/detail/user";
