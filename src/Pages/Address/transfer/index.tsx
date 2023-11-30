@@ -61,7 +61,7 @@ const TransferAddr = () => {
           </div>
         ))}
       </div>
-     <TransferRecord/>
+     <TransferRecord walletUse={4} />
     </>
   );
 };

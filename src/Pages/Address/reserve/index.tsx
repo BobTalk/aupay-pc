@@ -69,7 +69,7 @@ const ReserveAssets = () => {
           </div>
         ))}
       </div>
-      <TransferRecord />
+      <TransferRecord walletUse={3}/>
     </>
   );
 };

@@ -63,7 +63,7 @@ const MinerFeesAddress = (props) => {
   );
 };
 const RecordList = () => {
-  return <TransferRecord/>;
+  return <TransferRecord walletUse={5}/>;
 };
 const ChangeComp = () => {
   let [isRecord, setIsRecord] = useState(false);

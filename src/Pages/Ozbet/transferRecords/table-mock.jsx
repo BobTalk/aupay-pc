@@ -133,7 +133,10 @@ const TableConfig = (props, ref) => {
     let params = {
       pageNo: paginationParams?.current ?? pagination.current,
       pageSize: paginationParams?.pageSize ?? pagination.pageSize,
-      conditions
+      conditions: {
+        walletUse: props?.id ?? null,
+        ...conditions
+      }
     }
     FindWalletTransferRecordInterFace(params).then(res => {
       if (res.status) {

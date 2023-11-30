@@ -10,15 +10,16 @@ import { formatEnum, mergeClassName, timeJoin } from "@/utils/base";
 import { useRef, useState } from "react";
 import { useStopPropagation } from "@/Hooks/StopPropagation";
 import { assetsTypeEnum, tradeTypeEnum } from "@/Enum";
-const TransferRecord = () => {
+const TransferRecord = (props) => {
+  let { walletUse } = props;
   let [stop] = useStopPropagation();
   const tableRefs = useRef<any>({});
   const filterOrderOrAddrOrBussion = useRef<any>();
   const rangePickerRefs = useRef<any>();
   // let [assetsType, setAssetsType] = useState();
-  let assetsType = useRef()
+  let assetsType = useRef();
   // let [tradeType, setTradeType] = useState();
-  let tradeType = useRef()
+  let tradeType = useRef();
   const filterInfo = useRef<any>({});
 
   function filterListInfo(e, key, value) {
@@ -43,7 +44,7 @@ const TransferRecord = () => {
     tableRefs.current.getTableList(filterInfo.current);
   }
   function paginationCb({ current, pageSize, total }) {
-    tableRefs.current.getTableInfo(filterInfo.current,{
+    tableRefs.current.getTableInfo(filterInfo.current, {
       current,
       pageSize,
       total,
@@ -78,7 +79,7 @@ const TransferRecord = () => {
           size="large"
           allowClear
           placeholder="资产类型"
-          onChange={(val) => assetsType.current=val}
+          onChange={(val) => (assetsType.current = val)}
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
           options={formatEnum(assetsTypeEnum)}
@@ -87,7 +88,7 @@ const TransferRecord = () => {
           size="large"
           allowClear
           placeholder="交易类型"
-          onChange={(val) => tradeType.current = val}
+          onChange={(val) => (tradeType.current = val)}
           suffixIcon={<CaretDownOutlined />}
           style={{ width: "1.34rem" }}
           options={formatEnum(tradeTypeEnum)}
@@ -105,7 +106,11 @@ const TransferRecord = () => {
       <div
         className={mergeClassName("bg-[var(--white)]", styleScope["table-box"])}
       >
-        <TableConfig ref={tableRefs} onPaginationCb={paginationCb}/>
+        <TableConfig
+          id={walletUse}
+          ref={tableRefs}
+          onPaginationCb={paginationCb}
+        />
       </div>
     </>
   );
